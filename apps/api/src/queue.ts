@@ -5,7 +5,7 @@ import { env } from "./env.ts";
 /**
  * A ponta da API na fila (PRD §50, §51).
  *
- * A API **enfileira e nada mais**. Quem roda OpenTofu e k6 é o worker: o §51
+ * A API **enfileira e nada mais**. Quem roda OpenTofu é o worker: o §51
  * é explícito em não executar teste pesado no servidor que atende requisição.
  */
 const queue = new Queue<RunJob>(RUN_QUEUE, {

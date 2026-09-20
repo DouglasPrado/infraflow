@@ -270,7 +270,7 @@ describe("relatórios (PRD §73)", () => {
     assert.equal(response.statusCode, 200);
     assert.deepEqual(
       response.json<{ files: { name: string }[] }>().files.map((file) => file.name),
-      ["ARCHITECTURE.md", "CAPACITY.md", "LOAD-TEST.md", "GOAL.md", "architecture.json"],
+      ["ARCHITECTURE.md", "CAPACITY.md", "GOAL.md", "architecture.json"],
     );
   });
 
@@ -298,60 +298,6 @@ describe("relatórios (PRD §73)", () => {
       cookies: as(sessaoDono),
     });
     assert.equal(response.statusCode, 400);
-  });
-
-  it("escreve a medição real no CAPACITY.md quando existe execução (§77)", async () => {
-    const version = await db.architectureVersion.findFirstOrThrow({
-      where: { architectureId },
-      orderBy: { number: "desc" },
-    });
-
-    await db.run.create({
-      data: {
-        architectureId,
-        versionId: version.id,
-        kind: "LOAD_TEST",
-        slug: `load-test-relatorio-${suffix}`,
-        status: "SUCCEEDED",
-        finishedAt: new Date(),
-        params: { target: "docker" },
-        result: {
-          startedAt: "2026-09-20T10:00:00.000Z",
-          finishedAt: "2026-09-20T10:00:30.000Z",
-          durationSeconds: 30,
-          requests: 9000,
-          rps: 300,
-          p50Ms: 12,
-          p95Ms: 48,
-          p99Ms: 95,
-          errorRatePct: 0,
-          meetsSlo: true,
-          droppedIterations: 0,
-          loadCeiling: "none",
-          stages: [
-            {
-              targetRps: 300,
-              rps: 300,
-              p95Ms: 48,
-              errorRatePct: 0,
-              startedAt: "2026-09-20T10:00:00.000Z",
-              endedAt: "2026-09-20T10:00:30.000Z",
-            },
-          ],
-        },
-      },
-    });
-
-    const response = await app.inject({
-      method: "GET",
-      url: `/architectures/${architectureId}/reports/CAPACITY.md`,
-      cookies: as(sessaoDono),
-    });
-
-    assert.equal(response.statusCode, 200);
-    assert.match(response.body, /load-test-relatorio/);
-    assert.match(response.body, /Sustained throughput: 300 req\/s/);
-    assert.doesNotMatch(response.body, /Nenhuma execução real registrada/);
   });
 
   it("não gera relatório de arquitetura alheia", async () => {

@@ -80,7 +80,6 @@ model Architecture {
   project  Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
   versions ArchitectureVersion[]
   runs     Run[]
-  labs     Lab[]
 
   @@unique([projectId, name])
   @@map("architectures")
@@ -101,7 +100,6 @@ model ArchitectureVersion {
 
   architecture Architecture @relation(fields: [architectureId], references: [id], onDelete: Cascade)
   runs         Run[]
-  labs         Lab[]
 
   @@unique([architectureId, number])
   @@index([architectureId, createdAt])
@@ -111,22 +109,8 @@ model ArchitectureVersion {
 /// O que o worker executa fora da API (PRD §51).
 enum RunKind {
   PLAN
-  LAB_APPLY
-  LAB_DESTROY
-  LOAD_TEST
 
   @@map("run_kind")
-}
-
-/// Ciclo de vida do laboratório efêmero (PRD §76).
-enum LabStatus {
-  CREATING
-  READY
-  DESTROYING
-  DESTROYED
-  FAILED
-
-  @@map("lab_status")
 }
 
 /// Infraestrutura temporária de um teste (PRD §53, §76).
@@ -135,41 +119,6 @@ enum LabStatus {
 /// publicada**. Guarda o diretório de trabalho porque o state do OpenTofu
 /// precisa sobreviver entre o apply e o destroy — sem ele, `tofu destroy` não
 /// teria o que destruir e o ambiente viraria órfão (§54).
-model Lab {
-  id             String    @id @default(uuid()) @db.Uuid
-  architectureId String    @db.Uuid
-  versionId      String    @db.Uuid
-  /// Identificador do ambiente temporário (PRD §53).
-  slug           String    @unique
-  status         LabStatus @default(CREATING)
-  /// Porta publicada em 127.0.0.1 — a única entrada do laboratório.
-  entryPort      Int?
-  entryUrl       String?
-  /// Prometheus do laboratório, consultado pelo worker (PRD §36, §78).
-  observabilityPort Int?
-  observabilityUrl  String?
-  /// Container por node do canvas: é o que liga métrica a recurso (§78).
-  containers     Json      @default("[]")
-  /// Diretório que guarda o state desta infraestrutura.
-  workdir        String
-  error          String?
-  /// Depois disto o worker derruba o laboratório sozinho (§54).
-  expiresAt      DateTime
-  readyAt        DateTime?
-  destroyedAt    DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  architecture Architecture        @relation(fields: [architectureId], references: [id], onDelete: Cascade)
-  version      ArchitectureVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
-  runs         Run[]
-
-  @@index([architectureId, createdAt])
-  @@index([status, expiresAt])
-  @@map("labs")
-}
-
 enum RunStatus {
   QUEUED
   RUNNING
@@ -208,8 +157,6 @@ model Run {
 
   architecture Architecture        @relation(fields: [architectureId], references: [id], onDelete: Cascade)
   version      ArchitectureVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
-  labId        String?             @db.Uuid
-  lab          Lab?                @relation(fields: [labId], references: [id], onDelete: Cascade)
 
   @@index([architectureId, createdAt])
   @@index([status])

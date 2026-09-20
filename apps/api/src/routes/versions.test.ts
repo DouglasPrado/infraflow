@@ -100,11 +100,9 @@ describe("listar versões (PRD §38)", () => {
     });
 
     assert.equal(response.statusCode, 200);
-    const versions = response.json<{ number: number; label: string | null; tested: boolean }[]>();
+    const versions = response.json<{ number: number; label: string | null }[]>();
     assert.deepEqual(versions.map((version) => version.number), [2, 1]);
     assert.equal(versions[1]!.label, "linha de base");
-    // Nenhuma foi medida ainda.
-    assert.ok(versions.every((version) => version.tested === false));
   });
 
   it("esconde versões de arquitetura alheia", async () => {

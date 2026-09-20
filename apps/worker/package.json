@@ -14,12 +14,10 @@
   "dependencies": {
     "@infraflow/compiler": "workspace:*",
     "@infraflow/db": "workspace:*",
-    "@infraflow/load-engine": "workspace:*",
     "@infraflow/schema": "workspace:*",
     "bullmq": "^5.65.0"
   },
   "devDependencies": {
-    "@infraflow/analyzer": "workspace:*",
     "@infraflow/validator": "workspace:*",
     "@types/node": "^22",
     "dotenv": "^17.2.3",

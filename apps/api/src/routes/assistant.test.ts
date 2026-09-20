@@ -159,68 +159,10 @@ describe("o contexto que chega ao modelo", () => {
     assert.match(prompt, /zona só/);
     // Nada foi executado ainda, e isso está dito.
     assert.match(prompt, /Nenhum `tofu plan` foi executado/);
-    assert.match(prompt, /Nenhum teste de carga foi executado/);
+    // E que os números são estimativa, não medição.
+    assert.match(prompt, /não mede execução real/);
     // A tarefa pedida está no prompt.
     assert.match(prompt, /Explique esta arquitetura/);
-  });
-
-  it("inclui a medição quando existe execução (§77, §78, §79)", async () => {
-    const version = await db.architectureVersion.findFirstOrThrow({ where: { architectureId } });
-    const start = Date.parse("2026-09-20T10:00:00.000Z");
-
-    await db.run.create({
-      data: {
-        architectureId,
-        versionId: version.id,
-        kind: "LOAD_TEST",
-        slug: `load-test-assistente-${suffix}`,
-        status: "SUCCEEDED",
-        finishedAt: new Date(),
-        params: { target: "docker" },
-        result: {
-          startedAt: new Date(start).toISOString(),
-          finishedAt: new Date(start + 30_000).toISOString(),
-          durationSeconds: 30,
-          requests: 6000,
-          rps: 200,
-          p50Ms: 30,
-          p95Ms: 900,
-          p99Ms: 1800,
-          errorRatePct: 4,
-          meetsSlo: false,
-          droppedIterations: 0,
-          loadCeiling: "none",
-          stages: [0, 1, 2].map((index) => ({
-            targetRps: 100 * (index + 1),
-            rps: 100 * (index + 1),
-            p95Ms: index === 2 ? 900 : 70,
-            errorRatePct: index === 2 ? 4 : 0,
-            startedAt: new Date(start + index * 10_000).toISOString(),
-            endedAt: new Date(start + (index + 1) * 10_000).toISOString(),
-          })),
-          metrics: [0, 1, 2].flatMap((index) => [
-            { nodeId: "rds", metric: "cpu", unit: "%", value: [30, 64, 97][index]!, at: new Date(start + 5_000 + index * 10_000).toISOString() },
-            { nodeId: "ecs", metric: "cpu", unit: "%", value: [18, 26, 33][index]!, at: new Date(start + 5_000 + index * 10_000).toISOString() },
-          ]),
-        },
-      },
-    });
-
-    await app.inject({
-      method: "POST",
-      url: `/architectures/${architectureId}/assistant`,
-      cookies: as(sessaoDono),
-      payload: { task: "explain-bottleneck" },
-    });
-
-    const prompt = buildPrompt(recebido!);
-
-    assert.match(prompt, /load-test-assistente/);
-    assert.match(prompt, /SLO: violado/);
-    assert.match(prompt, /rds · cpu: pico 97\.0%/);
-    // A conclusão do §79 entra pronta: o modelo não precisa deduzi-la.
-    assert.match(prompt, /Gargalo observado/);
-    assert.doesNotMatch(prompt, /Nenhum teste de carga foi executado/);
   });
 
   it("repassa a pergunta do usuário dentro do escopo da tarefa", async () => {

@@ -4,7 +4,7 @@ import { env } from "./env.ts";
 /**
  * Execução de processo externo (PRD §51, §52).
  *
- * Três cuidados que não são opcionais quando se roda OpenTofu e k6:
+ * Três cuidados que não são opcionais quando se roda OpenTofu:
  *
  * 1. **Ambiente mínimo.** O filho não herda `process.env`. Recebe uma lista
  *    explícita — sem isso, qualquer variável do worker (inclusive a URL do

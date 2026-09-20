@@ -1,11 +1,4 @@
-import { analyzeObserved } from "@infraflow/analyzer";
-import {
-  ArchitectureDocumentSchema,
-  LoadTestObservationSchema,
-  RunParamsSchema,
-  RunTargetSchema,
-  slugFor,
-} from "@infraflow/schema";
+import { RunParamsSchema, RunTargetSchema, slugFor } from "@infraflow/schema";
 import type { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
 import { requireUser } from "../auth/guard.ts";
@@ -23,7 +16,7 @@ import { runQueue } from "../queue.ts";
 const idParams = z.object({ id: z.uuid() });
 
 const createBody = z.object({
-  kind: z.enum(["plan", "load-test"]).default("plan"),
+  kind: z.enum(["plan"]).default("plan"),
   target: RunTargetSchema.default("aws"),
 });
 
@@ -55,10 +48,9 @@ function serialize(run: {
 
 export const runRoutes: FastifyPluginAsync = async (app) => {
   /**
-   * PRD §75, §77 — pede uma execução ao worker.
+   * PRD §75 — pede uma execução ao worker.
    *
-   * `plan` compila e planeja; `load-test` dispara o k6 contra o laboratório.
-   * A API não executa nenhum dos dois (§51).
+   * `plan` compila e planeja. A API não executa (§51).
    */
   app.post("/architectures/:id/runs", async (request, reply) => {
     const user = await requireUser(request, reply);
@@ -87,29 +79,13 @@ export const runRoutes: FastifyPluginAsync = async (app) => {
     });
     if (running) return reply.status(409).send({ error: "execucao_em_andamento" });
 
-    // O teste de carga mede o laboratório; sem ambiente pronto não há alvo.
-    const lab =
-      body.data.kind === "load-test"
-        ? await db.lab.findFirst({
-            where: { architectureId: architecture.id, status: "READY" },
-            orderBy: { createdAt: "desc" },
-          })
-        : null;
-
-    if (body.data.kind === "load-test" && !lab) {
-      return reply.status(409).send({ error: "laboratorio_nao_esta_pronto" });
-    }
-
     const run = await db.run.create({
       data: {
         architectureId: architecture.id,
-        versionId: lab?.versionId ?? latest.id,
-        ...(lab ? { labId: lab.id } : {}),
-        kind: body.data.kind === "load-test" ? "LOAD_TEST" : "PLAN",
+        versionId: latest.id,
+        kind: "PLAN",
         slug: slugFor(body.data.kind),
-        params: RunParamsSchema.parse({
-          target: body.data.kind === "load-test" ? "docker" : body.data.target,
-        }),
+        params: RunParamsSchema.parse({ target: body.data.target }),
       },
     });
 
@@ -163,13 +139,6 @@ export const runRoutes: FastifyPluginAsync = async (app) => {
     });
     if (!run) return reply.status(404).send({ error: "execucao_nao_encontrada" });
 
-    const base = { ...serialize(run), version: run.version.number, logs: run.logs };
-    if (run.kind !== "LOAD_TEST" || run.status !== "SUCCEEDED") return base;
-
-    const document = ArchitectureDocumentSchema.safeParse(run.version.graph);
-    const observation = LoadTestObservationSchema.safeParse(run.result);
-    if (!document.success || !observation.success) return base;
-
-    return { ...base, analysis: analyzeObserved(document.data, observation.data) };
+    return { ...serialize(run), version: run.version.number, logs: run.logs };
   });
 };

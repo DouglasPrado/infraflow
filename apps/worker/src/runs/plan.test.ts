@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { after, before, describe, it } from "node:test";
-import { PlanSummarySchema } from "@infraflow/schema";
 import { referenceArchitecture } from "@infraflow/validator";
 import { db } from "../db.ts";
 import { runPlan } from "./plan.ts";
@@ -9,9 +8,11 @@ import { runPlan } from "./plan.ts";
 /**
  * Integração de verdade: Postgres de pé e OpenTofu instalado.
  *
- * O alvo é o `docker`, que planeja sem credencial nenhuma — é o que torna o
- * §75 verificável aqui. O alvo `aws` exige credencial e está registrado como
- * limitação no README.
+ * O alvo `aws` é o único que resta, e o provider valida a credencial contra o
+ * STS antes de planejar — não há `plan` bem-sucedido sem chave real. O que dá
+ * para verificar sem credencial é o que este arquivo cobre: que a execução
+ * termina, que a falha vira mensagem legível e que o worker não cai. O caminho
+ * feliz exige credencial e está registrado como limitação no README.
  */
 
 const hasTofu = spawnSync("tofu", ["version"], { stdio: "ignore" }).status === 0;
@@ -53,37 +54,18 @@ async function createRun(target: string, slug: string) {
 }
 
 describe("plan (PRD §75)", { skip: hasTofu ? false : "OpenTofu não está instalado" }, () => {
-  it(
-    "roda tofu init e plan de verdade e grava o resumo",
-    { timeout: 300_000 },
-    async () => {
-      const run = await createRun("docker", `plan-teste-${suffix}`);
+  it("sem credencial de nuvem, falha com instrução em vez de cair", { timeout: 300_000 }, async () => {
+    const run = await createRun("aws", `plan-sem-credencial-${suffix}`);
 
-      await runPlan(run.id);
+    await runPlan(run.id);
 
-      const done = await db.run.findUniqueOrThrow({ where: { id: run.id } });
-      assert.equal(done.status, "SUCCEEDED", done.error ?? "");
-      assert.ok(done.startedAt);
-      assert.ok(done.finishedAt);
-
-      const summary = PlanSummarySchema.parse(done.result);
-      assert.equal(summary.target, "docker");
-      // A arquitetura de referência vira rede, imagens e seis containers.
-      assert.ok(summary.add >= 7, `esperava criar vários recursos, veio ${summary.add}`);
-      assert.equal(summary.destroy, 0);
-      assert.ok(
-        summary.changes.some((change) => change.type === "docker_container"),
-        "o plano deveria conter containers",
-      );
-
-      // O que não foi traduzido acompanha o plano, não some.
-      assert.ok(summary.compileWarnings.some((warning) => warning.code === "unsupported-resource"));
-
-      // O log traz a saída dos comandos, que é o que o workspace mostra.
-      assert.match(done.logs, /tofu init/);
-      assert.match(done.logs, /tofu plan/);
-    },
-  );
+    const done = await db.run.findUniqueOrThrow({ where: { id: run.id } });
+    assert.equal(done.status, "FAILED");
+    assert.ok(done.finishedAt);
+    // O §52 exige credencial por projeto: a mensagem diz onde configurar.
+    assert.match(done.error ?? "", /credencial de nuvem/i);
+    assert.match(done.error ?? "", /Configurações/);
+  });
 
   it("grava a falha em vez de derrubar o worker", { timeout: 300_000 }, async () => {
     const run = await db.run.create({
@@ -101,7 +83,7 @@ describe("plan (PRD §75)", { skip: hasTofu ? false : "OpenTofu não está insta
 
     const done = await db.run.findUniqueOrThrow({ where: { id: run.id } });
     assert.equal(done.status, "FAILED");
-    assert.ok(done.error && done.error.length > 0);
+    assert.ok(done.error);
     assert.ok(done.finishedAt);
   });
 });

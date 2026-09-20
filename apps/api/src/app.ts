@@ -9,7 +9,6 @@ import { assistantRoutes, type AssistantOptions } from "./routes/assistant.ts";
 import { credentialRoutes } from "./routes/credentials.ts";
 import { authRoutes } from "./routes/auth.ts";
 import { healthRoutes } from "./routes/health.ts";
-import { labRoutes } from "./routes/labs.ts";
 import { runRoutes } from "./routes/runs.ts";
 import { versionRoutes } from "./routes/versions.ts";
 
@@ -34,7 +33,6 @@ export async function buildApp(options: BuildOptions = {}): Promise<FastifyInsta
   await app.register(authRoutes);
   await app.register(architectureRoutes);
   await app.register(runRoutes);
-  await app.register(labRoutes);
   await app.register(versionRoutes);
   await app.register(credentialRoutes);
   await app.register(assistantRoutes(options.assistant ?? {}));

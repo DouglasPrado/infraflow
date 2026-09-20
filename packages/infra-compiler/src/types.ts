@@ -3,10 +3,10 @@ import type { TofuFile } from "@infraflow/opentofu-generator";
 /**
  * Compilação do grafo para infraestrutura (PRD §34, §74).
  *
- * O alvo faz parte do contrato: o mesmo canvas descreve tanto a infraestrutura
- * de nuvem quanto o laboratório efêmero do §76, e os dois saem do mesmo grafo.
+ * A nuvem é o único alvo: o §75 mantém o `plan` sem apply automático, e a
+ * capacidade sai do motor de análise, não de execução.
  */
-export type CompileTarget = "aws" | "docker";
+export type CompileTarget = "aws";
 
 /** O que o compiler não conseguiu traduzir — nunca silenciosamente. */
 export interface CompileWarning {
@@ -16,36 +16,12 @@ export interface CompileWarning {
   hint?: string;
 }
 
-/**
- * O que o laboratório precisa saber depois do apply (PRD §76, §78).
- *
- * O nome do container é a ponte entre a métrica observada e o node do canvas:
- * sem ele, a coleta do §78 devolveria número sem dono.
- */
-export interface DockerRuntime {
-  network: string;
-  containers: {
-    nodeId: string;
-    name: string;
-    image: string;
-    role: "app" | "proxy" | "database" | "cache" | "storage" | "queue";
-    /** Porta em que o serviço escuta dentro da rede do laboratório. */
-    port: number;
-  }[];
-  /** Recurso que recebe a carga e tem porta publicada. */
-  entry?: { nodeId: string; port: number };
-  /** Containers da observabilidade do laboratório (PRD §36, §78). */
-  observability: { collector: string; prometheus: string };
-}
-
 export interface CompiledStack {
   target: CompileTarget;
   files: TofuFile[];
   /** Ids dos nodes do canvas que viraram infraestrutura. */
   compiledNodeIds: string[];
   warnings: CompileWarning[];
-  /** Presente apenas no alvo docker. */
-  docker?: DockerRuntime;
 }
 
 /** Arquivo pronto para gravar no diretório de trabalho do worker. */

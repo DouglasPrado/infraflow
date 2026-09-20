@@ -1,4 +1,4 @@
-import { ArchitectureDocumentSchema, LoadTestObservationSchema, PlanSummarySchema } from "@infraflow/schema";
+import { ArchitectureDocumentSchema, PlanSummarySchema } from "@infraflow/schema";
 import type { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
 import { claudeTransport, isConfigured, type AssistantTransport } from "../assistant/claude.ts";
@@ -74,35 +74,18 @@ export function assistantRoutes(options: AssistantOptions = {}): FastifyPluginAs
       if (!document.success) return reply.status(500).send({ error: "documento_invalido" });
 
       // Tudo o que o sistema já apurou sobre esta arquitetura.
-      const [planRun, lab, loadRun] = await Promise.all([
-        db.run.findFirst({
-          where: { architectureId: architecture.id, kind: "PLAN", status: "SUCCEEDED" },
-          orderBy: { finishedAt: "desc" },
-          select: { slug: true, result: true },
-        }),
-        db.lab.findFirst({
-          where: { architectureId: architecture.id, status: { not: "DESTROYED" } },
-          orderBy: { createdAt: "desc" },
-          select: { slug: true, status: true, entryUrl: true },
-        }),
-        db.run.findFirst({
-          where: { architectureId: architecture.id, kind: "LOAD_TEST", status: "SUCCEEDED" },
-          orderBy: { finishedAt: "desc" },
-          select: { slug: true, result: true },
-        }),
-      ]);
+      const planRun = await db.run.findFirst({
+        where: { architectureId: architecture.id, kind: "PLAN", status: "SUCCEEDED" },
+        orderBy: { finishedAt: "desc" },
+        select: { slug: true, result: true },
+      });
 
       const plan = planRun ? PlanSummarySchema.safeParse(planRun.result) : undefined;
-      const observation = loadRun ? LoadTestObservationSchema.safeParse(loadRun.result) : undefined;
 
       const context = buildContext({
         document: document.data,
         version: latest.number,
         ...(plan?.success && planRun ? { plan: { runId: planRun.slug, summary: plan.data } } : {}),
-        ...(lab ? { lab } : {}),
-        ...(observation?.success && loadRun
-          ? { observation: { runId: loadRun.slug, observation: observation.data } }
-          : {}),
       });
 
       try {

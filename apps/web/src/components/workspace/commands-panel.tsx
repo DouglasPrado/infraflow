@@ -1,16 +1,14 @@
 "use client";
 
-import { FileCode, FileJson, FileText, Gauge, Info, Play, TriangleAlert } from "lucide-react";
-import type { LoadTestObservation, PlanSummary } from "@infraflow/schema";
+import { FileCode, FileJson, FileText, Info, Play, TriangleAlert } from "lucide-react";
+import type { PlanSummary } from "@infraflow/schema";
 import { useMemo } from "react";
 import type { RunSummary } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { useLabs } from "@/hooks/use-labs";
 import { useRuns } from "@/hooks/use-runs";
 import { ARTIFACT_GROUPS, compileWarnings } from "@/lib/artifacts";
 import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/store/workspace-store";
-import { LabPanel } from "./lab-panel";
 import { FieldGroup } from "./property-field";
 import { RUN_LABEL, RunIcon } from "./run-sheet";
 
@@ -20,10 +18,6 @@ function summaryOf(run: RunSummary): string | null {
   if (run.kind === "PLAN") {
     const plan = run.result as PlanSummary;
     return `+${plan.add} ~${plan.change} -${plan.destroy}`;
-  }
-  if (run.kind === "LOAD_TEST") {
-    const observation = run.result as LoadTestObservation;
-    return `${Math.round(observation.rps)} req/s`;
   }
   return null;
 }
@@ -58,12 +52,9 @@ export function CommandsPanel({
   );
 
   const { runs, error, starting, start, busy } = useRuns(architectureId);
-  const { lab } = useLabs(architectureId);
 
   return (
     <div className="space-y-5 p-3">
-      <LabPanel />
-
       {/* PRD §75 — o plan roda no worker; aqui só se pede e se acompanha. */}
       <FieldGroup title="Execução">
         <div className="space-y-2">
@@ -76,18 +67,6 @@ export function CommandsPanel({
           >
             <Play className="size-3.5" />
             {busy ? "Execução em andamento" : "Rodar tofu plan"}
-          </Button>
-
-          {/* PRD §77 — o k6 mede o laboratório; sem ambiente pronto não há alvo. */}
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-8 w-full gap-1.5"
-            disabled={starting || busy || lab?.status !== "READY"}
-            onClick={() => void start("load-test", "docker")}
-          >
-            <Gauge className="size-3.5" />
-            Rodar teste de carga
           </Button>
 
           {error && (

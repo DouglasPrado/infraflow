@@ -19,8 +19,8 @@ import type { AnalyzerNode, EdgeFlow, Graph, LoadPoint, NodeLoad, Slo, Verdict }
  *    exibir um número específico.
  *
  * Continua sendo **estimativa**: os tempos de serviço e capacidades vêm do
- * registry, não de medição. O k6 do §77 e a Observabilidade do §78 é que
- * transformam isso em observação.
+ * registry, não de medição. O sistema não mede execução real — este motor é a
+ * única fonte de números de capacidade.
  */
 
 /** Acima disto a fila cresce sem limite; o excedente vira recusa. */

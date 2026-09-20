@@ -4,7 +4,7 @@ import { PrismaClient } from "./generated/prisma/client.ts";
 /**
  * Cliente do banco, compartilhado pela API e pelo worker.
  *
- * O §51 separa quem atende requisição de quem executa OpenTofu e k6, mas os
+ * O §51 separa quem atende requisição de quem executa OpenTofu, mas os
  * dois gravam o mesmo estado: o resultado de uma execução precisa sobreviver ao
  * processo que a rodou. Um schema só e um cliente só evitam que as duas visões
  * do banco divirjam.

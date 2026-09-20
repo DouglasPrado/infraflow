@@ -70,7 +70,7 @@ function Row({
 const ms = (value: number) => `${Math.round(value)}ms`;
 
 function Comparison({ comparison }: { comparison: VersionComparison }) {
-  const { estimated, observed, diff } = comparison;
+  const { estimated, diff } = comparison;
 
   return (
     <div className="space-y-4">
@@ -112,28 +112,6 @@ function Comparison({ comparison }: { comparison: VersionComparison }) {
         />
       </section>
 
-      {observed ? (
-        <section className="space-y-2">
-          <Provenance kind="Observed" />
-          <Row
-            label="Sustentado"
-            from={formatRps(observed.from.maxHealthyRps)}
-            to={formatRps(observed.to.maxHealthyRps)}
-            delta={<Growth value={observed.maxHealthyRps.delta} format={formatRps} />}
-          />
-          <Row
-            label="p95"
-            from={ms(observed.from.p95Ms)}
-            to={ms(observed.to.p95Ms)}
-            delta={<Cost value={observed.p95Ms.delta} format={ms} />}
-          />
-        </section>
-      ) : (
-        <p className="text-[11px] leading-relaxed text-muted-foreground">
-          Sem lado medido: comparar medição de uma versão com estimativa da outra produziria um
-          número sem significado. Rode o teste de carga nas duas (§77).
-        </p>
-      )}
 
       <Separator />
 
@@ -341,11 +319,6 @@ export function VersionsSheet({
                   <span className="min-w-0 flex-1 truncate text-[11px]">
                     {version.label ?? <span className="text-muted-foreground">em trabalho</span>}
                   </span>
-                  {version.tested && (
-                    <span className="shrink-0 rounded-sm bg-brand/10 px-1.5 py-0.5 text-[10px] uppercase tracking-eyebrow text-brand">
-                      testada
-                    </span>
-                  )}
                   <div className="flex shrink-0 gap-1">
                     <Button
                       size="sm"

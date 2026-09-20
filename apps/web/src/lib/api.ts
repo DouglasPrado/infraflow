@@ -1,10 +1,5 @@
-import type { ObservedAnalysis, VersionComparison } from "@infraflow/analyzer";
-import type {
-  LabApplyResult,
-  LabContainer,
-  LoadTestObservation,
-  PlanSummary,
-} from "@infraflow/schema";
+import type { VersionComparison } from "@infraflow/analyzer";
+import type { PlanSummary } from "@infraflow/schema";
 
 /**
  * Cliente da API.
@@ -37,10 +32,6 @@ const MESSAGES: Record<string, string> = {
   execucao_em_andamento: "Já existe uma execução em andamento para esta arquitetura.",
   fila_indisponivel: "A fila de execuções está fora do ar. Suba o Redis e o worker.",
   execucao_nao_encontrada: "Execução não encontrada.",
-  laboratorio_em_andamento: "Já existe um laboratório vivo para esta arquitetura.",
-  laboratorio_nao_encontrado: "Laboratório não encontrado.",
-  laboratorio_ja_destruido: "Este laboratório já foi destruído.",
-  laboratorio_nao_esta_pronto: "Crie um laboratório antes de rodar o teste de carga.",
   versao_nao_encontrada: "Versão não encontrada.",
   assistente_indisponivel:
     "O assistente precisa de uma credencial da Anthropic configurada na API (ANTHROPIC_API_KEY).",
@@ -103,8 +94,8 @@ export interface RunSummary {
   kind: string;
   status: RunStatus;
   slug: string;
-  params: { target: "aws" | "docker" };
-  result: PlanSummary | LoadTestObservation | LabApplyResult | null;
+  params: { target: "aws" };
+  result: PlanSummary | null;
   error: string | null;
   startedAt: string | null;
   finishedAt: string | null;
@@ -114,8 +105,6 @@ export interface RunSummary {
 export interface RunDetail extends RunSummary {
   version: number;
   logs: string;
-  /** PRD §79 — presente só em teste de carga concluído. */
-  analysis?: ObservedAnalysis;
 }
 
 /** PRD §38 — uma versão da arquitetura. */
@@ -125,8 +114,6 @@ export interface ArchitectureVersion {
   createdAt: string;
   updatedAt: string;
   runs: number;
-  /** Se houve teste de carga bem-sucedido nesta versão (§80). */
-  tested: boolean;
 }
 
 /** PRD §81 — o que o assistente pode fazer. */
@@ -172,23 +159,6 @@ export interface ArchitecturePricing {
   pricedMonthlyUsd: number;
   nodes: NodePrice[];
   at: string;
-}
-
-export type LabStatus = "CREATING" | "READY" | "DESTROYING" | "DESTROYED" | "FAILED";
-
-/** PRD §76 — infraestrutura temporária de um teste. */
-export interface Lab {
-  id: string;
-  slug: string;
-  status: LabStatus;
-  entryUrl: string | null;
-  entryPort: number | null;
-  containers: LabContainer[];
-  error: string | null;
-  expiresAt: string;
-  readyAt: string | null;
-  destroyedAt: string | null;
-  createdAt: string;
 }
 
 export const api = {
@@ -238,7 +208,7 @@ export const api = {
   },
 
   /** PRD §75, §77 — pede uma execução ao worker. A API só enfileira. */
-  createRun: (architectureId: string, kind: "plan" | "load-test", target: "aws" | "docker" = "aws") =>
+  createRun: (architectureId: string, kind: "plan", target: "aws" = "aws") =>
     request<RunSummary>(`/architectures/${architectureId}/runs`, {
       method: "POST",
       body: JSON.stringify({ kind, target }),
@@ -247,16 +217,6 @@ export const api = {
   runs: (architectureId: string) => request<RunSummary[]>(`/architectures/${architectureId}/runs`),
 
   run: (runId: string) => request<RunDetail>(`/runs/${runId}`),
-
-  /** PRD §76 — cria a infraestrutura temporária. O worker é quem aplica. */
-  createLab: (architectureId: string) =>
-    request<Lab & { runId: string }>(`/architectures/${architectureId}/labs`, { method: "POST" }),
-
-  labs: (architectureId: string) => request<Lab[]>(`/architectures/${architectureId}/labs`),
-
-  /** PRD §54 — o que sobe tem que descer. */
-  destroyLab: (labId: string) =>
-    request<{ runId: string }>(`/labs/${labId}`, { method: "DELETE" }),
 
   /** PRD §38 — congela a versão corrente e abre a próxima para trabalho. */
   snapshot: (id: string, label?: string) =>

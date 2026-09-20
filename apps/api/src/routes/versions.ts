@@ -1,5 +1,5 @@
 import { compareVersions } from "@infraflow/analyzer";
-import { ArchitectureDocumentSchema, LoadTestObservationSchema } from "@infraflow/schema";
+import { ArchitectureDocumentSchema } from "@infraflow/schema";
 import type { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
 import { requireUser } from "../auth/guard.ts";
@@ -33,21 +33,8 @@ async function ownedArchitecture(id: string, userId: string) {
   });
 }
 
-/** Medição mais recente de uma versão, quando houve (PRD §77). */
-async function observationFor(versionId: string) {
-  const run = await db.run.findFirst({
-    where: { versionId, kind: "LOAD_TEST", status: "SUCCEEDED" },
-    orderBy: { finishedAt: "desc" },
-    select: { result: true },
-  });
-  if (!run) return undefined;
-
-  const parsed = LoadTestObservationSchema.safeParse(run.result);
-  return parsed.success ? parsed.data : undefined;
-}
-
 export const versionRoutes: FastifyPluginAsync = async (app) => {
-  /** PRD §38 — as versões da arquitetura, com o que foi medido em cada uma. */
+  /** PRD §38 — as versões da arquitetura. */
   app.get("/architectures/:id/versions", async (request, reply) => {
     const user = await requireUser(request, reply);
     if (!user) return;
@@ -71,27 +58,12 @@ export const versionRoutes: FastifyPluginAsync = async (app) => {
       },
     });
 
-    const tested = new Set(
-      (
-        await db.run.findMany({
-          where: {
-            architectureId: architecture.id,
-            kind: "LOAD_TEST",
-            status: "SUCCEEDED",
-          },
-          select: { versionId: true },
-        })
-      ).map((run) => run.versionId),
-    );
-
     return versions.map((version) => ({
       number: version.number,
       label: version.label,
       createdAt: version.createdAt,
       updatedAt: version.updatedAt,
       runs: version._count.runs,
-      /** PRD §80 — "test" é parte do fluxo: a versão foi medida ou não. */
-      tested: tested.has(version.id),
     }));
   });
 
@@ -187,18 +159,10 @@ export const versionRoutes: FastifyPluginAsync = async (app) => {
       return reply.status(500).send({ error: "documento_invalido" });
     }
 
-    const [leftObservation, rightObservation] = await Promise.all([
-      observationFor(from.id),
-      observationFor(to.id),
-    ]);
-
     return {
       from: { number: from.number, label: from.label },
       to: { number: to.number, label: to.label },
-      ...compareVersions(
-        { document: left.data, ...(leftObservation ? { observation: leftObservation } : {}) },
-        { document: right.data, ...(rightObservation ? { observation: rightObservation } : {}) },
-      ),
+      ...compareVersions({ document: left.data }, { document: right.data }),
     };
   });
 };

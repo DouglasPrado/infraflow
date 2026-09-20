@@ -16,9 +16,8 @@ import { Eyebrow } from "./property-field";
  * PRD §81 — o assistente.
  *
  * Ele não lê o canvas: lê o que o sistema **concluiu** sobre a arquitetura — a
- * validação do §72, a estimativa, o plano do §75, o laboratório do §76 e a
- * medição do §77–§79. Por isso as tarefas são fechadas: são as seis do §81, e
- * cada uma tem de onde tirar resposta.
+ * validação do §72, a estimativa e o plano do §75. Por isso as tarefas são
+ * fechadas: são as seis do §81, e cada uma tem de onde tirar resposta.
  */
 export function AssistantSheet({
   open,
@@ -87,8 +86,8 @@ export function AssistantSheet({
             Assistente
           </SheetTitle>
           <SheetDescription>
-            Responde a partir do que o sistema apurou: validação, estimativa, plano, laboratório e
-            medição (PRD §81).
+            Responde a partir do que o sistema apurou: validação, estimativa e
+            plano (PRD §81).
           </SheetDescription>
         </SheetHeader>
 

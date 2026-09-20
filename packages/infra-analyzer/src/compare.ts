@@ -1,11 +1,5 @@
-import {
-  diffDocuments,
-  type ArchitectureDocument,
-  type DocumentDiff,
-  type LoadTestObservation,
-} from "@infraflow/schema";
+import { diffDocuments, type ArchitectureDocument, type DocumentDiff } from "@infraflow/schema";
 import { estimate, runCapacityTestFor } from "./document.ts";
-import { analyzeObserved } from "./observed.ts";
 
 /**
  * Comparação entre duas versões (PRD §39, §41, §80).
@@ -14,9 +8,9 @@ import { analyzeObserved } from "./observed.ts";
  * eficiência do §41: custo por mil req/s. Duas arquiteturas com a mesma
  * capacidade não são equivalentes se uma custa o dobro.
  *
- * `estimated` e `observed` viajam separados. A comparação só tem lado medido
- * quando **as duas versões** foram testadas — comparar medição de uma com
- * estimativa da outra produziria um número sem significado.
+ * Os números são estimativa do motor de capacidade, sobre os recursos
+ * configurados no canvas. Não há lado medido: a comparação é entre dois
+ * desenhos, não entre duas execuções.
  */
 
 export interface Delta {
@@ -34,12 +28,6 @@ export interface VersionSide {
   costPer1kRps: number | null;
 }
 
-export interface ObservedSide {
-  maxHealthyRps: number;
-  p95Ms: number;
-  errorRatePct: number;
-}
-
 export interface VersionComparison {
   diff: DocumentDiff;
   estimated: {
@@ -47,12 +35,6 @@ export interface VersionComparison {
     to: VersionSide;
     capacityRps: Delta;
     monthlyCostUsd: Delta;
-    p95Ms: Delta;
-  };
-  observed?: {
-    from: ObservedSide;
-    to: ObservedSide;
-    maxHealthyRps: Delta;
     p95Ms: Delta;
   };
 }
@@ -74,27 +56,15 @@ function sideOf(document: ArchitectureDocument): VersionSide {
   };
 }
 
-function observedSide(
-  document: ArchitectureDocument,
-  observation: LoadTestObservation,
-): ObservedSide {
-  return {
-    maxHealthyRps: Math.round(analyzeObserved(document, observation).maxHealthyRps),
-    p95Ms: Math.round(observation.p95Ms),
-    errorRatePct: Math.round(observation.errorRatePct * 10) / 10,
-  };
-}
-
 export interface CompareInput {
   document: ArchitectureDocument;
-  observation?: LoadTestObservation;
 }
 
 export function compareVersions(from: CompareInput, to: CompareInput): VersionComparison {
   const left = sideOf(from.document);
   const right = sideOf(to.document);
 
-  const comparison: VersionComparison = {
+  return {
     diff: diffDocuments(from.document, to.document),
     estimated: {
       from: left,
@@ -102,21 +72,6 @@ export function compareVersions(from: CompareInput, to: CompareInput): VersionCo
       capacityRps: delta(left.capacityRps, right.capacityRps),
       monthlyCostUsd: delta(left.monthlyCostUsd, right.monthlyCostUsd),
       p95Ms: delta(left.p95Ms, right.p95Ms),
-    },
-  };
-
-  if (!from.observation || !to.observation) return comparison;
-
-  const leftObserved = observedSide(from.document, from.observation);
-  const rightObserved = observedSide(to.document, to.observation);
-
-  return {
-    ...comparison,
-    observed: {
-      from: leftObserved,
-      to: rightObserved,
-      maxHealthyRps: delta(leftObserved.maxHealthyRps, rightObserved.maxHealthyRps),
-      p95Ms: delta(leftObserved.p95Ms, rightObserved.p95Ms),
     },
   };
 }

@@ -55,7 +55,7 @@ export function useRuns(architectureId: string | null) {
   }, [busy]);
 
   const start = useCallback(
-    async (kind: "plan" | "load-test", target: "aws" | "docker" = "aws") => {
+    async (kind: "plan", target: "aws" = "aws") => {
       if (!architectureId) return;
       setStarting(true);
       setError(null);

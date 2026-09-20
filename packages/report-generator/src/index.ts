@@ -2,7 +2,6 @@ import { serializeArchitectureJson } from "@infraflow/schema";
 import { architectureMd } from "./architecture.ts";
 import { capacityMd } from "./capacity.ts";
 import { goalMd } from "./goal.ts";
-import { loadTestMd } from "./load-test.ts";
 import type { ReportContext, ReportFile, ReportLanguage } from "./types.ts";
 
 export * from "./types.ts";
@@ -25,14 +24,8 @@ const REPORTS: ReportDefinition[] = [
   {
     name: "CAPACITY.md",
     language: "markdown",
-    description: "Capacidade estimada e observada",
+    description: "Capacidade estimada pelo motor de análise",
     render: capacityMd,
-  },
-  {
-    name: "LOAD-TEST.md",
-    language: "markdown",
-    description: "Workload, perfil e resultado",
-    render: loadTestMd,
   },
   {
     name: "GOAL.md",

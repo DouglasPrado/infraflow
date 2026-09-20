@@ -29,21 +29,20 @@ export async function runPlan(runId: string): Promise<void> {
   try {
     const params = RunParamsSchema.parse(run.params);
     const document = ArchitectureDocumentSchema.parse(run.version.graph);
-    const { stack, files } = emit(document, { target: params.target, slug: run.slug });
+    const { stack, files } = emit(document);
 
     await workspace.write(files);
 
     /**
-     * Alvo de nuvem exige credencial do projeto (§52). Sem ela a execução
-     * falha com instrução, em vez de cair na credencial da máquina.
+     * O plano exige credencial do projeto (§52). Sem ela a execução falha com
+     * instrução, em vez de cair na credencial da máquina.
      */
-    const cloudEnv =
-      params.target === "aws" ? await cloudEnvFor(run.architectureId) : {};
+    const cloudEnv = await cloudEnvFor(run.architectureId);
 
     const outcome = await plan(
       workspace.path,
       params.target,
-      defaultVariables(document, { target: params.target }),
+      defaultVariables(document),
       cloudEnv,
     );
     const summary: PlanSummary = {

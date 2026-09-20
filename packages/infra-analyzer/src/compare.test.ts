@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import type { LoadTestObservation } from "@infraflow/schema";
 import { connection, documentOf, loadGeneratorNode, resourceNode } from "@infraflow/validator";
 import { compareVersions } from "./compare.ts";
 
@@ -20,35 +19,6 @@ function architecture(overrides: Record<string, string | number | boolean> = {})
       connection("ecs", "rds", "Database"),
     ],
   );
-}
-
-function observation(maxRps: number, p95Ms: number): LoadTestObservation {
-  const start = Date.parse("2026-09-20T10:00:00.000Z");
-  return {
-    startedAt: new Date(start).toISOString(),
-    finishedAt: new Date(start + 20_000).toISOString(),
-    durationSeconds: 20,
-    requests: maxRps * 20,
-    rps: maxRps,
-    p50Ms: p95Ms / 4,
-    p95Ms,
-    p99Ms: p95Ms * 2,
-    errorRatePct: 0,
-    meetsSlo: true,
-    droppedIterations: 0,
-    loadCeiling: "none",
-    metrics: [],
-    stages: [
-      {
-        targetRps: maxRps,
-        rps: maxRps,
-        p95Ms,
-        errorRatePct: 0,
-        startedAt: new Date(start).toISOString(),
-        endedAt: new Date(start + 20_000).toISOString(),
-      },
-    ],
-  };
 }
 
 describe("comparação de versões (PRD §39)", () => {
@@ -90,29 +60,5 @@ describe("comparação de versões (PRD §39)", () => {
         change.properties.some((property) => property.key === "maxReplicas"),
       ),
     );
-  });
-});
-
-describe("lado observado", () => {
-  it("só aparece quando as duas versões foram medidas", () => {
-    const comSomenteUma = compareVersions(
-      { document: architecture(), observation: observation(1000, 120) },
-      { document: architecture({ maxReplicas: 20 }) },
-    );
-    assert.equal(comSomenteUma.observed, undefined);
-  });
-
-  it("compara medição com medição", () => {
-    const comparison = compareVersions(
-      { document: architecture(), observation: observation(1200, 410) },
-      { document: architecture({ maxReplicas: 20 }), observation: observation(2800, 230) },
-    );
-
-    assert.ok(comparison.observed);
-    assert.equal(comparison.observed.maxHealthyRps.from, 1200);
-    assert.equal(comparison.observed.maxHealthyRps.to, 2800);
-    assert.equal(comparison.observed.maxHealthyRps.delta, 1600);
-    // Latência caiu: o delta é negativo, e isso é melhora.
-    assert.equal(comparison.observed.p95Ms.delta, -180);
   });
 });

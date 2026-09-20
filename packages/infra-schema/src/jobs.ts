@@ -14,8 +14,8 @@ export const RUN_QUEUE = "infraflow-runs";
 export const RunJobSchema = z.object({ runId: z.uuid() });
 export type RunJob = z.infer<typeof RunJobSchema>;
 
-/** Alvo da compilação que a execução usa (PRD §74, §76). */
-export const RunTargetSchema = z.enum(["aws", "docker"]);
+/** Alvo da compilação que a execução usa (PRD §74). */
+export const RunTargetSchema = z.enum(["aws"]);
 export type RunTarget = z.infer<typeof RunTargetSchema>;
 
 export const RunParamsSchema = z.object({ target: RunTargetSchema });

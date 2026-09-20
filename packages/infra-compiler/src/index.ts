@@ -1,21 +1,11 @@
 import { printFile } from "@infraflow/opentofu-generator";
 import type { ArchitectureDocument } from "@infraflow/schema";
 import { awsTfvarsExample, compileAws } from "./aws/index.ts";
-import { compileDocker } from "./docker/index.ts";
 import { projectSlug } from "./names.ts";
-import type { CompiledStack, CompileTarget, EmittedFile } from "./types.ts";
+import type { CompiledStack, EmittedFile } from "./types.ts";
 
 export * from "./types.ts";
 export * from "./names.ts";
-
-export interface CompileOptions {
-  target: CompileTarget;
-  /**
-   * Identificador da execução (PRD §53). O alvo docker prefixa rede e
-   * containers com ele — é o que mantém dois laboratórios sem se ver.
-   */
-  slug?: string;
-}
 
 /** Os arquivos do §34, na ordem em que fazem sentido ler. */
 export const OPENTOFU_FILES: { name: string; description: string }[] = [
@@ -37,16 +27,8 @@ export function isOpenTofuFile(name: string): boolean {
  * byte. Não é preciosismo — o endereço do recurso é a chave do state, e saída
  * instável significa destruir e recriar infraestrutura a cada compilação.
  */
-export function compile(
-  document: ArchitectureDocument,
-  options: CompileOptions = { target: "aws" },
-): CompiledStack {
-  switch (options.target) {
-    case "aws":
-      return compileAws(document);
-    case "docker":
-      return compileDocker(document, { slug: options.slug ?? "lab" });
-  }
+export function compile(document: ArchitectureDocument): CompiledStack {
+  return compileAws(document);
 }
 
 /**
@@ -56,26 +38,22 @@ export function compile(
  * dado que está no canvas desde o começo. O worker passa estes valores ao
  * OpenTofu; quem rodar os arquivos à mão usa o `terraform.tfvars.example`.
  */
-export function defaultVariables(
-  document: ArchitectureDocument,
-  options: CompileOptions = { target: "aws" },
-): Record<string, string> {
-  if (options.target !== "aws") return {};
+export function defaultVariables(document: ArchitectureDocument): Record<string, string> {
   return { project: projectSlug(document.name), environment: document.environment };
 }
 
 /** Arquivos prontos para gravar no diretório de trabalho do worker. */
-export function emit(
-  document: ArchitectureDocument,
-  options: CompileOptions = { target: "aws" },
-): { stack: CompiledStack; files: EmittedFile[] } {
-  const stack = compile(document, options);
+export function emit(document: ArchitectureDocument): {
+  stack: CompiledStack;
+  files: EmittedFile[];
+} {
+  const stack = compile(document);
 
   return {
     stack,
     files: [
       ...stack.files.map((file) => ({ name: file.name, content: printFile(file) })),
-      ...(stack.target === "aws" ? [awsTfvarsExample(document)] : []),
+      awsTfvarsExample(document),
     ],
   };
 }

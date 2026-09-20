@@ -16,15 +16,9 @@ export interface Workspace {
 }
 
 export interface WorkspaceOptions {
-  /** Raiz onde o diretório é criado. Execuções e laboratórios têm as suas. */
+  /** Raiz onde o diretório é criado. */
   root?: string;
-  /**
-   * Apaga o que existir antes de escrever.
-   *
-   * Verdadeiro para execução avulsa. **Falso para laboratório**: o state do
-   * OpenTofu precisa sobreviver entre o apply e o destroy, senão o ambiente
-   * fica órfão (§54).
-   */
+  /** Apaga o que existir antes de escrever. */
   fresh?: boolean;
 }
 

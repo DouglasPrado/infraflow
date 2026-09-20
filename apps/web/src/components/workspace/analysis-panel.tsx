@@ -10,7 +10,6 @@ import { analyze, recommendationsFor } from "@/lib/simulation";
 import { summarize, validateCanvas, type ValidationIssue } from "@/lib/validation";
 import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/store/workspace-store";
-import { ObservedPanel } from "./observed-panel";
 import { PricingPanel } from "./pricing-panel";
 import { Eyebrow, FieldGroup, Provenance } from "./property-field";
 
@@ -86,7 +85,7 @@ export function AnalysisPanel() {
   const bottleneckItem =
     bottleneckNode?.type === "resource" ? getCatalogItem(bottleneckNode.data.type) : undefined;
 
-  const observed = status === "done" && result;
+  const finished = status === "done" && result;
 
   /** Pico de saturação em cada degrau já executado. */
   const ladder = (result?.steps ?? []).slice(0, runLog.length).map((step) => ({
@@ -97,15 +96,11 @@ export function AnalysisPanel() {
 
   return (
     <div className="space-y-5 p-3">
-      {/* PRD §79 — medição lidera sobre simulação: quando existe execução real,
-          é ela que responde onde a arquitetura cedeu. */}
-      <ObservedPanel />
-
-      {/* O veredito lidera assim que existe. Antes disso, a estimativa é tudo que há. */}
-      {observed && (
+      {/* O veredito lidera assim que o teste termina. */}
+      {finished && (
         <>
           <section className="space-y-3">
-            <Provenance kind="Observed" />
+            <Provenance kind="Estimated" />
             <div>
               <div className="text-[11px] text-muted-foreground">Maximum healthy capacity</div>
               <div className="mt-0.5 font-mono text-[32px] font-medium leading-none tracking-tight tabular-nums">
@@ -151,7 +146,7 @@ export function AnalysisPanel() {
         )}
       </FieldGroup>
 
-      {observed && bottleneckItem && bottleneckNode && (
+      {finished && bottleneckItem && bottleneckNode && (
         <>
           <Separator />
 

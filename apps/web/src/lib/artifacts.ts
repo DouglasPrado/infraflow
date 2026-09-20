@@ -44,7 +44,7 @@ export function compileWarnings(
   edges: InfraEdge[],
 ): CompileWarning[] {
   try {
-    return compile(toDocument(meta, nodes, edges), { target: "aws" }).warnings;
+    return compile(toDocument(meta, nodes, edges)).warnings;
   } catch {
     return [];
   }

@@ -1,7 +1,5 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
-import type { PlanAction, PlanSummary, RunTarget } from "@infraflow/schema";
 import { mkdir } from "node:fs/promises";
+import type { PlanAction, PlanSummary, RunTarget } from "@infraflow/schema";
 import { env } from "./env.ts";
 import { execute, failureOf, type ProcessResult } from "./process.ts";
 
@@ -150,68 +148,3 @@ export function transcript(steps: TofuStep[]): string {
 }
 
 /** O plano gravado, para quem quiser inspecionar depois. */
-export function planPath(cwd: string): string {
-  return join(cwd, PLAN_FILE);
-}
-
-export async function readPlanJson(cwd: string): Promise<string> {
-  return readFile(planPath(cwd), "utf8");
-}
-
-/**
- * `tofu apply` no diretório do laboratório (PRD §76).
- *
- * `-auto-approve` é deliberado e seguro **porque o alvo é o laboratório**: o
- * §75 mantém a nuvem sem apply automático, e quem chama aqui já recusou
- * qualquer alvo que não seja o docker efêmero.
- */
-export async function apply(
-  cwd: string,
-  variables: Record<string, string> = {},
-): Promise<TofuStep[]> {
-  const steps: TofuStep[] = [];
-  await mkdir(env.tofuPluginCache, { recursive: true });
-
-  await step("init", ["init", "-no-color", "-input=false"], cwd, steps);
-  await step(
-    "apply",
-    [
-      "apply",
-      "-no-color",
-      "-input=false",
-      "-auto-approve",
-      ...Object.entries(variables).map(([name, value]) => `-var=${name}=${value}`),
-    ],
-    cwd,
-    steps,
-  );
-
-  return steps;
-}
-
-/** PRD §54 — o que sobe tem que descer. */
-export async function destroy(cwd: string): Promise<TofuStep[]> {
-  const steps: TofuStep[] = [];
-  await mkdir(env.tofuPluginCache, { recursive: true });
-
-  await step("init", ["init", "-no-color", "-input=false"], cwd, steps);
-  await step("destroy", ["destroy", "-no-color", "-input=false", "-auto-approve"], cwd, steps);
-
-  return steps;
-}
-
-/** Saídas declaradas pelo módulo, já resolvidas. */
-export async function outputs(cwd: string): Promise<Record<string, string>> {
-  const result = await execute("tofu", ["output", "-json"], {
-    cwd,
-    env: { TF_PLUGIN_CACHE_DIR: env.tofuPluginCache, TF_IN_AUTOMATION: "1" },
-  });
-  if (!result.ok) return {};
-
-  const parsed = JSON.parse(result.stdout) as Record<string, { value?: unknown }>;
-  return Object.fromEntries(
-    Object.entries(parsed).flatMap(([name, entry]) =>
-      typeof entry.value === "string" ? [[name, entry.value]] : [],
-    ),
-  );
-}
