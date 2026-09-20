@@ -7,11 +7,12 @@ import {
   Controls,
   MarkerType,
   ReactFlow,
+  useNodesInitialized,
   useReactFlow,
   type NodeTypes,
   type EdgeTypes,
 } from "@xyflow/react";
-import { useCallback, useRef, type DragEvent } from "react";
+import { useCallback, useEffect, useRef, type DragEvent } from "react";
 import { useWorkspaceStore } from "@/store/workspace-store";
 import { FlowEdge } from "./flow-edge";
 import { GroupNode } from "./group-node";
@@ -37,9 +38,38 @@ const defaultEdgeOptions = {
   markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16, color: "var(--border)" },
 };
 
+const FIT_VIEW_OPTIONS = { padding: 0.18 };
+
 export function InfraCanvas() {
   const wrapper = useRef<HTMLDivElement>(null);
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, fitView } = useReactFlow();
+
+  /**
+   * O `fitView` da montagem roda antes dos nodes serem medidos: as alturas ainda
+   * dependem do carregamento da fonte, então ele calcula um zoom grande demais e
+   * a arquitetura vaza para fora do canvas. Refazemos o fit uma única vez, quando
+   * os nodes já têm dimensão real.
+   */
+  const nodesInitialized = useNodesInitialized();
+  const fitted = useRef(false);
+
+  useEffect(() => {
+    if (!nodesInitialized || fitted.current) return;
+    fitted.current = true;
+
+    let cancelled = false;
+    const run = () => {
+      if (!cancelled) fitView(FIT_VIEW_OPTIONS);
+    };
+
+    const fonts = document.fonts;
+    if (fonts?.status === "loaded") run();
+    else fonts?.ready.then(run).catch(run);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [fitView, nodesInitialized]);
 
   const nodes = useWorkspaceStore((state) => state.nodes);
   const edges = useWorkspaceStore((state) => state.edges);
@@ -98,7 +128,7 @@ export function InfraCanvas() {
         minZoom={0.2}
         maxZoom={2}
         fitView
-        fitViewOptions={{ padding: 0.25 }}
+        fitViewOptions={FIT_VIEW_OPTIONS}
         attributionPosition="bottom-left"
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="var(--canvas-dot)" />
