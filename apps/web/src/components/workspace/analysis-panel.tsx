@@ -101,9 +101,6 @@ export function AnalysisPanel() {
           é ela que responde onde a arquitetura cedeu. */}
       <ObservedPanel />
 
-      {/* PRD §40 — preço de tabela, quando há credencial configurada (§52). */}
-      <PricingPanel />
-
       {/* O veredito lidera assim que existe. Antes disso, a estimativa é tudo que há. */}
       {observed && (
         <>
@@ -257,6 +254,12 @@ export function AnalysisPanel() {
           </ul>
         )}
       </FieldGroup>
+
+      <Separator />
+
+      {/* PRD §40 — a conta fecha o painel: capacidade e gargalo primeiro, o que
+          isso custa por último. Só aparece com credencial configurada (§52). */}
+      <PricingPanel />
     </div>
   );
 }

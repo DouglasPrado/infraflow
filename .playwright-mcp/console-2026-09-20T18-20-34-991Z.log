@@ -12,3 +12,31 @@
 [   73915ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=XHUUCCc3rPUSylt_H3901' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/0n33_next_dist_client_11wwo80._.js:16348
 [   78921ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=XHUUCCc3rPUSylt_H3901' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/0n33_next_dist_client_11wwo80._.js:16348
 [   83924ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=XHUUCCc3rPUSylt_H3901' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/0n33_next_dist_client_11wwo80._.js:16348
+[  480735ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[  480745ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[  732642ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[  732959ms] [LOG] [Fast Refresh] done in 419ms @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[  734257ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=hHYvUdcuCapnHmtuqiAHY' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/0n33_next_dist_client_11wwo80._.js:16348
+[  735259ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=hHYvUdcuCapnHmtuqiAHY' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/0n33_next_dist_client_11wwo80._.js:16348
+[  736792ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=hHYvUdcuCapnHmtuqiAHY' failed: Error during WebSocket handshake: Unexpected response code: 404 @ http://localhost:3000/_next/static/chunks/0n33_next_dist_client_11wwo80._.js:16348
+[  737801ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[  738845ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[  738859ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[ 1044056ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[ 1045032ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=nas5TQJZXhaqGDdZjfynb' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/0n33_next_dist_client_11wwo80._.js:16348
+[ 1046044ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=nas5TQJZXhaqGDdZjfynb' failed: Error during WebSocket handshake: Unexpected response code: 404 @ http://localhost:3000/_next/static/chunks/0n33_next_dist_client_11wwo80._.js:16348
+[ 1047048ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[ 1047563ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[ 1047571ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[ 1332060ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:3000/workspace/f7dccbcb-e844-4af7-8444-15e9bba9e92b:0
+[ 1376916ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/architectures/f7dccbcb-e844-4af7-8444-15e9bba9e92b/pricing:0
+[ 1377257ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=dZe1XV1u0Ia3Cxn_fdSm0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/0n33_next_dist_client_11wwo80._.js:16348
+[ 1377815ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/architectures/f7dccbcb-e844-4af7-8444-15e9bba9e92b:0
+[ 1377818ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/architectures/f7dccbcb-e844-4af7-8444-15e9bba9e92b/pricing:0
+[ 1377818ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/api/architectures/f7dccbcb-e844-4af7-8444-15e9bba9e92b/pricing:0
+[ 1378258ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/hmr?id=dZe1XV1u0Ia3Cxn_fdSm0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/0n33_next_dist_client_11wwo80._.js:16348
+[ 1379262ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[ 1379845ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[ 1379855ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[ 1521602ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
+[ 1521698ms] [LOG] [Fast Refresh] done in 161ms @ http://localhost:3000/_next/static/chunks/0n33_next_dist_09wkv-m._.js:776
