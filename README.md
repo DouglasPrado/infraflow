@@ -90,6 +90,8 @@ Os testes da API são de integração e **exigem o Postgres de pé**.
 | `GET /architectures/:id/versions` | Versões, com quais foram testadas (§38) |
 | `POST /architectures/:id/clone` | Clona uma versão numa arquitetura nova (§80) |
 | `GET /architectures/:id/compare` | Compara duas versões (§39, §41) |
+| `GET /assistant/tasks` | As seis tarefas do §81 e se há credencial |
+| `POST /architectures/:id/assistant` | Resposta sobre a arquitetura (§81) |
 | `POST /architectures/:id/labs` | Cria o laboratório efêmero (§76) |
 | `GET /architectures/:id/labs` | Laboratórios da arquitetura |
 | `DELETE /labs/:id` | `tofu destroy` do laboratório (§54) |
@@ -351,6 +353,36 @@ conexão redesenhada com outro id continua sendo a mesma conexão.
 O lado `Observed` da comparação só aparece quando **as duas versões** foram
 medidas. Comparar medição de uma com estimativa da outra produziria um número
 sem significado.
+
+## Assistente (§81)
+
+"Somente depois do motor determinístico funcionar" não é só ordem de
+construção — é de onde vêm os dados. O assistente **não olha para o canvas**:
+lê o que o sistema já concluiu e explica isso.
+
+O contexto que vai ao modelo é `architecture.json` (§33), os achados da
+validação (§72), a estimativa de capacidade e custo (§23, §40), os avisos de
+compilação (§74), o último `tofu plan` (§75), o laboratório (§76) e a medição
+com o gargalo observado (§77–§79). Cada bloco diz de qual leitura vem —
+`Estimated`, `Planned` ou `Observed` —, porque misturar as três no prompt é a
+forma mais rápida de um assistente apresentar estimativa como resultado (§85).
+
+**O que o sistema não sabe entra como ausência**, não como espaço em branco:
+sem teste de carga, o contexto diz que não há medição e que afirmar qualquer
+coisa sobre desempenho real seria especulação.
+
+As tarefas são as seis do §81 e nada além: explicar arquitetura, explicar
+gargalo, sugerir melhorias, explicar tradeoffs, gerar documentação e preparar
+instruções para agente. Uma pergunta livre é respondida dentro do escopo da
+tarefa escolhida.
+
+```bash
+# necessário para o assistente responder
+ANTHROPIC_API_KEY=sk-ant-... pnpm --filter @infraflow/api dev
+```
+
+Sem credencial a rota responde `503` e a interface explica por quê. Nenhuma
+resposta é fabricada.
 
 ## Como a capacidade é calculada
 

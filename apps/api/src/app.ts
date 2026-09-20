@@ -5,6 +5,7 @@ import Fastify, { type FastifyInstance } from "fastify";
 import { env } from "./env.ts";
 import { closeQueue } from "./queue.ts";
 import { architectureRoutes } from "./routes/architectures.ts";
+import { assistantRoutes, type AssistantOptions } from "./routes/assistant.ts";
 import { authRoutes } from "./routes/auth.ts";
 import { healthRoutes } from "./routes/health.ts";
 import { labRoutes } from "./routes/labs.ts";
@@ -12,7 +13,12 @@ import { runRoutes } from "./routes/runs.ts";
 import { versionRoutes } from "./routes/versions.ts";
 
 /** Instância separada do listen para os testes poderem injetar requisições. */
-export async function buildApp(): Promise<FastifyInstance> {
+/** O transporte do assistente é injetável para o teste não usar credencial. */
+export interface BuildOptions {
+  assistant?: AssistantOptions;
+}
+
+export async function buildApp(options: BuildOptions = {}): Promise<FastifyInstance> {
   const app = Fastify({
     logger: { level: process.env.LOG_LEVEL ?? "info" },
   });
@@ -29,6 +35,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(runRoutes);
   await app.register(labRoutes);
   await app.register(versionRoutes);
+  await app.register(assistantRoutes(options.assistant ?? {}));
 
   // A fila vive enquanto a aplicação viver (PRD §50).
   app.addHook("onClose", closeQueue);

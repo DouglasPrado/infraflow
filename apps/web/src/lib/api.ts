@@ -42,6 +42,9 @@ const MESSAGES: Record<string, string> = {
   laboratorio_ja_destruido: "Este laboratório já foi destruído.",
   laboratorio_nao_esta_pronto: "Crie um laboratório antes de rodar o teste de carga.",
   versao_nao_encontrada: "Versão não encontrada.",
+  assistente_indisponivel:
+    "O assistente precisa de uma credencial da Anthropic configurada na API (ANTHROPIC_API_KEY).",
+  assistente_falhou: "O assistente não conseguiu responder. Tente de novo.",
   arquitetura_nao_encontrada: "Arquitetura não encontrada.",
 };
 
@@ -120,6 +123,15 @@ export interface ArchitectureVersion {
   /** Se houve teste de carga bem-sucedido nesta versão (§80). */
   tested: boolean;
 }
+
+/** PRD §81 — o que o assistente pode fazer. */
+export type AssistantTask =
+  | "explain-architecture"
+  | "explain-bottleneck"
+  | "suggest-improvements"
+  | "explain-tradeoffs"
+  | "generate-documentation"
+  | "prepare-agent-instructions";
 
 export type LabStatus = "CREATING" | "READY" | "DESTROYING" | "DESTROYED" | "FAILED";
 
@@ -220,6 +232,18 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ version }),
     }),
+
+  /** PRD §81 — tarefas do assistente e se ele está utilizável. */
+  assistantTasks: () =>
+    request<{ available: boolean; tasks: { task: AssistantTask; label: string; description: string }[] }>(
+      "/assistant/tasks",
+    ),
+
+  ask: (architectureId: string, task: AssistantTask, question?: string) =>
+    request<{ task: AssistantTask; text: string; model: string }>(
+      `/architectures/${architectureId}/assistant`,
+      { method: "POST", body: JSON.stringify({ task, question }) },
+    ),
 
   /** PRD §39 — compara duas versões. */
   compare: (id: string, from: number, to: number) =>

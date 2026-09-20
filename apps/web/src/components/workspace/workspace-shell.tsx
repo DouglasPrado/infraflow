@@ -11,6 +11,7 @@ import { useWorkspaceStore } from "@/store/workspace-store";
 import { CommandPalette } from "./command-palette";
 import { ComponentLibrary } from "./component-library";
 import { ExportSheet } from "./export-sheet";
+import { AssistantSheet } from "./assistant-sheet";
 import { RunSheet } from "./run-sheet";
 import { VersionsSheet } from "./versions-sheet";
 import { Inspector } from "./inspector";
@@ -42,6 +43,7 @@ function WorkspaceShellInner({ user }: { user: SessionUser }) {
   const [exportFile, setExportFile] = useState<string | null>(null);
   const [openRun, setOpenRun] = useState<string | null>(null);
   const [versionsOpen, setVersionsOpen] = useState(false);
+  const [assistantOpen, setAssistantOpen] = useState(false);
 
   useSimulationRunner();
   useAutosave();
@@ -95,6 +97,7 @@ function WorkspaceShellInner({ user }: { user: SessionUser }) {
         onOpenExport={openFile}
         onOpenPalette={() => setPaletteOpen(true)}
         onOpenVersions={() => setVersionsOpen(true)}
+        onOpenAssistant={() => setAssistantOpen(true)}
       />
 
       <div className="flex min-h-0 flex-1">
@@ -111,6 +114,7 @@ function WorkspaceShellInner({ user }: { user: SessionUser }) {
       <ExportSheet file={exportFile} onOpenChange={(open) => !open && setExportFile(null)} />
       <RunSheet runId={openRun} onOpenChange={(open) => !open && setOpenRun(null)} />
       <VersionsSheet open={versionsOpen} onOpenChange={setVersionsOpen} />
+      <AssistantSheet open={assistantOpen} onOpenChange={setAssistantOpen} />
     </div>
   );
 }

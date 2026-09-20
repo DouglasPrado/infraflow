@@ -12,6 +12,7 @@ import {
   Play,
   Redo2,
   RotateCcw,
+  Sparkles,
   Undo2,
   ZoomIn,
   ZoomOut,
@@ -174,11 +175,13 @@ export function TopBar({
   onOpenExport,
   onOpenPalette,
   onOpenVersions,
+  onOpenAssistant,
 }: {
   user: SessionUser;
   onOpenExport: (file?: string) => void;
   onOpenPalette: () => void;
   onOpenVersions: () => void;
+  onOpenAssistant: () => void;
 }) {
   const { zoomIn, zoomOut } = useReactFlow();
 
@@ -271,6 +274,16 @@ export function TopBar({
         >
           <FileCode className="size-3.5" strokeWidth={1.75} />
           OpenTofu
+        </Button>
+        {/* PRD §81 — explica a arquitetura a partir do que o sistema apurou. */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="hidden h-7 gap-1.5 px-2 text-muted-foreground hover:text-foreground lg:inline-flex"
+          onClick={onOpenAssistant}
+        >
+          <Sparkles className="size-3.5" strokeWidth={1.75} />
+          Assistente
         </Button>
         {/* PRD §80 — congelar, clonar e comparar versões. */}
         <Button

@@ -12,6 +12,7 @@
     "lint": "eslint --config ../../eslint.config.mjs src"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.127.0",
     "@fastify/cookie": "^11.1.2",
     "@fastify/cors": "^11.1.0",
     "@fastify/rate-limit": "^11.2.0",
