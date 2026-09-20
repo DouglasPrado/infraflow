@@ -204,13 +204,8 @@ export function compileAws(document: ArchitectureDocument): CompiledStack {
 
 /** O `terraform.tfvars.example` do §34 — não é HCL de bloco, é chave/valor. */
 export function awsTfvarsExample(document: ArchitectureDocument): EmittedFile {
-  const project = document.name
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 24);
+  // O mesmo cálculo que o worker usa para passar `-var project=…`.
+  const project = projectSlug(document.name);
 
   return {
     name: "terraform.tfvars.example",

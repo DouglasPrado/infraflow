@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { IdSchema } from "./primitives.ts";
 
 /**
  * Contrato entre a API e o worker (PRD §50, §51).
@@ -45,3 +46,45 @@ export const PlanSummarySchema = z.object({
   ),
 });
 export type PlanSummary = z.infer<typeof PlanSummarySchema>;
+
+/** Container do laboratório, ligado ao node que o originou (PRD §76, §78). */
+export const LabContainerSchema = z.object({
+  nodeId: IdSchema,
+  name: z.string().min(1),
+  image: z.string().min(1),
+  role: z.enum(["app", "proxy", "database", "cache", "storage", "queue"]),
+  port: z.number().int().positive(),
+});
+export type LabContainer = z.infer<typeof LabContainerSchema>;
+
+/** Quanto custou até a arquitetura responder (PRD §76 — "Ready"). */
+export const LabReadinessSchema = z.object({
+  ready: z.boolean(),
+  attempts: z.number().int().nonnegative(),
+  lastStatus: z.number().int().optional(),
+  lastError: z.string().optional(),
+  waitedMs: z.number().nonnegative(),
+});
+export type LabReadiness = z.infer<typeof LabReadinessSchema>;
+
+export const LabApplyResultSchema = z.object({
+  entryUrl: z.string().min(1),
+  containers: z.array(LabContainerSchema),
+  readiness: LabReadinessSchema,
+});
+export type LabApplyResult = z.infer<typeof LabApplyResultSchema>;
+
+/**
+ * Identificador legível de uma execução ou ambiente (PRD §53).
+ *
+ * Usa `crypto.getRandomValues`, que existe no Node e no navegador: este pacote
+ * é o vocabulário comum, e importar `node:crypto` aqui quebraria a web.
+ */
+export function slugFor(kind: string): string {
+  const bytes = new Uint8Array(5);
+  globalThis.crypto.getRandomValues(bytes);
+  const suffix = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0"))
+    .join("")
+    .toUpperCase();
+  return `${kind}-${suffix}`;
+}

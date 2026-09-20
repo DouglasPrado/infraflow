@@ -15,16 +15,33 @@ export interface Workspace {
   remove(): Promise<void>;
 }
 
-export async function createWorkspace(slug: string): Promise<Workspace> {
-  const path = join(env.runsRoot, slug);
+export interface WorkspaceOptions {
+  /** Raiz onde o diretório é criado. Execuções e laboratórios têm as suas. */
+  root?: string;
+  /**
+   * Apaga o que existir antes de escrever.
+   *
+   * Verdadeiro para execução avulsa. **Falso para laboratório**: o state do
+   * OpenTofu precisa sobreviver entre o apply e o destroy, senão o ambiente
+   * fica órfão (§54).
+   */
+  fresh?: boolean;
+}
+
+export async function createWorkspace(
+  slug: string,
+  options: WorkspaceOptions = {},
+): Promise<Workspace> {
+  const root = options.root ?? env.runsRoot;
+  const path = join(root, slug);
 
   // O slug vem do banco, mas o caminho é conferido mesmo assim: um `..` aqui
-  // escreveria fora da raiz de execuções.
-  if (!resolve(path).startsWith(resolve(env.runsRoot))) {
+  // escreveria fora da raiz configurada.
+  if (!resolve(path).startsWith(resolve(root))) {
     throw new Error(`Diretório de execução inválido para "${slug}".`);
   }
 
-  await rm(path, { recursive: true, force: true });
+  if (options.fresh !== false) await rm(path, { recursive: true, force: true });
   await mkdir(path, { recursive: true });
 
   return {

@@ -7,6 +7,7 @@ import { useRuns } from "@/hooks/use-runs";
 import { ARTIFACT_GROUPS, compileWarnings } from "@/lib/artifacts";
 import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/store/workspace-store";
+import { LabPanel } from "./lab-panel";
 import { FieldGroup } from "./property-field";
 import { RUN_LABEL, RunIcon } from "./run-sheet";
 
@@ -43,6 +44,8 @@ export function CommandsPanel({
 
   return (
     <div className="space-y-5 p-3">
+      <LabPanel />
+
       {/* PRD §75 — o plan roda no worker; aqui só se pede e se acompanha. */}
       <FieldGroup title="Execução">
         <div className="space-y-2">

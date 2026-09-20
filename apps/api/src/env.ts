@@ -14,4 +14,9 @@ export const env = {
   webOrigin: process.env.WEB_ORIGIN ?? "http://localhost:3000",
   /** Fila que leva as execuções ao worker (PRD §50, §51). */
   redisUrl: process.env.REDIS_URL ?? "redis://localhost:6381",
+  /**
+   * Validade inicial de um laboratório (PRD §54). O worker renova quando o
+   * ambiente fica pronto; este valor só cobre a criação.
+   */
+  labTtlMs: Number(process.env.INFRAFLOW_LAB_TTL_MS ?? 60 * 60 * 1000),
 };

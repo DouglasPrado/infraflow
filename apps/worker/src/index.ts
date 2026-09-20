@@ -2,7 +2,9 @@ import { RUN_QUEUE, RunJobSchema } from "@infraflow/schema";
 import { Worker } from "bullmq";
 import { db } from "./db.ts";
 import { env } from "./env.ts";
+import { runLabApply, runLabDestroy } from "./runs/lab.ts";
 import { runPlan } from "./runs/plan.ts";
+import { startLabSweep } from "./sweep.ts";
 
 /**
  * Worker de execuções (PRD §51).
@@ -14,6 +16,8 @@ import { runPlan } from "./runs/plan.ts";
 
 const KINDS = {
   PLAN: runPlan,
+  LAB_APPLY: runLabApply,
+  LAB_DESTROY: runLabDestroy,
 } as const;
 
 const worker = new Worker(
@@ -36,6 +40,8 @@ worker.on("failed", (job, cause) => {
   console.error(`[worker] job ${job?.id ?? "?"} falhou:`, cause.message);
 });
 
+const sweep = startLabSweep();
+
 worker.on("ready", () => {
   console.log(`[worker] ouvindo "${RUN_QUEUE}" · ${env.concurrency} execuções simultâneas`);
   console.log(`[worker] diretório de execuções: ${env.runsRoot}`);
@@ -43,6 +49,7 @@ worker.on("ready", () => {
 
 async function shutdown(signal: string): Promise<void> {
   console.log(`[worker] ${signal} recebido; encerrando após as execuções em curso.`);
+  clearInterval(sweep);
   await worker.close();
   await db.$disconnect();
   process.exit(0);

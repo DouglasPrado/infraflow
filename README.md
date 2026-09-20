@@ -2,10 +2,10 @@
 
 Plataforma visual para planejamento, validação e execução de infraestrutura.
 
-**Estágio:** Milestone 6 — Plan (PRD §75), concluído.
-O canvas compila para OpenTofu e um worker isolado roda `tofu init` e
-`tofu plan` de verdade, com o resultado dentro do workspace. Ainda **não** há
-`apply`, k6 nem LLM.
+**Estágio:** Milestone 7 — Infrastructure Lab (PRD §76), concluído.
+O canvas compila para OpenTofu, o worker roda `plan` de verdade e sobe
+laboratórios efêmeros em containers isolados que respondem a requisição real.
+Ainda **não** há k6 nem LLM.
 
 ## Documentos
 
@@ -86,6 +86,9 @@ Os testes da API são de integração e **exigem o Postgres de pé**.
 | `POST /architectures/:id/runs` | Enfileira um `tofu plan` (§75) |
 | `GET /architectures/:id/runs` | Execuções da arquitetura |
 | `GET /runs/:id` | Execução com o log do OpenTofu |
+| `POST /architectures/:id/labs` | Cria o laboratório efêmero (§76) |
+| `GET /architectures/:id/labs` | Laboratórios da arquitetura |
+| `DELETE /labs/:id` | `tofu destroy` do laboratório (§54) |
 | `GET /architectures/:id/architecture.json` | Projeção de automação (§33) |
 
 Todo documento é validado contra `@infraflow/schema` na entrada. Um documento
@@ -212,6 +215,40 @@ A credencial de nuvem usada é a **do próprio worker** — a que estiver no
 ambiente ou em `~/.aws`. O §52 pede credencial por projeto, e isso não existe
 ainda: um worker compartilhado planejaria arquiteturas de vários projetos com a
 mesma identidade. Antes de uso multiusuário, isso precisa mudar.
+
+## O laboratório (§76)
+
+`Create Lab → OpenTofu apply → Deploy → Ready`, literalmente — e tudo real:
+
+1. o grafo compila para o alvo `docker`;
+2. o worker aplica numa **rede exclusiva**, com nome derivado do identificador
+   do ambiente (§53);
+3. cada node de compute recebe uma aplicação que, a cada requisição,
+   **exercita as dependências declaradas no canvas** — `PING` no Redis,
+   conexão TCP no banco, `GET` no que fala HTTP;
+4. "Ready" é a arquitetura responder pela porta de entrada, não o container
+   subir. Banco leva dezenas de segundos para aceitar conexão, então a
+   verificação insiste.
+
+**Só a porta de entrada é publicada**, em `127.0.0.1`. Banco, cache e
+armazenamento existem apenas dentro da rede do laboratório (§52).
+
+O alvo é sempre o docker efêmero. **Não existe rota para aplicar na nuvem**: o
+§75 mantém a nuvem sem apply automático, e um laboratório que pudesse aplicar na
+AWS transformaria um clique em conta.
+
+Cada laboratório nasce com prazo. O worker varre os vencidos e roda
+`tofu destroy` (§54) — o diretório com o state persiste entre o apply e o
+destroy justamente para que haja o que destruir.
+
+| Categoria do canvas | Imagem no laboratório |
+| --- | --- |
+| compute | `node:22-alpine` com a aplicação que exercita dependências |
+| rede | `nginx:1.29-alpine` com upstream para o que o canvas apontar |
+| banco | `postgres:17-alpine` ou `mysql:8.4`, conforme o engine |
+| cache | `redis:8-alpine` com a política de despejo do painel |
+| armazenamento | `quay.io/minio/minio` |
+| fila | `rabbitmq:4-alpine` ou `nats:2-alpine` |
 
 ## Como a capacidade é calculada
 

@@ -111,7 +111,8 @@ const APP: ContainerSpec = { image: "node:22-alpine", port: 8080, role: "app", p
 const PROXY: ContainerSpec = { image: "nginx:1.29-alpine", port: 80, role: "proxy", probe: "http" };
 
 const MINIO: ContainerSpec = {
-  image: "minio/minio:latest",
+  // A imagem oficial vive no quay.io; o repositório do Docker Hub recusa pull.
+  image: "quay.io/minio/minio:latest",
   port: 9000,
   role: "storage",
   probe: "http",

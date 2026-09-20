@@ -1,4 +1,4 @@
-import type { PlanSummary } from "@infraflow/schema";
+import type { LabContainer, PlanSummary } from "@infraflow/schema";
 
 /**
  * Cliente da API.
@@ -31,6 +31,9 @@ const MESSAGES: Record<string, string> = {
   execucao_em_andamento: "Já existe uma execução em andamento para esta arquitetura.",
   fila_indisponivel: "A fila de execuções está fora do ar. Suba o Redis e o worker.",
   execucao_nao_encontrada: "Execução não encontrada.",
+  laboratorio_em_andamento: "Já existe um laboratório vivo para esta arquitetura.",
+  laboratorio_nao_encontrado: "Laboratório não encontrado.",
+  laboratorio_ja_destruido: "Este laboratório já foi destruído.",
   arquitetura_nao_encontrada: "Arquitetura não encontrada.",
 };
 
@@ -97,6 +100,23 @@ export interface RunDetail extends RunSummary {
   logs: string;
 }
 
+export type LabStatus = "CREATING" | "READY" | "DESTROYING" | "DESTROYED" | "FAILED";
+
+/** PRD §76 — infraestrutura temporária de um teste. */
+export interface Lab {
+  id: string;
+  slug: string;
+  status: LabStatus;
+  entryUrl: string | null;
+  entryPort: number | null;
+  containers: LabContainer[];
+  error: string | null;
+  expiresAt: string;
+  readyAt: string | null;
+  destroyedAt: string | null;
+  createdAt: string;
+}
+
 export const api = {
   login: (email: string, password: string) =>
     request<{ user: SessionUser }>("/auth/login", {
@@ -153,6 +173,16 @@ export const api = {
   runs: (architectureId: string) => request<RunSummary[]>(`/architectures/${architectureId}/runs`),
 
   run: (runId: string) => request<RunDetail>(`/runs/${runId}`),
+
+  /** PRD §76 — cria a infraestrutura temporária. O worker é quem aplica. */
+  createLab: (architectureId: string) =>
+    request<Lab & { runId: string }>(`/architectures/${architectureId}/labs`, { method: "POST" }),
+
+  labs: (architectureId: string) => request<Lab[]>(`/architectures/${architectureId}/labs`),
+
+  /** PRD §54 — o que sobe tem que descer. */
+  destroyLab: (labId: string) =>
+    request<{ runId: string }>(`/labs/${labId}`, { method: "DELETE" }),
 
   snapshot: (id: string, label?: string) =>
     request<{ version: number; label: string | null }>(`/architectures/${id}/versions`, {

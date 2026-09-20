@@ -1,5 +1,4 @@
-import { randomBytes } from "node:crypto";
-import { RunParamsSchema, RunTargetSchema } from "@infraflow/schema";
+import { RunParamsSchema, RunTargetSchema, slugFor } from "@infraflow/schema";
 import type { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
 import { requireUser } from "../auth/guard.ts";
@@ -20,12 +19,6 @@ const createBody = z.object({
   kind: z.literal("plan"),
   target: RunTargetSchema.default("aws"),
 });
-
-/** Identificador legível e único da execução (PRD §53). */
-function runSlug(kind: string): string {
-  const suffix = randomBytes(5).toString("hex").toUpperCase();
-  return `${kind}-${suffix}`;
-}
 
 function serialize(run: {
   id: string;
@@ -87,7 +80,7 @@ export const runRoutes: FastifyPluginAsync = async (app) => {
         architectureId: architecture.id,
         versionId: latest.id,
         kind: "PLAN",
-        slug: runSlug("plan"),
+        slug: slugFor("plan"),
         params: RunParamsSchema.parse({ target: body.data.target }),
       },
     });
