@@ -2,7 +2,7 @@
 
 import { Check, Copy, Download, TriangleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
-import { REPORT_FILES } from "@infraflow/report-generator";
+import { describe as describeArtifact, kindOf } from "@/lib/artifacts";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -37,7 +37,7 @@ export function ExportSheet({
     null,
   );
 
-  const meta = REPORT_FILES.find((candidate) => candidate.name === file);
+  const description = file ? describeArtifact(file) : undefined;
   const current = loaded?.file === file ? loaded : null;
   const content = current?.content ?? "";
 
@@ -47,7 +47,7 @@ export function ExportSheet({
     let active = true;
 
     api
-      .report(architectureId, file)
+      .artifact(architectureId, kindOf(file), file)
       .then((text) => {
         if (active) setLoaded({ file, content: text });
       })
@@ -76,7 +76,7 @@ export function ExportSheet({
       <SheetContent side="right" className="flex w-full flex-col gap-0 sm:max-w-2xl">
         <SheetHeader className="border-b">
           <SheetTitle className="font-mono text-sm">{file}</SheetTitle>
-          <SheetDescription>{meta?.description}</SheetDescription>
+          <SheetDescription>{description}</SheetDescription>
         </SheetHeader>
 
         <ScrollArea className="min-h-0 flex-1">
@@ -108,7 +108,7 @@ export function ExportSheet({
               anexo, então não há blob intermediário para divergir do preview. */}
           {architectureId && file && (
             <Button asChild size="sm" className="h-8 gap-1.5">
-              <a href={`${API_BASE}/architectures/${architectureId}/reports/${file}`} download={file}>
+              <a href={`${API_BASE}/architectures/${architectureId}/${kindOf(file)}/${file}`} download={file}>
                 <Download className="size-3.5" />
                 Baixar
               </a>

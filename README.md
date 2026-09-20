@@ -2,11 +2,10 @@
 
 Plataforma visual para planejamento, validação e execução de infraestrutura.
 
-**Estágio:** Milestone 4 — Report Generator (PRD §73), concluído.
-O protótipo foi aprovado (§68), o modelo de domínio é real (§70), a API persiste
-em PostgreSQL, a web salva sozinha, a arquitetura é validada semanticamente e os
-artefatos são gerados e baixados de verdade. Ainda **não** existem OpenTofu, k6,
-integração com AWS nem LLM.
+**Estágio:** Milestone 5 — OpenTofu Compiler (PRD §74), concluído.
+O canvas compila para OpenTofu de verdade: o HCL gerado passa em `tofu fmt` e
+`tofu validate`. Ainda **não** há execução — `init`, `plan` e `apply` entram com
+o worker do Milestone 6. Também não há k6 nem LLM.
 
 ## Documentos
 
@@ -27,6 +26,8 @@ packages/
   infra-validator Validação semântica da arquitetura (§72)
   infra-analyzer  Motor de capacidade e gargalo (§37, §46)
   report-generator Artefatos derivados do documento (§32, §33, §73)
+  infra-compiler   Grafo → modelo de OpenTofu (§74)
+  opentofu-generator Modelo → HCL no formato canônico (§34)
 ```
 
 `infra-registry` não importa React: a API e os workers precisam dele para
@@ -74,6 +75,8 @@ Os testes da API são de integração e **exigem o Postgres de pé**.
 | `GET /architectures/:id/validation` | Validação semântica (§72) |
 | `GET /architectures/:id/reports` | Artefatos disponíveis (§73) |
 | `GET /architectures/:id/reports/:file` | Download do artefato (§73) |
+| `GET /architectures/:id/opentofu` | Arquivos compilados e avisos (§74) |
+| `GET /architectures/:id/opentofu/:file` | Download do `.tf` (§34) |
 | `GET /architectures/:id/architecture.json` | Projeção de automação (§33) |
 
 Todo documento é validado contra `@infraflow/schema` na entrada. Um documento
@@ -134,6 +137,41 @@ para o mesmo arquivo.
 quando existe execução real. Enquanto não houver k6 (§77), ela diz exatamente
 isso.
 
+## Compilação para OpenTofu
+
+O pipeline do §74 é literal: grafo → modelo de OpenTofu → `.tf` → `tofu fmt` →
+`tofu validate`.
+
+O compiler **não concatena string**. Monta uma árvore tipada
+(`@infraflow/opentofu-generator`) e imprime já no formato canônico do
+`tofu fmt` — sair formatado evita que cada regeneração vire diff falso. O
+`tofu fmt -check` roda na suíte de testes sempre que o OpenTofu estiver
+instalado.
+
+A parte que só um canvas sabe fazer é a fiação: **a conexão do desenho vira
+regra de grupo de segurança**. Um ALB ligado a um ECS abre a porta da aplicação
+só para aquele balanceador; um ECS ligado a um RDS abre a 5432 só para aquele
+serviço; só quem é porta de entrada aceita `0.0.0.0/0`.
+
+Escopo do §74: VPC, ALB, ECS, RDS, S3 e Redis (ElastiCache). A VPC não vem de
+node nenhum — é o chão que os outros precisam. Tipo fora dessa lista **não é
+traduzido por aproximação**: vira aviso com a alternativa que o registry já
+conhece (§29). Inventar equivalência silenciosa é o risco de IaC incorreta do
+§85.
+
+Decisões que ficam registradas como aviso, não escondidas no código:
+
+- a VPC sai sem NAT Gateway — compute em sub-rede pública com IP público, dado
+  no privado;
+- a senha do RDS fica no Secrets Manager (`manage_master_user_password`), então
+  não existe segredo em `tfvars` nem no state (§52);
+- listener HTTPS exige `certificate_arn` antes do apply.
+
+```bash
+# valida contra o provider real da AWS (baixa ~766 MB na primeira vez)
+INFRAFLOW_TOFU_VALIDATE=1 pnpm --filter @infraflow/compiler test
+```
+
 ## Como a capacidade é calculada
 
 Não há curva ajustada à mão. O `infra-analyzer` trabalha com três coisas que se
@@ -168,4 +206,5 @@ Também se assume que **toda requisição exercita todas as dependências** do
 recurso. É a hipótese conservadora; refinar isso pede peso por conexão, que
 ainda não existe no schema.
 
-O compiler determinístico de OpenTofu entra no Milestone 5 (§74).
+A execução do OpenTofu entra no Milestone 6 (§75), num worker isolado — nunca
+na API (§51).

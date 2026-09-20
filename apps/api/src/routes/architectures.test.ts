@@ -89,6 +89,8 @@ describe("acesso", () => {
       ["GET", `/architectures/${architectureId}/validation`],
       ["GET", `/architectures/${architectureId}/reports`],
       ["GET", `/architectures/${architectureId}/reports/GOAL.md`],
+      ["GET", `/architectures/${architectureId}/opentofu`],
+      ["GET", `/architectures/${architectureId}/opentofu/main.tf`],
     ] as const) {
       const response = await app.inject({ method, url, payload: {} });
       assert.equal(response.statusCode, 401, `${method} ${url}`);
@@ -297,6 +299,63 @@ describe("relatórios (PRD §73)", () => {
     const response = await app.inject({
       method: "GET",
       url: `/architectures/${architectureId}/reports/GOAL.md`,
+      cookies: as(sessaoIntruso),
+    });
+    assert.equal(response.statusCode, 404);
+  });
+});
+
+describe("OpenTofu (PRD §74)", () => {
+  it("lista os arquivos e o que não foi traduzido", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}/opentofu`,
+      cookies: as(sessaoDono),
+    });
+
+    assert.equal(response.statusCode, 200);
+    const body = response.json<{
+      target: string;
+      files: { name: string }[];
+      compiledNodeIds: string[];
+      warnings: { code: string }[];
+    }>();
+
+    assert.equal(body.target, "aws");
+    assert.deepEqual(
+      body.files.map((file) => file.name),
+      ["providers.tf", "main.tf", "variables.tf", "outputs.tf", "terraform.tfvars.example"],
+    );
+    assert.deepEqual(body.compiledNodeIds, ["alb"]);
+    assert.ok(body.warnings.length > 0);
+  });
+
+  it("entrega o main.tf compilado do documento gravado", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}/opentofu/main.tf`,
+      cookies: as(sessaoDono),
+    });
+
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.headers["content-disposition"], 'attachment; filename="main.tf"');
+    assert.match(response.body, /resource "aws_vpc" "main"/);
+    assert.match(response.body, /resource "aws_lb" "public_alb"/);
+  });
+
+  it("recusa arquivo fora da lista do §34", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}/opentofu/secrets.tf`,
+      cookies: as(sessaoDono),
+    });
+    assert.equal(response.statusCode, 400);
+  });
+
+  it("não compila arquitetura alheia", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}/opentofu`,
       cookies: as(sessaoIntruso),
     });
     assert.equal(response.statusCode, 404);

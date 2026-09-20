@@ -35,6 +35,9 @@ importers:
       '@fastify/rate-limit':
         specifier: ^11.2.0
         version: 11.2.0
+      '@infraflow/compiler':
+        specifier: workspace:*
+        version: link:../../packages/infra-compiler
       '@infraflow/report-generator':
         specifier: workspace:*
         version: link:../../packages/report-generator
@@ -81,6 +84,9 @@ importers:
       '@infraflow/analyzer':
         specifier: workspace:*
         version: link:../../packages/infra-analyzer
+      '@infraflow/compiler':
+        specifier: workspace:*
+        version: link:../../packages/infra-compiler
       '@infraflow/registry':
         specifier: workspace:*
         version: link:../../packages/infra-registry
@@ -177,6 +183,28 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/infra-compiler:
+    dependencies:
+      '@infraflow/opentofu-generator':
+        specifier: workspace:*
+        version: link:../opentofu-generator
+      '@infraflow/registry':
+        specifier: workspace:*
+        version: link:../infra-registry
+      '@infraflow/schema':
+        specifier: workspace:*
+        version: link:../infra-schema
+    devDependencies:
+      '@infraflow/validator':
+        specifier: workspace:*
+        version: link:../infra-validator
+      '@types/node':
+        specifier: ^22
+        version: 22.20.4
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/infra-registry:
     dependencies:
       '@infraflow/schema':
@@ -211,6 +239,15 @@ importers:
       '@infraflow/schema':
         specifier: workspace:*
         version: link:../infra-schema
+    devDependencies:
+      '@types/node':
+        specifier: ^22
+        version: 22.20.4
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/opentofu-generator:
     devDependencies:
       '@types/node':
         specifier: ^22

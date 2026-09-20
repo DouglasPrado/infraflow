@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@infraflow/analyzer": "workspace:*",
+    "@infraflow/compiler": "workspace:*",
     "@infraflow/registry": "workspace:*",
     "@infraflow/report-generator": "workspace:*",
     "@infraflow/schema": "workspace:*",

@@ -1,4 +1,5 @@
 import { ArchitectureDocumentSchema, toArchitectureJson, validateIntegrity } from "@infraflow/schema";
+import { emit, isOpenTofuFile, OPENTOFU_FILES } from "@infraflow/compiler";
 import {
   generateReport,
   isReportName,
@@ -26,6 +27,10 @@ const idParams = z.object({ id: z.uuid() });
 /** O nome só pode ser um dos artefatos conhecidos — nunca um caminho. */
 const reportParams = idParams.extend({
   file: z.string().refine(isReportName, "artefato desconhecido"),
+});
+
+const opentofuParams = idParams.extend({
+  file: z.string().refine(isOpenTofuFile, "arquivo desconhecido"),
 });
 
 const saveBody = z.object({ document: ArchitectureDocumentSchema });
@@ -283,6 +288,62 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
       .header("content-type", mediaTypeOf(report.language))
       .header("content-disposition", `attachment; filename="${report.name}"`)
       .send(report.content);
+  });
+
+  /**
+   * PRD §74 — compilação para OpenTofu.
+   *
+   * A API **compila**; não executa. `init`, `plan` e `apply` rodam no worker
+   * isolado (§51), nunca neste processo.
+   */
+  app.get("/architectures/:id/opentofu", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+
+    const params = idParams.safeParse(request.params);
+    if (!params.success) return reply.status(400).send(invalid(params.error.issues));
+
+    const architecture = await ownedArchitecture(params.data.id, user.id);
+    const latest = architecture?.versions[0];
+    if (!latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
+
+    const parsed = ArchitectureDocumentSchema.safeParse(latest.graph);
+    if (!parsed.success) return reply.status(500).send(invalid(parsed.error.issues));
+
+    const { stack } = emit(parsed.data, { target: "aws" });
+
+    return {
+      version: latest.number,
+      target: stack.target,
+      files: OPENTOFU_FILES,
+      compiledNodeIds: stack.compiledNodeIds,
+      warnings: stack.warnings,
+    };
+  });
+
+  app.get("/architectures/:id/opentofu/:file", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+
+    const params = opentofuParams.safeParse(request.params);
+    if (!params.success) return reply.status(400).send(invalid(params.error.issues));
+
+    const architecture = await ownedArchitecture(params.data.id, user.id);
+    const latest = architecture?.versions[0];
+    if (!latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
+
+    const parsed = ArchitectureDocumentSchema.safeParse(latest.graph);
+    if (!parsed.success) return reply.status(500).send(invalid(parsed.error.issues));
+
+    const file = emit(parsed.data, { target: "aws" }).files.find(
+      (candidate) => candidate.name === params.data.file,
+    );
+    if (!file) return reply.status(404).send({ error: "arquivo_nao_encontrado" });
+
+    return reply
+      .header("content-type", "text/plain; charset=utf-8")
+      .header("content-disposition", `attachment; filename="${file.name}"`)
+      .send(file.content);
   });
 
   /** Projeção de automação (PRD §33, §34). */

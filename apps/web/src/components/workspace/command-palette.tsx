@@ -1,6 +1,6 @@
 "use client";
 
-import { FileJson, FileText, Play, Redo2, RotateCcw, Undo2 } from "lucide-react";
+import { FileCode, FileJson, FileText, Play, Redo2, RotateCcw, Undo2 } from "lucide-react";
 import { useReactFlow } from "@xyflow/react";
 import {
   Command,
@@ -13,10 +13,11 @@ import {
 } from "@/components/ui/command";
 import { CATALOG, LOAD_GENERATOR_TYPE } from "@infraflow/registry";
 import { ServiceIcon } from "@/components/service-icon";
-import { REPORT_FILES } from "@infraflow/report-generator";
+import { ARTIFACT_GROUPS } from "@/lib/artifacts";
 import { useWorkspaceStore } from "@/store/workspace-store";
 
-const FILE_ICON = { markdown: FileText, json: FileJson } as const;
+const iconFor = (name: string) =>
+  name.endsWith(".json") ? FileJson : name.endsWith(".md") ? FileText : FileCode;
 
 /** PRD §9 — command palette (⌘K). */
 export function CommandPalette({
@@ -99,8 +100,8 @@ export function CommandPalette({
           </CommandGroup>
 
           <CommandGroup heading="Exportar">
-            {REPORT_FILES.map((file) => {
-              const Icon = FILE_ICON[file.language];
+            {ARTIFACT_GROUPS.flatMap((group) => group.files).map((file) => {
+              const Icon = iconFor(file.name);
               return (
                 <CommandItem
                   key={file.name}

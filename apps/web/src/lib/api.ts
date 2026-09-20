@@ -106,13 +106,13 @@ export const api = {
       body: JSON.stringify({ document }),
     }),
 
-  /** PRD §73 — artefato gerado da versão gravada, em texto. */
-  report: async (id: string, file: string): Promise<string> => {
-    const response = await fetch(`${API_BASE}/architectures/${id}/reports/${file}`, {
+  /** PRD §73, §74 — artefato gerado da versão gravada, em texto. */
+  artifact: async (id: string, kind: "reports" | "opentofu", file: string): Promise<string> => {
+    const response = await fetch(`${API_BASE}/architectures/${id}/${kind}/${file}`, {
       credentials: "same-origin",
     });
     if (!response.ok) {
-      throw new ApiError(response.status, "relatorio_indisponivel", "Não foi possível gerar o artefato.");
+      throw new ApiError(response.status, "artefato_indisponivel", "Não foi possível gerar o artefato.");
     }
     return response.text();
   },
