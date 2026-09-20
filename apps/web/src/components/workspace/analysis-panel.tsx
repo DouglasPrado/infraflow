@@ -11,6 +11,7 @@ import { summarize, validateCanvas, type ValidationIssue } from "@/lib/validatio
 import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/store/workspace-store";
 import { ObservedPanel } from "./observed-panel";
+import { PricingPanel } from "./pricing-panel";
 import { Eyebrow, FieldGroup, Provenance } from "./property-field";
 
 function Stat({ label, value, tone }: { label: string; value: string; tone?: string }) {
@@ -99,6 +100,9 @@ export function AnalysisPanel() {
       {/* PRD §79 — medição lidera sobre simulação: quando existe execução real,
           é ela que responde onde a arquitetura cedeu. */}
       <ObservedPanel />
+
+      {/* PRD §40 — preço de tabela, quando há credencial configurada (§52). */}
+      <PricingPanel />
 
       {/* O veredito lidera assim que existe. Antes disso, a estimativa é tudo que há. */}
       {observed && (

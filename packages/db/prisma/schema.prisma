@@ -58,8 +58,9 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  owner         User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner         User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   architectures Architecture[]
+  credential    CloudCredential?
 
   @@index([ownerId])
   @@map("projects")
@@ -213,4 +214,38 @@ model Run {
   @@index([architectureId, createdAt])
   @@index([status])
   @@map("runs")
+}
+
+/// Credencial de nuvem do projeto (PRD §52).
+///
+/// Por projeto, não por instalação: o §52 proíbe compartilhar credencial entre
+/// projetos, e um worker que usasse a credencial da máquina planejaria a
+/// arquitetura de todo mundo com a mesma identidade.
+///
+/// O segredo vai cifrado (AES-256-GCM) e nunca é devolvido em claro por
+/// nenhuma rota. `hint` existe só para a interface dizer qual chave está ali.
+model CloudCredential {
+  id        String @id @default(uuid()) @db.Uuid
+  projectId String @unique @db.Uuid
+  /// Hoje só `aws`. A coluna existe porque o §44 já prevê outros.
+  provider  String @default("aws")
+  region    String
+
+  /// Últimos caracteres do access key id — identifica sem expor.
+  hint   String
+  cipher String
+  iv     String
+  tag    String
+
+  /// Resultado da última verificação contra o provedor.
+  accountId  String?
+  verifiedAt DateTime?
+  lastError  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("cloud_credentials")
 }

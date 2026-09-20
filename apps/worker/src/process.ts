@@ -20,14 +20,24 @@ const INHERITED = ["PATH", "HOME", "LANG", "LC_ALL", "TMPDIR", "TERM"];
 /**
  * Prefixos repassados quando existem no ambiente do worker.
  *
- * Credencial de nuvem ainda é a do próprio worker, compartilhada por todos os
- * projetos — o §52 pede credencial por projeto, que não existe neste estágio e
- * está registrada como limitação no README.
+ * `AWS_` **não** está aqui, de propósito: credencial de nuvem vem da credencial
+ * do projeto, decifrada e passada explicitamente pelo chamador (§52). Herdar o
+ * ambiente faria toda arquitetura planejar com a identidade da máquina — e foi
+ * o que acontecia antes.
  */
-const INHERITED_PREFIXES = ["AWS_", "TF_", "DOCKER_"];
+const INHERITED_PREFIXES = ["TF_", "DOCKER_"];
 
 function childEnv(extra: Record<string, string> = {}): Record<string, string> {
-  const result: Record<string, string> = {};
+  const result: Record<string, string> = {
+    /**
+     * Neutraliza o `~/.aws` da máquina. Sem isto o provider acharia o perfil
+     * local mesmo sem variável de ambiente, e a credencial do projeto seria
+     * apenas mais uma na fila de resolução.
+     */
+    AWS_SHARED_CREDENTIALS_FILE: "/dev/null",
+    AWS_CONFIG_FILE: "/dev/null",
+    AWS_EC2_METADATA_DISABLED: "true",
+  };
 
   for (const name of INHERITED) {
     const value = process.env[name];

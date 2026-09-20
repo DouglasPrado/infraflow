@@ -6,6 +6,7 @@ import { env } from "./env.ts";
 import { closeQueue } from "./queue.ts";
 import { architectureRoutes } from "./routes/architectures.ts";
 import { assistantRoutes, type AssistantOptions } from "./routes/assistant.ts";
+import { credentialRoutes } from "./routes/credentials.ts";
 import { authRoutes } from "./routes/auth.ts";
 import { healthRoutes } from "./routes/health.ts";
 import { labRoutes } from "./routes/labs.ts";
@@ -35,6 +36,7 @@ export async function buildApp(options: BuildOptions = {}): Promise<FastifyInsta
   await app.register(runRoutes);
   await app.register(labRoutes);
   await app.register(versionRoutes);
+  await app.register(credentialRoutes);
   await app.register(assistantRoutes(options.assistant ?? {}));
 
   // A fila vive enquanto a aplicação viver (PRD §50).

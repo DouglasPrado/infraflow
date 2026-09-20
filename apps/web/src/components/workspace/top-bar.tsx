@@ -7,6 +7,7 @@ import {
   FileCode,
   FileText,
   GitBranch,
+  KeyRound,
   LoaderCircle,
   LogOut,
   Play,
@@ -126,7 +127,7 @@ function SaveIndicator() {
   return null;
 }
 
-function UserMenu({ user }: { user: SessionUser }) {
+function UserMenu({ user, onOpenSettings }: { user: SessionUser; onOpenSettings: () => void }) {
   const router = useRouter();
 
   const initials = user.name
@@ -153,6 +154,12 @@ function UserMenu({ user }: { user: SessionUser }) {
           <div className="truncate font-mono text-[11px] text-muted-foreground">{user.email}</div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {/* PRD §52 — credencial de nuvem do projeto. */}
+        <DropdownMenuItem onSelect={onOpenSettings}>
+          <KeyRound />
+          Configurações
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {
             void api.logout().finally(() => {
@@ -176,12 +183,14 @@ export function TopBar({
   onOpenPalette,
   onOpenVersions,
   onOpenAssistant,
+  onOpenSettings,
 }: {
   user: SessionUser;
   onOpenExport: (file?: string) => void;
   onOpenPalette: () => void;
   onOpenVersions: () => void;
   onOpenAssistant: () => void;
+  onOpenSettings: () => void;
 }) {
   const { zoomIn, zoomOut } = useReactFlow();
 
@@ -337,7 +346,7 @@ export function TopBar({
           {running ? "Parar" : "Teste de carga"}
         </Button>
 
-        <UserMenu user={user} />
+        <UserMenu user={user} onOpenSettings={onOpenSettings} />
       </div>
     </header>
   );

@@ -1,0 +1,119 @@
+- generic [active] [ref=f33e1]:
+  - generic [ref=f33e2]:
+    - banner [ref=f33e3]:
+      - generic [ref=f33e4]: InfraFlow
+      - generic [ref=f33e10]:
+        - generic [ref=f33e11]: Arquitetura Web
+        - combobox [ref=f33e12]
+        - combobox [aria-hidden] [ref=f33e13]
+        - combobox [ref=f33e14]
+        - combobox [aria-hidden] [ref=f33e15]
+      - generic [ref=f33e16]:
+        - button "Analisar" [ref=f33e17]
+        - button "Markdown" [ref=f33e18]
+        - button "OpenTofu" [ref=f33e19]
+        - button "Assistente" [ref=f33e20]
+        - button "Versões" [ref=f33e21]
+        - button "Desfazer" [disabled]
+        - button "Refazer" [disabled]
+        - button "Diminuir zoom" [ref=f33e23]
+        - button "Aumentar zoom" [ref=f33e25]
+        - button "⌘K" [ref=f33e27]
+        - button "Teste de carga" [ref=f33e29]
+        - button "D Conta" [ref=f33e30]:
+          - text: D
+          - generic [ref=f33e31]: Conta
+    - generic [ref=f33e32]:
+      - complementary [ref=f33e33]:
+        - textbox "Buscar recursos..." [ref=f33e35]
+        - generic [ref=f33e39]:
+          - generic [ref=f33e40]:
+            - generic [ref=f33e41]: Compute
+            - generic [ref=f33e42]:
+              - generic "EC2 Instance" [ref=f33e43]: EC2
+              - generic "ECS Service" [ref=f33e46]: ECS
+              - generic "Lambda Function" [ref=f33e49]: Lambda
+              - generic "Docker Container" [ref=f33e52]: Docker
+              - generic "Kubernetes Deployment" [ref=f33e55]: Kubernetes
+          - generic [ref=f33e58]:
+            - generic [ref=f33e59]: Storage
+            - generic [ref=f33e60]:
+              - generic "S3 Bucket" [ref=f33e61]: S3
+              - generic "MinIO Object Storage" [ref=f33e64]: MinIO
+          - generic [ref=f33e67]:
+            - generic [ref=f33e68]: Database
+            - generic [ref=f33e69]:
+              - generic "RDS PostgreSQL" [ref=f33e70]: RDS
+              - generic "PostgreSQL" [ref=f33e73]
+              - generic "MySQL" [ref=f33e76]
+          - generic [ref=f33e79]:
+            - generic [ref=f33e80]: Cache
+            - generic [ref=f33e81]:
+              - generic "Redis" [ref=f33e82]
+              - generic "ElastiCache Redis" [ref=f33e85]: ElastiCache
+          - generic [ref=f33e88]:
+            - generic [ref=f33e89]: Network
+            - generic [ref=f33e90]:
+              - generic "Application Load Balancer" [ref=f33e91]: ALB
+              - generic "Network Load Balancer" [ref=f33e94]: NLB
+              - generic "CloudFront Distribution" [ref=f33e97]: CloudFront
+              - generic "Traefik Proxy" [ref=f33e100]: Traefik
+              - generic "Nginx" [ref=f33e103]
+          - generic [ref=f33e106]:
+            - generic [ref=f33e107]: Messaging
+            - generic [ref=f33e108]:
+              - generic "SQS Queue" [ref=f33e109]: SQS
+              - generic "RabbitMQ" [ref=f33e112]
+              - generic "NATS" [ref=f33e115]
+              - generic "Apache Kafka" [ref=f33e118]: Kafka
+          - generic [ref=f33e121]:
+            - generic [ref=f33e122]: Observability
+            - generic [ref=f33e123]:
+              - generic "Prometheus" [ref=f33e124]
+              - generic "Grafana" [ref=f33e127]
+              - generic "CloudWatch" [ref=f33e130]
+              - generic "OpenTelemetry Collector" [ref=f33e133]: OpenTelemetry
+          - generic [ref=f33e136]:
+            - generic [ref=f33e137]: Testing
+            - generic "Origem do teste" [ref=f33e139]: Load Generator
+          - generic [ref=f33e143]:
+            - generic [ref=f33e144]: Canvas
+            - generic [ref=f33e145]:
+              - generic "Nota" [ref=f33e146]: Sticky Note
+              - generic "Texto" [ref=f33e151]: Text
+              - generic "Seção" [ref=f33e155]: Group
+      - main [ref=f33e162]:
+        - application [ref=f33e164]:
+          - generic [ref=f33e166] [cursor=pointer]
+          - generic "Control Panel" [ref=f33e167]:
+            - button "Zoom In" [ref=f33e168] [cursor=pointer]
+            - button "Zoom Out" [ref=f33e171] [cursor=pointer]
+            - button "Fit View" [ref=f33e174] [cursor=pointer]
+          - link "React Flow attribution" [ref=f33e178] [cursor=pointer]:
+            - /url: https://reactflow.dev/attribution
+            - text: React Flow
+      - complementary [ref=f33e180]:
+        - generic [ref=f33e181]:
+          - tablist [ref=f33e183]:
+            - tab "Properties" [selected] [ref=f33e184]
+            - tab "Analysis" [ref=f33e185]
+            - tab "Commands" [ref=f33e186]
+          - tabpanel "Properties" [ref=f33e190]:
+            - paragraph [ref=f33e198]: Selecione um elemento do canvas para ver suas propriedades.
+    - contentinfo [ref=f33e199]:
+      - generic [ref=f33e200]:
+        - generic [ref=f33e201]: Architecture
+        - button "1 warning" [ref=f33e202]
+      - generic [ref=f33e206]:
+        - generic [ref=f33e207]: Capacity
+        - generic [ref=f33e208]: 5K req/s
+      - generic [ref=f33e210]:
+        - generic [ref=f33e211]: Cost
+        - generic [ref=f33e212]: US$ 468
+      - generic [ref=f33e214]:
+        - generic [ref=f33e215]: Resources
+        - generic [ref=f33e216]: "8"
+    - generic [ref=f33e217]:
+      - heading "Command Palette" [level=2] [ref=f33e218]
+      - paragraph [ref=f33e219]: Buscar recursos e ações
+  - button "Open Next.js Dev Tools" [ref=f33e225] [cursor=pointer]

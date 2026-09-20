@@ -41,10 +41,14 @@ identificador string e só vira componente na web.
 
 ```bash
 pnpm install
-docker compose up -d          # PostgreSQL 17 (:5434) e Redis 8 (:6381)
 pnpm --filter @infraflow/db db:deploy
-pnpm dev                      # web :3000 · api :3333 · worker na fila
+./dev.sh                      # docker + web :3000 · api :3333 · worker
 ```
+
+`dev.sh` sobe os três serviços **separados e supervisionados**, em sessão
+própria: sob o `turbo run dev` um serviço que cai derruba os outros dois, e
+processo de desenvolvimento às vezes leva SIGTERM do ambiente. `./dev.sh status`
+diz o que está vivo, `./dev.sh logs` acompanha, `./dev.sh stop` derruba.
 
 O worker precisa do **OpenTofu** no PATH para executar `plan`. Sem ele, a
 execução falha com a mensagem do sistema — e a falha aparece no workspace, que
@@ -353,6 +357,46 @@ conexão redesenhada com outro id continua sendo a mesma conexão.
 O lado `Observed` da comparação só aparece quando **as duas versões** foram
 medidas. Comparar medição de uma com estimativa da outra produziria um número
 sem significado.
+
+## Credencial e custo real (§40, §52)
+
+A credencial da AWS é **do projeto**, guardada cifrada (AES-256-GCM) e nunca
+devolvida por nenhuma rota. Configure em Conta → Configurações. Requer
+`INFRAFLOW_SECRET_KEY` na API e no worker:
+
+```bash
+openssl rand -base64 32   # põe em apps/api/.env e apps/worker/.env
+```
+
+Ela muda duas coisas:
+
+**O `tofu plan` deixa de usar a credencial da máquina.** O processo filho não
+herda mais `AWS_*`, e `AWS_SHARED_CREDENTIALS_FILE` aponta para `/dev/null` —
+sem isso o provider acharia o `~/.aws` mesmo sem variável de ambiente. É a
+lacuna do §52 fechada: antes, toda arquitetura planejava com a identidade de
+quem hospeda o worker.
+
+**O custo passa a vir da Price List da AWS**, não do palpite do registry. É uma
+leitura distinta, rotulada `Priced` na interface:
+
+| Leitura | De onde vem |
+| --- | --- |
+| `Estimated` | Constante declarada no registry. Palpite de ordem de grandeza |
+| `Priced` | Tabela pública da AWS para a configuração desenhada |
+| `Planned` | O que o `tofu plan` declarou que fará |
+| `Observed` | O que o k6 e o Prometheus mediram |
+
+Seis tipos têm preço de tabela — EC2, ECS (Fargate), RDS, ElastiCache, ALB e
+NLB. Cada filtro foi conferido contra a API de verdade, e os testes travam as
+duas armadilhas que já custaram um número errado: a tabela devolve SKU de
+sobretaxa (suporte estendido, variante Windows) junto com o preço base, e o
+SKU de armazenamento Multi-AZ **já** cobra o dobro — multiplicar por dois
+cobraria a réplica duas vezes.
+
+**O que é cobrado por uso não é precificado.** S3, CloudFront, Lambda, SQS e
+CloudWatch aparecem com o palpite e o motivo: o canvas não declara volume, e
+inventar a hipótese devolveria palpite com cara de tabela. Não entram Savings
+Plans, Reserved, transferência de dados nem free tier.
 
 ## Assistente (§81)
 

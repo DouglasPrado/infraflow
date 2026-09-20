@@ -45,6 +45,11 @@ const MESSAGES: Record<string, string> = {
   assistente_indisponivel:
     "O assistente precisa de uma credencial da Anthropic configurada na API (ANTHROPIC_API_KEY).",
   assistente_falhou: "O assistente não conseguiu responder. Tente de novo.",
+  credencial_ausente: "Configure uma credencial da AWS para ver preço de tabela.",
+  credencial_invalida: "A AWS recusou essa credencial.",
+  cifra_indisponivel:
+    "A API está sem INFRAFLOW_SECRET_KEY, então não pode guardar a credencial cifrada.",
+  tabela_indisponivel: "A tabela de preços da AWS não respondeu.",
   arquitetura_nao_encontrada: "Arquitetura não encontrada.",
 };
 
@@ -132,6 +137,42 @@ export type AssistantTask =
   | "explain-tradeoffs"
   | "generate-documentation"
   | "prepare-agent-instructions";
+
+/** PRD §52 — o que a interface pode saber da credencial guardada. */
+export interface CredentialView {
+  configured: boolean;
+  canStore: boolean;
+  provider?: string;
+  region?: string;
+  /** Últimos caracteres do access key id. */
+  hint?: string;
+  accountId?: string | null;
+  verifiedAt?: string | null;
+  lastError?: string | null;
+  updatedAt?: string;
+}
+
+export type CostSource = "priced" | "estimated";
+
+export interface NodePrice {
+  nodeId: string;
+  name: string;
+  type: string;
+  monthlyUsd: number;
+  source: CostSource;
+  breakdown?: { label: string; monthlyUsd: number; sku: string; unitUsd: number }[];
+  reason?: string;
+}
+
+/** PRD §40 — custo da arquitetura pela tabela da AWS. */
+export interface ArchitecturePricing {
+  region: string;
+  currency: "USD";
+  monthlyUsd: number;
+  pricedMonthlyUsd: number;
+  nodes: NodePrice[];
+  at: string;
+}
 
 export type LabStatus = "CREATING" | "READY" | "DESTROYING" | "DESTROYED" | "FAILED";
 
@@ -232,6 +273,26 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ version }),
     }),
+
+  /** PRD §52 — credencial de nuvem do projeto. O segredo nunca volta. */
+  credential: (architectureId: string) =>
+    request<CredentialView>(`/architectures/${architectureId}/credential`),
+
+  saveCredential: (
+    architectureId: string,
+    body: { region: string; accessKeyId: string; secretAccessKey: string },
+  ) =>
+    request<CredentialView>(`/architectures/${architectureId}/credential`, {
+      method: "PUT",
+      body: JSON.stringify(body),
+    }),
+
+  deleteCredential: (architectureId: string) =>
+    request<void>(`/architectures/${architectureId}/credential`, { method: "DELETE" }),
+
+  /** PRD §40 — custo pela tabela da AWS. */
+  pricing: (architectureId: string) =>
+    request<ArchitecturePricing>(`/architectures/${architectureId}/pricing`),
 
   /** PRD §81 — tarefas do assistente e se ele está utilizável. */
   assistantTasks: () =>

@@ -44,17 +44,20 @@ export function Eyebrow({ children, className }: { children: ReactNode; classNam
  *
  * `Planned` é o que o OpenTofu declarou que vai fazer (§75): não é estimativa
  * de modelo nem medição de execução — é a intenção conferida contra o provider.
+ *
+ * `Priced` é a tabela pública da AWS para a configuração desenhada (§40).
+ * Também não é medição: nem a AWS sabe quanto você vai consumir.
  */
 export function Provenance({
   kind,
 }: {
-  kind: "Estimated" | "Planned" | "Observed" | "Suggested";
+  kind: "Estimated" | "Priced" | "Planned" | "Observed" | "Suggested";
 }) {
   return (
     <span
       className={cn(
         "inline-flex items-center rounded-sm px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-eyebrow",
-        kind === "Observed" || kind === "Planned"
+        kind === "Observed" || kind === "Planned" || kind === "Priced"
           ? "bg-brand/10 text-brand"
           : "bg-secondary text-muted-foreground",
       )}

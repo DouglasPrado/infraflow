@@ -41,10 +41,11 @@ async function step(
   args: string[],
   cwd: string,
   steps: TofuStep[],
+  extraEnv: Record<string, string> = {},
 ): Promise<ProcessResult> {
   const result = await execute("tofu", args, {
     cwd,
-    env: { TF_PLUGIN_CACHE_DIR: env.tofuPluginCache, TF_IN_AUTOMATION: "1" },
+    env: { TF_PLUGIN_CACHE_DIR: env.tofuPluginCache, TF_IN_AUTOMATION: "1", ...extraEnv },
   });
   steps.push({ label, result });
   if (!result.ok) throw new TofuFailure(label, result);
@@ -91,11 +92,13 @@ export async function plan(
   cwd: string,
   target: RunTarget,
   variables: Record<string, string> = {},
+  /** Credencial do projeto, quando o alvo é nuvem (§52). */
+  cloudEnv: Record<string, string> = {},
 ): Promise<PlanOutcome> {
   const steps: TofuStep[] = [];
   await mkdir(env.tofuPluginCache, { recursive: true });
 
-  await step("init", ["init", "-no-color", "-input=false"], cwd, steps);
+  await step("init", ["init", "-no-color", "-input=false"], cwd, steps, cloudEnv);
   await step(
     "plan",
     [
@@ -108,6 +111,7 @@ export async function plan(
     ],
     cwd,
     steps,
+    cloudEnv,
   );
   const shown = await step("show", ["show", "-json", PLAN_FILE], cwd, steps);
 

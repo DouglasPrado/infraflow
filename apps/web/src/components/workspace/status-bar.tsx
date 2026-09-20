@@ -4,6 +4,7 @@ import { Check, CircleX, TriangleAlert } from "lucide-react";
 import { useMemo, type ReactNode } from "react";
 import { getCatalogItem } from "@infraflow/registry";
 import { formatCost, formatRps } from "@/lib/format";
+import { usePricing } from "@/hooks/use-pricing";
 import { analyze } from "@/lib/simulation";
 import { summarize, validateCanvas } from "@/lib/validation";
 import { cn } from "@/lib/utils";
@@ -33,6 +34,8 @@ export function StatusBar() {
   const environment = useWorkspaceStore((state) => state.environment);
 
   const analysis = useMemo(() => analyze(nodes, edges), [nodes, edges]);
+  const pricing = usePricing();
+
   const validation = useMemo(
     () => summarize(validateCanvas({ name: projectName, provider, environment }, nodes, edges)),
     [projectName, provider, environment, nodes, edges],
@@ -87,7 +90,11 @@ export function StatusBar() {
       </Readout>
 
       <span className="hidden sm:contents">
-        <Readout label="Cost">{formatCost(analysis.monthlyCostUsd)}</Readout>
+        {/* PRD §40 — preço de tabela quando há credencial; palpite quando não há.
+            Os dois nunca aparecem com o mesmo rótulo (§85). */}
+        <Readout label={pricing ? "Priced" : "Cost"}>
+          {formatCost(Math.round(pricing?.monthlyUsd ?? analysis.monthlyCostUsd))}
+        </Readout>
       </span>
 
       <span className="hidden md:contents">

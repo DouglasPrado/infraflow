@@ -1,5 +1,6 @@
 import { defaultVariables, emit } from "@infraflow/compiler";
 import { ArchitectureDocumentSchema, RunParamsSchema, type PlanSummary } from "@infraflow/schema";
+import { cloudEnvFor } from "../credentials.ts";
 import { db } from "../db.ts";
 import { TofuFailure, plan, transcript } from "../tofu.ts";
 import { createWorkspace } from "../workspace.ts";
@@ -32,10 +33,18 @@ export async function runPlan(runId: string): Promise<void> {
 
     await workspace.write(files);
 
+    /**
+     * Alvo de nuvem exige credencial do projeto (§52). Sem ela a execução
+     * falha com instrução, em vez de cair na credencial da máquina.
+     */
+    const cloudEnv =
+      params.target === "aws" ? await cloudEnvFor(run.architectureId) : {};
+
     const outcome = await plan(
       workspace.path,
       params.target,
       defaultVariables(document, { target: params.target }),
+      cloudEnv,
     );
     const summary: PlanSummary = {
       ...outcome.summary,
