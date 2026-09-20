@@ -1,0 +1,46 @@
+$ node --test --experimental-strip-types "src/**/*.test.ts"
+▶ parseDocument
+  ✔ aceita um documento válido (4.146458ms)
+  ✔ rejeita versão desconhecida (0.539125ms)
+  ✔ rejeita propriedade que não é escalar (0.354541ms)
+  ✔ rejeita peso de endpoint acima de 100 (0.173083ms)
+✔ parseDocument (5.941375ms)
+▶ toArchitectureJson
+  ✔ deixa de fora notas e grupos (1.548916ms)
+  ✔ promove o load generator a loadTests com os alvos alcançados (0.259209ms)
+  ✔ carrega o environment do documento (0.108167ms)
+  ✔ descarta conexões que não tocam nenhum recurso (0.095208ms)
+  ✔ serializa de forma estável (0.111375ms)
+✔ toArchitectureJson (2.388583ms)
+▶ reachableFrom
+  ✔ não alcança recurso desconectado (0.091625ms)
+  ✔ não entra em laço com ciclo (0.050709ms)
+✔ reachableFrom (0.206541ms)
+▶ validateIntegrity
+  ✔ aceita um documento íntegro (0.114583ms)
+  ✔ acusa conexão apontando para elemento inexistente (0.046875ms)
+  ✔ acusa id duplicado (0.08275ms)
+  ✔ acusa pai que não é grupo (0.043292ms)
+  ✔ acusa conexão de um elemento para ele mesmo (0.032917ms)
+✔ validateIntegrity (0.398667ms)
+▶ fromFlow
+  ✔ converte cada tipo de node do canvas (5.622292ms)
+  ✔ descarta estado de simulação — ele não é do documento (1.112875ms)
+  ✔ ignora node de tipo desconhecido (0.235083ms)
+  ✔ assume HTTP quando a conexão não declara tipo (0.339583ms)
+  ✔ dá tamanho padrão para nota sem style (0.381166ms)
+  ✔ rejeita canvas inválido em vez de gravar lixo (0.443834ms)
+✔ fromFlow (9.465333ms)
+▶ round-trip
+  ✔ preserva o documento ao voltar para o canvas e de volta (0.324708ms)
+  ✔ devolve os grupos antes dos filhos, como o React Flow exige (0.187625ms)
+  ✔ volta com os nodes em estado limpo (0.140625ms)
+✔ round-trip (0.778042ms)
+ℹ tests 25
+ℹ suites 6
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 198.501667
