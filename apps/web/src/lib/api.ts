@@ -1,4 +1,4 @@
-import type { ObservedAnalysis } from "@infraflow/analyzer";
+import type { ObservedAnalysis, VersionComparison } from "@infraflow/analyzer";
 import type {
   LabApplyResult,
   LabContainer,
@@ -41,6 +41,7 @@ const MESSAGES: Record<string, string> = {
   laboratorio_nao_encontrado: "Laboratório não encontrado.",
   laboratorio_ja_destruido: "Este laboratório já foi destruído.",
   laboratorio_nao_esta_pronto: "Crie um laboratório antes de rodar o teste de carga.",
+  versao_nao_encontrada: "Versão não encontrada.",
   arquitetura_nao_encontrada: "Arquitetura não encontrada.",
 };
 
@@ -107,6 +108,17 @@ export interface RunDetail extends RunSummary {
   logs: string;
   /** PRD §79 — presente só em teste de carga concluído. */
   analysis?: ObservedAnalysis;
+}
+
+/** PRD §38 — uma versão da arquitetura. */
+export interface ArchitectureVersion {
+  number: number;
+  label: string | null;
+  createdAt: string;
+  updatedAt: string;
+  runs: number;
+  /** Se houve teste de carga bem-sucedido nesta versão (§80). */
+  tested: boolean;
 }
 
 export type LabStatus = "CREATING" | "READY" | "DESTROYING" | "DESTROYED" | "FAILED";
@@ -193,9 +205,25 @@ export const api = {
   destroyLab: (labId: string) =>
     request<{ runId: string }>(`/labs/${labId}`, { method: "DELETE" }),
 
+  /** PRD §38 — congela a versão corrente e abre a próxima para trabalho. */
   snapshot: (id: string, label?: string) =>
-    request<{ version: number; label: string | null }>(`/architectures/${id}/versions`, {
+    request<{ version: number; label: string | null; working: number }>(
+      `/architectures/${id}/versions`,
+      { method: "POST", body: JSON.stringify({ label }) },
+    ),
+
+  versions: (id: string) => request<ArchitectureVersion[]>(`/architectures/${id}/versions`),
+
+  /** PRD §80 — abre uma arquitetura nova a partir de uma versão. */
+  clone: (id: string, version?: number) =>
+    request<{ id: string; name: string; fromVersion: number }>(`/architectures/${id}/clone`, {
       method: "POST",
-      body: JSON.stringify({ label }),
+      body: JSON.stringify({ version }),
     }),
+
+  /** PRD §39 — compara duas versões. */
+  compare: (id: string, from: number, to: number) =>
+    request<VersionComparison & { from: { number: number; label: string | null }; to: { number: number; label: string | null } }>(
+      `/architectures/${id}/compare?from=${from}&to=${to}`,
+    ),
 };

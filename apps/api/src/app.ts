@@ -9,6 +9,7 @@ import { authRoutes } from "./routes/auth.ts";
 import { healthRoutes } from "./routes/health.ts";
 import { labRoutes } from "./routes/labs.ts";
 import { runRoutes } from "./routes/runs.ts";
+import { versionRoutes } from "./routes/versions.ts";
 
 /** Instância separada do listen para os testes poderem injetar requisições. */
 export async function buildApp(): Promise<FastifyInstance> {
@@ -27,6 +28,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(architectureRoutes);
   await app.register(runRoutes);
   await app.register(labRoutes);
+  await app.register(versionRoutes);
 
   // A fila vive enquanto a aplicação viver (PRD §50).
   app.addHook("onClose", closeQueue);

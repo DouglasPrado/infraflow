@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "dev": "next dev",
+    "generate": "next typegen",
+    "icons": "node scripts/build-icons.mjs",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
-    "icons": "node scripts/build-icons.mjs"
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@infraflow/analyzer": "workspace:*",

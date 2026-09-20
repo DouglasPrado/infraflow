@@ -191,15 +191,20 @@ describe("persistência", () => {
     assert.equal(leitura.json<{ document: { environment: string } }>().document.environment, "staging");
   });
 
-  it("snapshot cria a próxima versão", async () => {
+  it("snapshot rotula o que foi congelado e abre uma versão de trabalho", async () => {
     const response = await app.inject({
       method: "POST",
       url: `/architectures/${architectureId}/versions`,
       cookies: as(sessaoDono),
       payload: { label: "marco" },
     });
+
     assert.equal(response.statusCode, 201);
-    assert.equal(response.json<{ version: number }>().version, 2);
+    const body = response.json<{ version: number; label: string; working: number }>();
+    // O rótulo fica no marco; o trabalho continua na versão seguinte.
+    assert.equal(body.version, 1);
+    assert.equal(body.label, "marco");
+    assert.equal(body.working, 2);
   });
 
   it("recusa id que não é uuid", async () => {

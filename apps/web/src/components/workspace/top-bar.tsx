@@ -6,6 +6,7 @@ import {
   CloudAlert,
   FileCode,
   FileText,
+  GitBranch,
   LoaderCircle,
   LogOut,
   Play,
@@ -172,10 +173,12 @@ export function TopBar({
   user,
   onOpenExport,
   onOpenPalette,
+  onOpenVersions,
 }: {
   user: SessionUser;
   onOpenExport: (file?: string) => void;
   onOpenPalette: () => void;
+  onOpenVersions: () => void;
 }) {
   const { zoomIn, zoomOut } = useReactFlow();
 
@@ -268,6 +271,16 @@ export function TopBar({
         >
           <FileCode className="size-3.5" strokeWidth={1.75} />
           OpenTofu
+        </Button>
+        {/* PRD §80 — congelar, clonar e comparar versões. */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="hidden h-7 gap-1.5 px-2 text-muted-foreground hover:text-foreground lg:inline-flex"
+          onClick={onOpenVersions}
+        >
+          <GitBranch className="size-3.5" strokeWidth={1.75} />
+          Versões
         </Button>
 
         <span aria-hidden className="mx-1 hidden h-4 w-px bg-border lg:block" />

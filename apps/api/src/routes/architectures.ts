@@ -216,7 +216,13 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
     return { id: architecture.id, version: version.number, updatedAt: version.updatedAt };
   });
 
-  /** PRD §38 — congela o estado atual numa nova versão. */
+  /**
+   * PRD §38, §80 — congela o estado atual.
+   *
+   * A versão corrente vira o marco rotulado e o trabalho continua numa nova,
+   * sem rótulo. O rótulo descreve o que foi congelado; pô-lo na cópia viva
+   * diria que o marco é o que ainda está sendo editado.
+   */
   app.post("/architectures/:id/versions", async (request, reply) => {
     const user = await requireUser(request, reply);
     if (!user) return;
@@ -231,16 +237,23 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
     const latest = architecture?.versions[0];
     if (!architecture || !latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
 
-    const version = await db.architectureVersion.create({
-      data: {
-        architectureId: architecture.id,
-        number: latest.number + 1,
-        graph: latest.graph ?? {},
-        label: body.data.label ?? null,
-      },
-    });
+    const [frozen, working] = await db.$transaction([
+      db.architectureVersion.update({
+        where: { id: latest.id },
+        data: { label: body.data.label ?? latest.label },
+      }),
+      db.architectureVersion.create({
+        data: {
+          architectureId: architecture.id,
+          number: latest.number + 1,
+          graph: latest.graph ?? {},
+        },
+      }),
+    ]);
 
-    return reply.status(201).send({ version: version.number, label: version.label });
+    return reply
+      .status(201)
+      .send({ version: frozen.number, label: frozen.label, working: working.number });
   });
 
   /**

@@ -2,10 +2,10 @@
 
 Plataforma visual para planejamento, validação e execução de infraestrutura.
 
-**Estágio:** Milestone 10 — Bottleneck Analyzer (PRD §79), concluído.
-O gargalo passa a sair de medição: a carga do k6 é correlacionada com o consumo
-de cada recurso, e quando a evidência não sustenta uma conclusão o produto diz
-isso em vez de apontar um culpado. Falta o AI Assistant (§81).
+**Estágio:** Milestone 11 — Architecture Versions (PRD §80), concluído.
+O ciclo `v1 → test → modify → v2 → test → compare` funciona: marco congelado,
+clone para explorar alternativa e comparação com capacidade, custo, p95 e
+eficiência. Falta o AI Assistant (§81).
 
 ## Documentos
 
@@ -86,7 +86,10 @@ Os testes da API são de integração e **exigem o Postgres de pé**.
 | `GET /architectures/:id/opentofu/:file` | Download do `.tf` (§34) |
 | `POST /architectures/:id/runs` | Enfileira `plan` (§75) ou `load-test` (§77) |
 | `GET /architectures/:id/runs` | Execuções da arquitetura |
-| `GET /runs/:id` | Execução com o log do OpenTofu |
+| `GET /runs/:id` | Execução, log e análise de gargalo (§79) |
+| `GET /architectures/:id/versions` | Versões, com quais foram testadas (§38) |
+| `POST /architectures/:id/clone` | Clona uma versão numa arquitetura nova (§80) |
+| `GET /architectures/:id/compare` | Compara duas versões (§39, §41) |
 | `POST /architectures/:id/labs` | Cria o laboratório efêmero (§76) |
 | `GET /architectures/:id/labs` | Laboratórios da arquitetura |
 | `DELETE /labs/:id` | `tofu destroy` do laboratório (§54) |
@@ -328,6 +331,26 @@ crescimento relativo e a confiança fica limitada.
 
 A conclusão é calculada **na leitura**, não gravada junto com a medição:
 congelá-la prenderia a análise à versão do algoritmo do dia da execução.
+
+## Versões (§38, §39, §80)
+
+O fluxo do §80 é `v1 → test → modify → v2 → test → compare`:
+
+- **Congelar** rotula a versão corrente como marco e abre a próxima para
+  trabalho. O rótulo descreve o que foi congelado; pô-lo na cópia viva diria que
+  o marco é o que ainda está sendo editado.
+- **Clonar** abre uma arquitetura nova a partir de uma versão, para explorar uma
+  alternativa (§29) sem arriscar a original.
+- **Comparar** responde o §39 — capacidade, custo e p95 — mais a eficiência do
+  §41, custo por mil req/s.
+
+O diff olha só o que é infraestrutura: recurso, propriedade, conexão e a
+configuração do teste. Mover um card no canvas não muda a arquitetura, e uma
+conexão redesenhada com outro id continua sendo a mesma conexão.
+
+O lado `Observed` da comparação só aparece quando **as duas versões** foram
+medidas. Comparar medição de uma com estimativa da outra produziria um número
+sem significado.
 
 ## Como a capacidade é calculada
 

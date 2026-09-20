@@ -3,3 +3,4 @@ export * from "./engine.ts";
 export * from "./run.ts";
 export * from "./document.ts";
 export * from "./observed.ts";
+export * from "./compare.ts";
