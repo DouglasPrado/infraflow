@@ -3,6 +3,7 @@ import { Worker } from "bullmq";
 import { db } from "./db.ts";
 import { env } from "./env.ts";
 import { runLabApply, runLabDestroy } from "./runs/lab.ts";
+import { runLoadTest } from "./runs/load-test.ts";
 import { runPlan } from "./runs/plan.ts";
 import { startLabSweep } from "./sweep.ts";
 
@@ -18,6 +19,7 @@ const KINDS = {
   PLAN: runPlan,
   LAB_APPLY: runLabApply,
   LAB_DESTROY: runLabDestroy,
+  LOAD_TEST: runLoadTest,
 } as const;
 
 const worker = new Worker(

@@ -4,7 +4,9 @@ import type {
   CanvasEdge,
   CanvasNode,
   EdgeKind,
+  LoadGeneratorNode,
   PropertyBag,
+  ResourceNode,
 } from "@infraflow/schema";
 
 /**
@@ -20,7 +22,7 @@ export function resourceNode(
   type: string,
   overrides: PropertyBag = {},
   name = id,
-): CanvasNode {
+): ResourceNode {
   const item = getCatalogItem(type);
   if (!item) throw new Error(`Tipo fora do registry: ${type}`);
   return {
@@ -33,7 +35,10 @@ export function resourceNode(
   };
 }
 
-export function loadGeneratorNode(id = "load-generator"): CanvasNode {
+export function loadGeneratorNode(
+  id = "load-generator",
+  overrides: Partial<Omit<LoadGeneratorNode, "kind" | "id">> = {},
+): LoadGeneratorNode {
   return {
     kind: "loadGenerator",
     id,
@@ -54,6 +59,7 @@ export function loadGeneratorNode(id = "load-generator"): CanvasNode {
     ],
     profile: { type: "Capacity", startRps: 100, incrementRps: 250, intervalSeconds: 30, maxRps: 5000 },
     slo: { p95Ms: 500, p99Ms: 1000, errorRatePct: 1 },
+    ...overrides,
   };
 }
 

@@ -27,6 +27,7 @@ const observation: LoadTestObservation = {
   p99Ms: 903,
   errorRatePct: 0.4,
   meetsSlo: true,
+  droppedIterations: 0,
   stages: [
     { targetRps: 1000, rps: 998, p95Ms: 210, errorRatePct: 0 },
     { targetRps: 1500, rps: 1375, p95Ms: 412, errorRatePct: 0.4 },

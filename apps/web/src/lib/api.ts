@@ -1,4 +1,9 @@
-import type { LabContainer, PlanSummary } from "@infraflow/schema";
+import type {
+  LabApplyResult,
+  LabContainer,
+  LoadTestObservation,
+  PlanSummary,
+} from "@infraflow/schema";
 
 /**
  * Cliente da API.
@@ -34,6 +39,7 @@ const MESSAGES: Record<string, string> = {
   laboratorio_em_andamento: "Já existe um laboratório vivo para esta arquitetura.",
   laboratorio_nao_encontrado: "Laboratório não encontrado.",
   laboratorio_ja_destruido: "Este laboratório já foi destruído.",
+  laboratorio_nao_esta_pronto: "Crie um laboratório antes de rodar o teste de carga.",
   arquitetura_nao_encontrada: "Arquitetura não encontrada.",
 };
 
@@ -88,7 +94,7 @@ export interface RunSummary {
   status: RunStatus;
   slug: string;
   params: { target: "aws" | "docker" };
-  result: PlanSummary | null;
+  result: PlanSummary | LoadTestObservation | LabApplyResult | null;
   error: string | null;
   startedAt: string | null;
   finishedAt: string | null;
@@ -163,11 +169,11 @@ export const api = {
     return response.text();
   },
 
-  /** PRD §75 — pede uma execução ao worker. A API só enfileira. */
-  createRun: (architectureId: string, target: "aws" | "docker") =>
+  /** PRD §75, §77 — pede uma execução ao worker. A API só enfileira. */
+  createRun: (architectureId: string, kind: "plan" | "load-test", target: "aws" | "docker" = "aws") =>
     request<RunSummary>(`/architectures/${architectureId}/runs`, {
       method: "POST",
-      body: JSON.stringify({ kind: "plan", target }),
+      body: JSON.stringify({ kind, target }),
     }),
 
   runs: (architectureId: string) => request<RunSummary[]>(`/architectures/${architectureId}/runs`),

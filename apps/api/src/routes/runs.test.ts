@@ -165,3 +165,57 @@ describe("ler execuções", () => {
     assert.equal(response.statusCode, 404);
   });
 });
+
+describe("teste de carga (PRD §77)", () => {
+  it("recusa medir sem laboratório pronto", async () => {
+    // A execução anterior já terminou? Limpa para não colidir com o 409 de
+    // execução em andamento, que é outra regra.
+    await db.run.updateMany({
+      where: { architectureId, status: { in: ["QUEUED", "RUNNING"] } },
+      data: { status: "FAILED", finishedAt: new Date(), error: "encerrada pelo teste" },
+    });
+
+    const response = await app.inject({
+      method: "POST",
+      url: `/architectures/${architectureId}/runs`,
+      cookies: as(sessaoDono),
+      payload: { kind: "load-test" },
+    });
+
+    assert.equal(response.statusCode, 409);
+    assert.equal(response.json<{ error: string }>().error, "laboratorio_nao_esta_pronto");
+  });
+
+  it("enfileira contra o laboratório pronto, sempre no alvo docker", async () => {
+    const version = await db.architectureVersion.findFirstOrThrow({ where: { architectureId } });
+    const lab = await db.lab.create({
+      data: {
+        architectureId,
+        versionId: version.id,
+        slug: `test-pronto-${suffix}`,
+        status: "READY",
+        entryUrl: "http://127.0.0.1:18999",
+        entryPort: 18999,
+        workdir: "/tmp/nao-usado",
+        expiresAt: new Date(Date.now() + 3_600_000),
+      },
+    });
+
+    const response = await app.inject({
+      method: "POST",
+      url: `/architectures/${architectureId}/runs`,
+      cookies: as(sessaoDono),
+      payload: { kind: "load-test" },
+    });
+
+    assert.equal(response.statusCode, 202);
+    const run = await db.run.findUniqueOrThrow({
+      where: { id: response.json<{ id: string }>().id },
+    });
+
+    assert.equal(run.kind, "LOAD_TEST");
+    assert.equal(run.labId, lab.id);
+    // A carga nunca vai para a nuvem: mede-se o laboratório (§76).
+    assert.deepEqual(run.params, { target: "docker" });
+  });
+});

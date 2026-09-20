@@ -14,6 +14,7 @@
   "dependencies": {
     "@infraflow/compiler": "workspace:*",
     "@infraflow/db": "workspace:*",
+    "@infraflow/load-engine": "workspace:*",
     "@infraflow/schema": "workspace:*",
     "bullmq": "^5.65.0"
   },

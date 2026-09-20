@@ -37,6 +37,14 @@ export const LoadTestObservationSchema = z.object({
   errorRatePct: z.number().min(0).max(100),
   /** Se os critérios do §19 foram cumpridos — do próprio k6, via thresholds. */
   meetsSlo: z.boolean(),
+  /**
+   * Iterações que o gerador não conseguiu disparar.
+   *
+   * Acima de zero, a carga oferecida ficou abaixo da pedida: o limite
+   * encontrado foi o da máquina que gera, não o da arquitetura. Sem este
+   * número, um teste mal dimensionado passaria por resultado.
+   */
+  droppedIterations: z.number().int().nonnegative().default(0),
   stages: z.array(ObservedStageSchema),
 });
 export type LoadTestObservation = z.infer<typeof LoadTestObservationSchema>;

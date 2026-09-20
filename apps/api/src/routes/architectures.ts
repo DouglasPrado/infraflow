@@ -1,4 +1,9 @@
-import { ArchitectureDocumentSchema, toArchitectureJson, validateIntegrity } from "@infraflow/schema";
+import {
+  ArchitectureDocumentSchema,
+  LoadTestObservationSchema,
+  toArchitectureJson,
+  validateIntegrity,
+} from "@infraflow/schema";
 import { emit, isOpenTofuFile, OPENTOFU_FILES } from "@infraflow/compiler";
 import {
   generateReport,
@@ -42,6 +47,24 @@ function invalid(issues: z.core.$ZodIssue[]) {
     error: "documento_invalido",
     issues: issues.map((issue) => ({ path: issue.path.join("."), message: issue.message })),
   };
+}
+
+/**
+ * Última medição real da arquitetura (PRD §77).
+ *
+ * É o que transforma a seção `Observed` do CAPACITY.md em medição de verdade.
+ * Sem execução bem-sucedida, o relatório continua dizendo exatamente isso.
+ */
+async function latestObservation(architectureId: string) {
+  const run = await db.run.findFirst({
+    where: { architectureId, kind: "LOAD_TEST", status: "SUCCEEDED" },
+    orderBy: { finishedAt: "desc" },
+    select: { slug: true, result: true },
+  });
+  if (!run) return undefined;
+
+  const parsed = LoadTestObservationSchema.safeParse(run.result);
+  return parsed.success ? { run: parsed.data, runId: run.slug } : undefined;
 }
 
 /** Carrega a arquitetura só se ela pertencer ao usuário. */
@@ -278,9 +301,12 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
     const parsed = ArchitectureDocumentSchema.safeParse(latest.graph);
     if (!parsed.success) return reply.status(500).send(invalid(parsed.error.issues));
 
+    const observed = await latestObservation(architecture.id);
+
     const report = generateReport(params.data.file, {
       document: parsed.data,
       version: latest.number,
+      ...(observed ? { observed } : {}),
     });
     if (!report) return reply.status(404).send({ error: "relatorio_nao_encontrado" });
 

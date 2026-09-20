@@ -1,11 +1,13 @@
 "use client";
 
 import { Check, CircleX, Loader2, TriangleAlert } from "lucide-react";
+import type { LoadTestObservation, PlanSummary } from "@infraflow/schema";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useRun } from "@/hooks/use-runs";
-import type { RunStatus } from "@/lib/api";
+import { formatRps } from "@/lib/format";
+import type { RunDetail, RunStatus } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Eyebrow, Provenance } from "./property-field";
 
@@ -50,8 +52,179 @@ function Counter({ label, value, tone }: { label: string; value: number; tone?: 
   );
 }
 
+/** PRD §75 — o que o OpenTofu declarou que vai fazer. */
+function PlanResult({ summary }: { summary: PlanSummary }) {
+  return (
+    <>
+      <section className="space-y-3">
+        <Provenance kind="Planned" />
+        <div className="grid grid-cols-3 gap-3">
+          <Counter label="A criar" value={summary.add} tone="text-state-healthy" />
+          <Counter label="A alterar" value={summary.change} tone="text-state-warning" />
+          <Counter label="A destruir" value={summary.destroy} tone="text-state-error" />
+        </div>
+      </section>
+
+      <Separator />
+
+      <section className="space-y-2">
+        <Eyebrow>Recursos</Eyebrow>
+        <ul className="space-y-1">
+          {summary.changes.map((change) => (
+            <li key={change.address} className="flex items-baseline gap-2">
+              <span
+                className={cn(
+                  "w-14 shrink-0 text-[10px] uppercase tracking-eyebrow",
+                  ACTION_TONE[change.action],
+                )}
+              >
+                {change.action}
+              </span>
+              <span className="min-w-0 truncate font-mono text-[11px]">{change.address}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {summary.compileWarnings.length > 0 && (
+        <>
+          <Separator />
+          <section className="space-y-2">
+            <Eyebrow>Compilação</Eyebrow>
+            <ul className="space-y-2">
+              {summary.compileWarnings.map((warning) => (
+                <li key={`${warning.code}-${warning.nodeId ?? "geral"}`} className="flex gap-1.5">
+                  <TriangleAlert
+                    className="mt-0.5 size-3 shrink-0 text-state-warning"
+                    strokeWidth={2.25}
+                  />
+                  <span className="min-w-0 space-y-0.5">
+                    <span className="block text-[11px] leading-relaxed">{warning.message}</span>
+                    {warning.hint && (
+                      <span className="block text-[10px] leading-relaxed text-muted-foreground">
+                        {warning.hint}
+                      </span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      )}
+    </>
+  );
+}
+
 /**
- * PRD §75 — o resultado do `tofu plan` dentro do workspace.
+ * PRD §77 — o que o k6 mediu.
+ *
+ * `Observed` e não `Estimated`: estes números vieram de requisição de verdade
+ * contra o laboratório, e o §85 proíbe confundir as duas leituras.
+ */
+function LoadTestResult({ observation }: { observation: LoadTestObservation }) {
+  const peak = observation.stages.reduce(
+    (best, stage) => (stage.errorRatePct <= 1 && stage.rps > best ? stage.rps : best),
+    0,
+  );
+
+  return (
+    <>
+      <section className="space-y-3">
+        <Provenance kind="Observed" />
+        <div>
+          <div className="text-[11px] text-muted-foreground">Vazão sustentada</div>
+          <div className="mt-0.5 font-mono text-[32px] font-medium leading-none tracking-tight tabular-nums">
+            {formatRps(Math.round(observation.rps))}
+          </div>
+        </div>
+        <div className="grid grid-cols-4 gap-3 border-t pt-3">
+          <Counter label="Requisições" value={observation.requests} />
+          <Counter label="p95" value={Math.round(observation.p95Ms)} />
+          <Counter label="p99" value={Math.round(observation.p99Ms)} />
+          <Counter
+            label="Erros %"
+            value={Math.round(observation.errorRatePct * 10) / 10}
+            tone={observation.errorRatePct > 0 ? "text-state-error" : undefined}
+          />
+        </div>
+        <div
+          className={cn(
+            "text-[11px]",
+            observation.meetsSlo ? "text-state-healthy" : "text-state-error",
+          )}
+        >
+          {observation.meetsSlo ? "SLO cumprido (§19)." : "SLO violado (§19)."}
+        </div>
+      </section>
+
+      <Separator />
+
+      <section className="space-y-2">
+        <Eyebrow>Escada de carga</Eyebrow>
+        <div className="space-y-1">
+          <div className="flex items-baseline gap-2 text-[10px] uppercase tracking-eyebrow text-muted-foreground">
+            <span className="w-16 shrink-0 text-right">pedido</span>
+            <span className="w-16 shrink-0 text-right">alcançado</span>
+            <span className="w-14 shrink-0 text-right">p95</span>
+            <span className="w-12 shrink-0 text-right">erros</span>
+          </div>
+          {observation.stages.map((stage) => (
+            <div key={stage.targetRps} className="flex items-baseline gap-2 font-mono text-[11px] tabular-nums">
+              <span className="w-16 shrink-0 text-right text-muted-foreground">
+                {Math.round(stage.targetRps)}
+              </span>
+              <span className="w-16 shrink-0 text-right">{Math.round(stage.rps)}</span>
+              <span className="w-14 shrink-0 text-right">{Math.round(stage.p95Ms)}ms</span>
+              <span
+                className={cn(
+                  "w-12 shrink-0 text-right",
+                  stage.errorRatePct > 0 ? "text-state-error" : "text-muted-foreground",
+                )}
+              >
+                {Math.round(stage.errorRatePct * 10) / 10}%
+              </span>
+            </div>
+          ))}
+        </div>
+        <p className="text-[10px] leading-relaxed text-muted-foreground">
+          Maior degrau sustentado com menos de 1% de erro: {formatRps(Math.round(peak))}.
+        </p>
+      </section>
+
+      {observation.droppedIterations > 0 && (
+        <>
+          <Separator />
+          <p className="flex gap-1.5 text-[11px] leading-relaxed text-state-warning">
+            <TriangleAlert className="mt-0.5 size-3 shrink-0" strokeWidth={2.25} />
+            O gerador descartou {observation.droppedIterations} iterações: a carga oferecida ficou
+            abaixo da pedida, então o limite encontrado é o da máquina que gera, não o da
+            arquitetura.
+          </p>
+        </>
+      )}
+    </>
+  );
+}
+
+function resultOf(run: RunDetail | null) {
+  if (!run?.result) return null;
+  if (run.kind === "PLAN") return <PlanResult summary={run.result as PlanSummary} />;
+  if (run.kind === "LOAD_TEST") {
+    return <LoadTestResult observation={run.result as LoadTestObservation} />;
+  }
+  return null;
+}
+
+const KIND_LABEL: Record<string, string> = {
+  PLAN: "tofu plan",
+  LOAD_TEST: "teste de carga (k6)",
+  LAB_APPLY: "criação do laboratório",
+  LAB_DESTROY: "destruição do laboratório",
+};
+
+/**
+ * PRD §75, §77 — o resultado da execução dentro do workspace.
  *
  * Mostra o que o OpenTofu disse, inclusive quando ele recusou: falta de
  * credencial e região errada são resposta, não ausência de resultado. Por isso
@@ -65,7 +238,6 @@ export function RunSheet({
   onOpenChange: (open: boolean) => void;
 }) {
   const run = useRun(runId);
-  const summary = run?.result ?? null;
 
   return (
     <Sheet open={runId !== null} onOpenChange={onOpenChange}>
@@ -77,7 +249,7 @@ export function RunSheet({
           </SheetTitle>
           <SheetDescription>
             {run
-              ? `tofu plan · alvo ${run.params.target} · versão v${run.version} · ${RUN_LABEL[run.status]}`
+              ? `${KIND_LABEL[run.kind] ?? run.kind} · versão v${run.version} · ${RUN_LABEL[run.status]}`
               : "Carregando…"}
           </SheetDescription>
         </SheetHeader>
@@ -93,77 +265,13 @@ export function RunSheet({
               </section>
             )}
 
-            {summary && (
-              <>
-                <section className="space-y-3">
-                  <Provenance kind="Planned" />
-                  <div className="grid grid-cols-3 gap-3">
-                    <Counter label="A criar" value={summary.add} tone="text-state-healthy" />
-                    <Counter label="A alterar" value={summary.change} tone="text-state-warning" />
-                    <Counter label="A destruir" value={summary.destroy} tone="text-state-error" />
-                  </div>
-                </section>
-
-                <Separator />
-
-                <section className="space-y-2">
-                  <Eyebrow>Recursos</Eyebrow>
-                  <ul className="space-y-1">
-                    {summary.changes.map((change) => (
-                      <li key={change.address} className="flex items-baseline gap-2">
-                        <span
-                          className={cn(
-                            "w-14 shrink-0 text-[10px] uppercase tracking-eyebrow",
-                            ACTION_TONE[change.action],
-                          )}
-                        >
-                          {change.action}
-                        </span>
-                        <span className="min-w-0 truncate font-mono text-[11px]">
-                          {change.address}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              </>
-            )}
-
-            {summary && summary.compileWarnings.length > 0 && (
-              <>
-                <Separator />
-                <section className="space-y-2">
-                  <Eyebrow>Compilação</Eyebrow>
-                  <ul className="space-y-2">
-                    {summary.compileWarnings.map((warning) => (
-                      <li
-                        key={`${warning.code}-${warning.nodeId ?? "geral"}`}
-                        className="flex gap-1.5"
-                      >
-                        <TriangleAlert
-                          className="mt-0.5 size-3 shrink-0 text-state-warning"
-                          strokeWidth={2.25}
-                        />
-                        <span className="min-w-0 space-y-0.5">
-                          <span className="block text-[11px] leading-relaxed">{warning.message}</span>
-                          {warning.hint && (
-                            <span className="block text-[10px] leading-relaxed text-muted-foreground">
-                              {warning.hint}
-                            </span>
-                          )}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              </>
-            )}
+            {resultOf(run)}
 
             {run && run.logs.length > 0 && (
               <>
                 <Separator />
                 <section className="space-y-2">
-                  <Eyebrow>Saída do OpenTofu</Eyebrow>
+                  <Eyebrow>Saída do processo</Eyebrow>
                   <pre className="whitespace-pre-wrap break-words rounded-md border bg-secondary/40 p-3 font-mono text-[11px] leading-relaxed">
                     {run.logs}
                   </pre>

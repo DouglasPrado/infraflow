@@ -166,6 +166,9 @@ importers:
       '@infraflow/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@infraflow/load-engine':
+        specifier: workspace:*
+        version: link:../../packages/load-engine
       '@infraflow/schema':
         specifier: workspace:*
         version: link:../../packages/infra-schema
@@ -283,6 +286,22 @@ importers:
       '@infraflow/registry':
         specifier: workspace:*
         version: link:../infra-registry
+      '@infraflow/schema':
+        specifier: workspace:*
+        version: link:../infra-schema
+    devDependencies:
+      '@types/node':
+        specifier: ^22
+        version: 22.20.4
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/load-engine:
+    dependencies:
+      '@infraflow/analyzer':
+        specifier: workspace:*
+        version: link:../infra-analyzer
       '@infraflow/schema':
         specifier: workspace:*
         version: link:../infra-schema

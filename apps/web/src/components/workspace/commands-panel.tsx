@@ -1,8 +1,11 @@
 "use client";
 
-import { FileCode, FileJson, FileText, Info, Play, TriangleAlert } from "lucide-react";
+import { FileCode, FileJson, FileText, Gauge, Info, Play, TriangleAlert } from "lucide-react";
+import type { LoadTestObservation, PlanSummary } from "@infraflow/schema";
 import { useMemo } from "react";
+import type { RunSummary } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import { useLabs } from "@/hooks/use-labs";
 import { useRuns } from "@/hooks/use-runs";
 import { ARTIFACT_GROUPS, compileWarnings } from "@/lib/artifacts";
 import { cn } from "@/lib/utils";
@@ -10,6 +13,20 @@ import { useWorkspaceStore } from "@/store/workspace-store";
 import { LabPanel } from "./lab-panel";
 import { FieldGroup } from "./property-field";
 import { RUN_LABEL, RunIcon } from "./run-sheet";
+
+/** Resumo de uma linha da execução, conforme o que ela produziu. */
+function summaryOf(run: RunSummary): string | null {
+  if (!run.result) return null;
+  if (run.kind === "PLAN") {
+    const plan = run.result as PlanSummary;
+    return `+${plan.add} ~${plan.change} -${plan.destroy}`;
+  }
+  if (run.kind === "LOAD_TEST") {
+    const observation = run.result as LoadTestObservation;
+    return `${Math.round(observation.rps)} req/s`;
+  }
+  return null;
+}
 
 function iconFor(name: string) {
   if (name.endsWith(".json")) return FileJson;
@@ -41,6 +58,7 @@ export function CommandsPanel({
   );
 
   const { runs, error, starting, start, busy } = useRuns(architectureId);
+  const { lab } = useLabs(architectureId);
 
   return (
     <div className="space-y-5 p-3">
@@ -54,10 +72,22 @@ export function CommandsPanel({
             variant="outline"
             className="h-8 w-full gap-1.5"
             disabled={starting || busy || !architectureId}
-            onClick={() => void start("aws")}
+            onClick={() => void start("plan")}
           >
             <Play className="size-3.5" />
             {busy ? "Execução em andamento" : "Rodar tofu plan"}
+          </Button>
+
+          {/* PRD §77 — o k6 mede o laboratório; sem ambiente pronto não há alvo. */}
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-8 w-full gap-1.5"
+            disabled={starting || busy || lab?.status !== "READY"}
+            onClick={() => void start("load-test", "docker")}
+          >
+            <Gauge className="size-3.5" />
+            Rodar teste de carga
           </Button>
 
           {error && (
@@ -86,9 +116,7 @@ export function CommandsPanel({
                       {run.slug}
                     </span>
                     <span className="shrink-0 text-[10px] text-muted-foreground">
-                      {run.result
-                        ? `+${run.result.add} ~${run.result.change} -${run.result.destroy}`
-                        : RUN_LABEL[run.status]}
+                      {summaryOf(run) ?? RUN_LABEL[run.status]}
                     </span>
                   </button>
                 </li>

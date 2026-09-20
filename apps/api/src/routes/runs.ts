@@ -16,7 +16,7 @@ import { runQueue } from "../queue.ts";
 const idParams = z.object({ id: z.uuid() });
 
 const createBody = z.object({
-  kind: z.literal("plan"),
+  kind: z.enum(["plan", "load-test"]).default("plan"),
   target: RunTargetSchema.default("aws"),
 });
 
@@ -47,7 +47,12 @@ function serialize(run: {
 }
 
 export const runRoutes: FastifyPluginAsync = async (app) => {
-  /** PRD §75 — pede um `tofu plan` da versão corrente. */
+  /**
+   * PRD §75, §77 — pede uma execução ao worker.
+   *
+   * `plan` compila e planeja; `load-test` dispara o k6 contra o laboratório.
+   * A API não executa nenhum dos dois (§51).
+   */
   app.post("/architectures/:id/runs", async (request, reply) => {
     const user = await requireUser(request, reply);
     if (!user) return;
@@ -75,13 +80,29 @@ export const runRoutes: FastifyPluginAsync = async (app) => {
     });
     if (running) return reply.status(409).send({ error: "execucao_em_andamento" });
 
+    // O teste de carga mede o laboratório; sem ambiente pronto não há alvo.
+    const lab =
+      body.data.kind === "load-test"
+        ? await db.lab.findFirst({
+            where: { architectureId: architecture.id, status: "READY" },
+            orderBy: { createdAt: "desc" },
+          })
+        : null;
+
+    if (body.data.kind === "load-test" && !lab) {
+      return reply.status(409).send({ error: "laboratorio_nao_esta_pronto" });
+    }
+
     const run = await db.run.create({
       data: {
         architectureId: architecture.id,
-        versionId: latest.id,
-        kind: "PLAN",
-        slug: slugFor("plan"),
-        params: RunParamsSchema.parse({ target: body.data.target }),
+        versionId: lab?.versionId ?? latest.id,
+        ...(lab ? { labId: lab.id } : {}),
+        kind: body.data.kind === "load-test" ? "LOAD_TEST" : "PLAN",
+        slug: slugFor(body.data.kind),
+        params: RunParamsSchema.parse({
+          target: body.data.kind === "load-test" ? "docker" : body.data.target,
+        }),
       },
     });
 

@@ -2,10 +2,10 @@
 
 Plataforma visual para planejamento, validação e execução de infraestrutura.
 
-**Estágio:** Milestone 7 — Infrastructure Lab (PRD §76), concluído.
-O canvas compila para OpenTofu, o worker roda `plan` de verdade e sobe
-laboratórios efêmeros em containers isolados que respondem a requisição real.
-Ainda **não** há k6 nem LLM.
+**Estágio:** Milestone 8 — Real Load Testing (PRD §77), concluído.
+O Load Generator do canvas virou script de k6 que roda contra o laboratório: o
+que volta é medição, não estimativa. Ainda **não** há observabilidade por
+recurso (§78) nem LLM.
 
 ## Documentos
 
@@ -30,6 +30,7 @@ packages/
   report-generator Artefatos derivados do documento (§32, §33, §73)
   infra-compiler   Grafo → modelo de OpenTofu (§74)
   opentofu-generator Modelo → HCL no formato canônico (§34)
+  load-engine      Load Generator → script de k6 e leitura do resumo (§77)
 ```
 
 `infra-registry` não importa React: a API e os workers precisam dele para
@@ -83,7 +84,7 @@ Os testes da API são de integração e **exigem o Postgres de pé**.
 | `GET /architectures/:id/reports/:file` | Download do artefato (§73) |
 | `GET /architectures/:id/opentofu` | Arquivos compilados e avisos (§74) |
 | `GET /architectures/:id/opentofu/:file` | Download do `.tf` (§34) |
-| `POST /architectures/:id/runs` | Enfileira um `tofu plan` (§75) |
+| `POST /architectures/:id/runs` | Enfileira `plan` (§75) ou `load-test` (§77) |
 | `GET /architectures/:id/runs` | Execuções da arquitetura |
 | `GET /runs/:id` | Execução com o log do OpenTofu |
 | `POST /architectures/:id/labs` | Cria o laboratório efêmero (§76) |
@@ -249,6 +250,36 @@ destroy justamente para que haja o que destruir.
 | cache | `redis:8-alpine` com a política de despejo do painel |
 | armazenamento | `quay.io/minio/minio` |
 | fila | `rabbitmq:4-alpine` ou `nats:2-alpine` |
+
+## Teste de carga real (§77)
+
+O Load Generator do canvas deixa de ser configuração de simulação: endpoints,
+pesos, perfil e SLO (§16–§19) viram o script que o k6 executa **contra o
+laboratório**. Sem ambiente pronto a execução recusa, em vez de fingir.
+
+A escada de carga sai de `ladderFor`, a **mesma** função que o motor de
+estimativa usa — se divergissem, comparar estimado com observado compararia
+coisas diferentes.
+
+Três detalhes que decidem se a medição vale:
+
+- **Degrau é degrau.** Cada patamar entra com duração zero antes do intervalo,
+  senão o k6 interpola a subida e não existe patamar nenhum.
+- **Medição por degrau.** O k6 só publica submétrica com rótulo quando há um
+  limiar declarado para ela; o gerador declara limiares `>= 0` — sempre
+  verdadeiros — justamente para forçar a publicação de cada degrau (§20).
+- **Vazão do degrau pela duração do degrau.** O `rate` que o k6 devolve na
+  submétrica é calculado sobre a execução inteira; usá-lo subestimaria todos os
+  patamares.
+
+O código de saída do k6 **não** é o veredito: `99` significa "limiar violado",
+ou seja, o teste rodou e a arquitetura não cumpriu o SLO. Isso é resultado.
+
+`droppedIterations` é reportado porque importa: acima de zero, a carga oferecida
+ficou abaixo da pedida e o limite encontrado foi o da máquina que gera, não o da
+arquitetura.
+
+A última execução bem-sucedida alimenta a seção `Observed` do CAPACITY.md (§73).
 
 ## Como a capacidade é calculada
 

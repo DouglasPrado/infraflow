@@ -55,12 +55,12 @@ export function useRuns(architectureId: string | null) {
   }, [busy]);
 
   const start = useCallback(
-    async (target: "aws" | "docker") => {
+    async (kind: "plan" | "load-test", target: "aws" | "docker" = "aws") => {
       if (!architectureId) return;
       setStarting(true);
       setError(null);
       try {
-        const run = await api.createRun(architectureId, target);
+        const run = await api.createRun(architectureId, kind, target);
         setRuns((current) => [run, ...current]);
       } catch (cause) {
         setError(cause instanceof ApiError ? cause.message : "Não foi possível iniciar a execução.");

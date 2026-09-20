@@ -112,6 +112,7 @@ enum RunKind {
   PLAN
   LAB_APPLY
   LAB_DESTROY
+  LOAD_TEST
 
   @@map("run_kind")
 }
