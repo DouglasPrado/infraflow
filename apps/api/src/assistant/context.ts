@@ -175,7 +175,13 @@ _Nenhum laboratório foi criado._`,
 - p50 / p95 / p99: ${observation.p50Ms.toFixed(0)}ms / ${observation.p95Ms.toFixed(0)}ms / ${observation.p99Ms.toFixed(0)}ms
 - Erros: ${observation.errorRatePct.toFixed(2)}%
 - SLO: ${observation.meetsSlo ? "cumprido" : "violado"}
-- Iterações descartadas pelo gerador: ${observation.droppedIterations}
+- Iterações não disparadas: ${observation.droppedIterations}${
+    observation.loadCeiling === "generator"
+      ? " (teto do gerador: o alvo seguia saudável, a medição subestima a arquitetura)"
+      : observation.loadCeiling === "architecture"
+        ? " (teto da arquitetura: o alvo saturou, o platô medido é o limite real)"
+        : ""
+  }
 
 ## Escada de carga
 

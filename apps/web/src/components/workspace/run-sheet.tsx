@@ -254,14 +254,27 @@ function LoadTestResult({ observation }: { observation: LoadTestObservation }) {
         </>
       )}
 
-      {observation.droppedIterations > 0 && (
+      {observation.loadCeiling !== "none" && (
         <>
           <Separator />
-          <p className="flex gap-1.5 text-[11px] leading-relaxed text-state-warning">
+          <p
+            className={`flex gap-1.5 text-[11px] leading-relaxed ${
+              observation.loadCeiling === "generator" ? "text-state-warning" : "text-muted-foreground"
+            }`}
+          >
             <TriangleAlert className="mt-0.5 size-3 shrink-0" strokeWidth={2.25} />
-            O gerador descartou {observation.droppedIterations} iterações: a carga oferecida ficou
-            abaixo da pedida, então o limite encontrado é o da máquina que gera, não o da
-            arquitetura.
+            {observation.loadCeiling === "generator" ? (
+              <>
+                O gerador descartou {observation.droppedIterations} iterações enquanto o alvo seguia
+                saudável: o limite encontrado é o da máquina que gera, não o da arquitetura. Repita
+                com um perfil menor para medir a arquitetura.
+              </>
+            ) : (
+              <>
+                O alvo saturou: a latência inflou e {observation.droppedIterations} iterações não
+                chegaram a sair. A vazão do platô é o teto da arquitetura, não do gerador.
+              </>
+            )}
           </p>
         </>
       )}

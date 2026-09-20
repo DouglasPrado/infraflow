@@ -28,6 +28,7 @@ const observation: LoadTestObservation = {
   errorRatePct: 0.4,
   meetsSlo: true,
   droppedIterations: 0,
+  loadCeiling: "none",
   metrics: [],
   stages: [
     {

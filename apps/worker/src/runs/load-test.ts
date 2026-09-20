@@ -1,3 +1,4 @@
+import { expectedLatencyFor } from "@infraflow/load-engine";
 import { ArchitectureDocumentSchema, isLoadGeneratorNode } from "@infraflow/schema";
 import { db } from "../db.ts";
 import { K6Failure, runK6 } from "../k6.ts";
@@ -37,7 +38,16 @@ export async function runLoadTest(runId: string): Promise<void> {
     const workspace = await createWorkspace(run.slug);
     const outcome = await runK6(
       workspace.path,
-      { baseUrl: run.lab.entryUrl, generator },
+      {
+        baseUrl: run.lab.entryUrl,
+        generator,
+        /**
+         * A estimativa dimensiona o gerador, não o resultado (§79, §85): sem
+         * esta pista o pool de VUs é chutado, e um chute baixo faz a máquina
+         * que dispara virar o gargalo medido.
+         */
+        expectedLatencyMs: expectedLatencyFor(document),
+      },
       (files) => workspace.write(files),
     );
 

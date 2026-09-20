@@ -10,6 +10,18 @@ import type { LoadGeneratorNode } from "@infraflow/schema";
 
 export interface LoadTestSpec {
   /**
+   * Latência esperada por requisição, em ms.
+   *
+   * Dimensiona os VUs pela Lei de Little: sustentar N req/s num alvo de L
+   * segundos exige N×L requisições simultâneas. Sem esta pista o gerador
+   * chutaria, e chutar baixo faz o **gerador** virar o gargalo — o teste passa
+   * a medir a máquina que dispara, não a arquitetura.
+   *
+   * Vem da estimativa do motor de capacidade. Ausente, assume-se um valor
+   * conservador.
+   */
+  expectedLatencyMs?: number;
+  /**
    * Endereço que de fato recebe a carga — o do laboratório.
    *
    * Distinto do `baseUrl` do canvas, que descreve o alvo **pretendido** em

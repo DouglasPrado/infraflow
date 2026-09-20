@@ -36,6 +36,7 @@ function observation(maxRps: number, p95Ms: number): LoadTestObservation {
     errorRatePct: 0,
     meetsSlo: true,
     droppedIterations: 0,
+    loadCeiling: "none",
     metrics: [],
     stages: [
       {

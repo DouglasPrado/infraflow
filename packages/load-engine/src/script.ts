@@ -1,4 +1,5 @@
-import { ladderFor } from "@infraflow/analyzer";
+import { evaluate, graphFromDocument, ladderFor } from "@infraflow/analyzer";
+import { isLoadGeneratorNode, type ArchitectureDocument } from "@infraflow/schema";
 import type { LadderStep, LoadTestSpec } from "./types.ts";
 
 /**
@@ -38,18 +39,29 @@ function parseHeaders(raw: string, authentication: string): Record<string, strin
 }
 
 /**
- * Quantos VUs reservar.
+ * Latência assumida quando ninguém informa uma. Deliberadamente folgada: errar
+ * para cima custa memória, errar para baixo custa a validade da medição.
+ */
+const LATÊNCIA_PADRÃO_MS = 250;
+
+/**
+ * Quantos VUs reservar, pela Lei de Little.
  *
  * O `ramping-arrival-rate` mantém a taxa **pedida**, não a que o alvo aguenta:
- * quando a latência sobe, ele precisa de mais VUs simultâneos para não deixar
- * de disparar. Faltando VU, o k6 descarta iterações — e isso vira limite do
- * gerador disfarçado de limite da arquitetura. Os tetos evitam que um perfil
- * agressivo peça mais VU do que a máquina aguenta.
+ * sustentar N req/s com latência L exige N×L requisições simultâneas. Faltando
+ * VU, o k6 descarta iterações — e isso vira limite do gerador disfarçado de
+ * limite da arquitetura.
+ *
+ * Reserva-se com folga porque a latência **sobe** perto da saturação, que é
+ * justamente onde a medição importa; e o teto cobre a subida sem deixar um
+ * perfil agressivo pedir mais VU do que a máquina aguenta.
  */
-function vus(maxRps: number): { preAllocated: number; max: number } {
+function vus(maxRps: number, expectedLatencyMs: number): { preAllocated: number; max: number } {
+  const simultâneas = (maxRps * Math.max(1, expectedLatencyMs)) / 1000;
+
   return {
-    preAllocated: Math.min(400, Math.max(10, Math.ceil(maxRps / 10))),
-    max: Math.min(2000, Math.max(50, Math.ceil(maxRps / 2))),
+    preAllocated: Math.min(1000, Math.max(10, Math.ceil(simultâneas * 1.5))),
+    max: Math.min(3000, Math.max(50, Math.ceil(simultâneas * 4))),
   };
 }
 
@@ -66,7 +78,7 @@ const json = (value: unknown) => JSON.stringify(value);
 export function buildScript(spec: LoadTestSpec): string {
   const { target, endpoints, profile, slo } = spec.generator;
   const ladder = buildLadder(spec);
-  const pool = vus(profile.maxRps);
+  const pool = vus(profile.maxRps, spec.expectedLatencyMs ?? LATÊNCIA_PADRÃO_MS);
 
   const total = endpoints.reduce((sum, endpoint) => sum + endpoint.weight, 0);
   const weighted = endpoints.map((endpoint) => ({
@@ -95,6 +107,7 @@ export function buildScript(spec: LoadTestSpec): string {
 
   return `// Gerado pelo InfraFlow a partir do Load Generator do canvas (PRD §16-§19, §77).
 // Não editar: recompile a partir do desenho.
+import exec from "k6/execution";
 import http from "k6/http";
 
 const BASE_URL = ${json(spec.baseUrl)};
@@ -125,11 +138,17 @@ ${stageThresholds.map(([name, rules]) => `    ${json(name)}: ${json(rules)},`).j
   },
 };
 
-const START = Date.now();
-
-/** Em que degrau da escada a requisição está sendo disparada. */
+/**
+ * Em que degrau da escada a requisição está sendo disparada.
+ *
+ * O relógio é o do cenário, não do VU. Código de módulo roda uma vez por VU, e
+ * o executor cria VUs durante a execução quando a latência sobe: um VU nascido
+ * no meio do teste acharia que o teste acabou de começar e marcaria tudo como
+ * primeiro degrau. O startTime do cenário é o mesmo para todos os VUs,
+ * inclusive os que chegam depois.
+ */
 function currentStage() {
-  const elapsed = (Date.now() - START) / 1000;
+  const elapsed = (Date.now() - exec.scenario.startTime) / 1000;
   for (const boundary of BOUNDARIES) {
     if (elapsed < boundary.endsAt) return String(boundary.stage);
   }
@@ -161,4 +180,34 @@ export function handleSummary(data) {
   return { "summary.json": JSON.stringify(data) };
 }
 `;
+}
+
+/**
+ * Latência que o dimensionador deve assumir, vinda da estimativa (PRD §79).
+ *
+ * O teto da escada é o degrau mais pesado, e é dele que o pool precisa dar
+ * conta: dimensionar pela latência do primeiro degrau deixaria o gerador sem
+ * fôlego justamente onde a medição importa.
+ *
+ * Isto é **estimativa alimentando a instrumentação**, não estimativa virando
+ * resultado. O número escolhido aqui não entra em nenhuma leitura do §85 — se
+ * estiver errado, o que aparece é descarte, não um valor inventado.
+ */
+export function expectedLatencyFor(document: ArchitectureDocument): number | undefined {
+  const generator = document.nodes.find(isLoadGeneratorNode);
+  if (!generator) return undefined;
+
+  const { profile, slo } = generator;
+  const ladder = ladderFor(profile);
+  const topo = ladder[ladder.length - 1];
+  if (topo === undefined) return undefined;
+
+  const previsto = evaluate(graphFromDocument(document), topo, slo).p95Ms;
+  if (!Number.isFinite(previsto) || previsto <= 0) return undefined;
+
+  /**
+   * Teto de sanidade: perto da saturação a previsão dispara, e reservar VU por
+   * uma latência de minutos consumiria memória sem melhorar medição alguma.
+   */
+  return Math.min(previsto, 10_000);
 }

@@ -159,9 +159,17 @@ export function analyzeObserved(
     );
   }
 
-  if (observation.droppedIterations > 0) {
+  /**
+   * Descarte só invalida a leitura quando o teto foi do **gerador**.
+   *
+   * Quando o alvo satura, a latência infla e os VUs ficam presos esperando: o
+   * k6 descarta, mas o platô medido é o limite real da arquitetura. Tratar os
+   * dois casos igual jogaria fora justamente o resultado que o teste existe
+   * para encontrar.
+   */
+  if (observation.loadCeiling === "generator") {
     return inconclusive(
-      `O gerador descartou ${observation.droppedIterations} iterações: a carga oferecida ficou abaixo da pedida, então o limite encontrado é o da máquina que gera, não o da arquitetura.`,
+      `O gerador descartou ${observation.droppedIterations} iterações enquanto o alvo seguia saudável: a carga oferecida ficou abaixo da pedida, então o limite encontrado é o da máquina que gera, não o da arquitetura.`,
     );
   }
 

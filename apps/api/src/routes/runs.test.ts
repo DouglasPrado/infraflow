@@ -293,6 +293,7 @@ describe("análise de gargalo observado (PRD §79)", () => {
           errorRatePct: 1.5,
           meetsSlo: false,
           droppedIterations: 0,
+          loadCeiling: "none",
           stages: [stage(100, 60, 0, 0), stage(200, 150, 0, 1), stage(300, 900, 5, 2)],
           metrics: [
             sample("rds", 30, 0),

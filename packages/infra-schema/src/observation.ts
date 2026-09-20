@@ -64,11 +64,28 @@ export const LoadTestObservationSchema = z.object({
   /**
    * Iterações que o gerador não conseguiu disparar.
    *
-   * Acima de zero, a carga oferecida ficou abaixo da pedida: o limite
-   * encontrado foi o da máquina que gera, não o da arquitetura. Sem este
-   * número, um teste mal dimensionado passaria por resultado.
+   * Acima de zero, a carga oferecida ficou abaixo da pedida. Quem ficou para
+   * trás — o gerador ou a arquitetura — está em `loadCeiling`; o número sozinho
+   * não distingue os dois.
    */
   droppedIterations: z.number().int().nonnegative().default(0),
+  /**
+   * De quem foi o teto que a execução encontrou.
+   *
+   * Um descarte acontece quando o executor quer disparar e não há VU livre. Isso
+   * tem duas causas opostas, e confundi-las inverte a conclusão:
+   *
+   * - `architecture`: o alvo saturou, a latência inflou e os VUs ficaram presos
+   *   esperando. **O resultado é conclusivo** — o platô medido é o teto real.
+   * - `generator`: o alvo continuou saudável e o gerador é que não tinha fôlego.
+   *   O resultado **subestima** a arquitetura e não serve de teto.
+   * - `none`: tudo que foi pedido foi disparado.
+   *
+   * O veredito sai só de medição: latência e erro no pior degrau contra o
+   * degrau mais calmo. Na dúvida responde `generator`, porque errar para esse
+   * lado faz repetir o teste, e errar para o outro faz acreditar num teto falso.
+   */
+  loadCeiling: z.enum(["none", "architecture", "generator"]).default("none"),
   stages: z.array(ObservedStageSchema),
   /**
    * Métricas dos recursos durante a execução (PRD §78).

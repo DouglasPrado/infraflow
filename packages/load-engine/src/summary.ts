@@ -33,6 +33,44 @@ export interface ParseOptions {
   finishedAt: Date;
 }
 
+/**
+ * Quanto a latência precisa inflar para a degradação ser do alvo, e não ruído.
+ *
+ * Dois é folgado de propósito: variação de rede e de coleta sobe o p95 em
+ * dezenas de porcento sem que nada tenha saturado. Só o dobro do degrau mais
+ * calmo é sinal de fila se formando.
+ */
+const INFLAÇÃO_DE_SATURAÇÃO = 2;
+
+/** Erro acima disto não é ruído: o alvo começou a recusar. */
+const ERRO_DE_SATURAÇÃO_PCT = 1;
+
+/**
+ * De quem foi o teto (PRD §77).
+ *
+ * O k6 conta descartes da execução inteira, sem rótulo de degrau — não dá para
+ * saber *quando* faltou VU. Mas dá para saber se o **alvo** se degradou durante
+ * a escada, e é isso que separa as duas causas: VU preso em alvo lento é teto da
+ * arquitetura; VU faltando com alvo saudável é teto do gerador.
+ */
+function ceilingOf(
+  dropped: number,
+  stages: { p95Ms: number; errorRatePct: number }[],
+): "none" | "architecture" | "generator" {
+  if (dropped <= 0) return "none";
+
+  // O degrau mais leve é a linha de base: a arquitetura sem fila.
+  const base = stages[0];
+  if (!base || stages.length < 2) return "generator";
+
+  const inflou = stages.some((stage) => stage.p95Ms >= base.p95Ms * INFLAÇÃO_DE_SATURAÇÃO);
+  const recusou = stages.some(
+    (stage) => stage.errorRatePct - base.errorRatePct >= ERRO_DE_SATURAÇÃO_PCT,
+  );
+
+  return inflou || recusou ? "architecture" : "generator";
+}
+
 export function parseSummary(raw: unknown, options: ParseOptions): LoadTestObservation {
   const summary = raw as K6Summary;
   const durationSeconds = zero(summary.state?.testRunDurationMs) / 1000;
@@ -66,7 +104,7 @@ export function parseSummary(raw: unknown, options: ParseOptions): LoadTestObser
     };
   });
 
-  /** Iteração que o gerador não conseguiu disparar — limite dele, não do alvo. */
+  /** Iteração que o executor quis disparar sem ter VU livre. */
   const dropped = zero(statistic(summary, "dropped_iterations", "count"));
 
   /** O SLO é o próprio k6 quem afere, pelos limiares do §19. */
@@ -78,6 +116,7 @@ export function parseSummary(raw: unknown, options: ParseOptions): LoadTestObser
   });
 
   return LoadTestObservationSchema.parse({
+    loadCeiling: ceilingOf(dropped, stages),
     startedAt: options.startedAt.toISOString(),
     finishedAt: options.finishedAt.toISOString(),
     durationSeconds,

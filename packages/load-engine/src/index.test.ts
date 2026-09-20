@@ -162,3 +162,106 @@ describe("leitura do resumo (PRD §77, §78)", () => {
     );
   });
 });
+
+/**
+ * Cada caso aqui é um defeito que a bancada de calibração encontrou rodando k6
+ * de verdade contra alvos de latência conhecida. O comentário diz o que a
+ * medição mostrava antes da correção.
+ */
+describe("calibração do gerador", () => {
+  it("marca o degrau pelo relógio do cenário, não pelo do VU", () => {
+    // Antes: `Date.now()` no módulo, que roda uma vez por VU. Contra um alvo de
+    // 200ms, VUs criados no meio do teste marcavam tudo como primeiro degrau —
+    // o degrau 1 media 303 req/s para um pedido de 100.
+    const script = buildScript(spec());
+
+    assert.match(script, /import exec from "k6\/execution"/);
+    assert.match(script, /exec\.scenario\.startTime/);
+    assert.doesNotMatch(script, /const START = Date\.now\(\)/);
+  });
+
+  it("dimensiona os VUs pela latência esperada, não por uma constante", () => {
+    // Antes: `maxRps / 10`, que assume 100ms. Contra 200ms o pool nascia pela
+    // metade e o k6 descartava iterações — limite do gerador lido como limite
+    // da arquitetura.
+    const perfil = { type: "Capacity" as const, startRps: 100, incrementRps: 100, intervalSeconds: 5, maxRps: 1000 };
+
+    const lento = buildScript({ ...spec({ profile: perfil }), expectedLatencyMs: 400 });
+    const rápido = buildScript({ ...spec({ profile: perfil }), expectedLatencyMs: 20 });
+
+    const vus = (script: string) => ({
+      pré: Number(/preAllocatedVUs: (\d+)/.exec(script)?.[1]),
+      max: Number(/maxVUs: (\d+)/.exec(script)?.[1]),
+    });
+
+    // Lei de Little: 1000 req/s × 0,4s = 400 simultâneas.
+    assert.equal(vus(lento).pré, 600);
+    assert.equal(vus(lento).max, 1600);
+
+    // O mesmo perfil num alvo rápido não precisa do mesmo pool.
+    assert.ok(vus(rápido).pré < vus(lento).pré);
+  });
+
+  it("separa teto da arquitetura de teto do gerador", () => {
+    // Antes: só `droppedIterations`, que é idêntico nos dois casos. A bancada
+    // produziu os dois com a mesma contagem de descartes e causas opostas.
+    const ladder = buildLadder(spec());
+    const janela = { startedAt: new Date(0), finishedAt: new Date(15_000) };
+
+    const execução = (degraus: { p95: number; erro: number }[], descartes: number) =>
+      parseSummary(
+        {
+          state: { testRunDurationMs: 15_000 },
+          metrics: {
+            http_reqs: { values: { count: 100 } },
+            dropped_iterations: { values: { count: descartes } },
+            ...Object.fromEntries(
+              degraus.flatMap((d, i) => [
+                [`http_reqs{stage:${i + 1}}`, { values: { count: 100 } }],
+                [`http_req_duration{stage:${i + 1}}`, { values: { "p(95)": d.p95 } }],
+                [`http_req_failed{stage:${i + 1}}`, { values: { rate: d.erro } }],
+              ]),
+            ),
+          },
+        },
+        { ladder, ...janela },
+      );
+
+    const saudável = [{ p95: 301, erro: 0 }, { p95: 302, erro: 0 }, { p95: 301, erro: 0 }];
+    const saturado = [{ p95: 10, erro: 0 }, { p95: 11, erro: 0 }, { p95: 10_000, erro: 0.12 }];
+
+    // Latência plana e sem erro: o alvo aguentava, quem não deu conta foi o
+    // gerador — o número não serve de teto.
+    assert.equal(execução(saudável, 980).loadCeiling, "generator");
+
+    // Latência inflada e erro subindo: o alvo cedeu, o platô medido é real.
+    assert.equal(execução(saturado, 980).loadCeiling, "architecture");
+
+    // Sem descarte não há teto a atribuir.
+    assert.equal(execução(saturado, 0).loadCeiling, "none");
+  });
+
+  it("não afirma teto da arquitetura sem escada para comparar", () => {
+    // Um degrau só não tem linha de base: `generator` é o palpite seguro,
+    // porque manda repetir o teste em vez de acreditar num teto falso.
+    const único = spec({
+      profile: { type: "Capacity", startRps: 100, incrementRps: 100, intervalSeconds: 5, maxRps: 100 },
+    });
+
+    const observação = parseSummary(
+      {
+        state: { testRunDurationMs: 5000 },
+        metrics: {
+          http_reqs: { values: { count: 100 } },
+          dropped_iterations: { values: { count: 50 } },
+          "http_reqs{stage:1}": { values: { count: 100 } },
+          "http_req_duration{stage:1}": { values: { "p(95)": 9000 } },
+          "http_req_failed{stage:1}": { values: { rate: 0.5 } },
+        },
+      },
+      { ladder: buildLadder(único), startedAt: new Date(0), finishedAt: new Date(5000) },
+    );
+
+    assert.equal(observação.loadCeiling, "generator");
+  });
+});

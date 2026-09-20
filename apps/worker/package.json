@@ -19,6 +19,7 @@
     "bullmq": "^5.65.0"
   },
   "devDependencies": {
+    "@infraflow/analyzer": "workspace:*",
     "@infraflow/validator": "workspace:*",
     "@types/node": "^22",
     "dotenv": "^17.2.3",

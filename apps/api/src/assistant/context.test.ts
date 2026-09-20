@@ -43,6 +43,7 @@ const observation: LoadTestObservation = {
   errorRatePct: 4,
   meetsSlo: false,
   droppedIterations: 0,
+  loadCeiling: "none",
   stages: [0, 1, 2].map((index) => ({
     targetRps: 100 * (index + 1),
     rps: 100 * (index + 1),

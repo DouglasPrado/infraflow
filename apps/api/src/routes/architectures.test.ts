@@ -327,6 +327,7 @@ describe("relatórios (PRD §73)", () => {
           errorRatePct: 0,
           meetsSlo: true,
           droppedIterations: 0,
+          loadCeiling: "none",
           stages: [
             {
               targetRps: 300,

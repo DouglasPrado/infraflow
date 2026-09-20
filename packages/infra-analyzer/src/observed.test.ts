@@ -83,6 +83,7 @@ function observation(overrides: Partial<LoadTestObservation> = {}): LoadTestObse
       // A borda quase não sente.
       ...series("alb", "cpu", "%", [4, 6, 8]),
     ],
+    loadCeiling: "none",
     ...overrides,
   };
 }
@@ -171,10 +172,25 @@ describe("quando não dá para concluir, não conclui", () => {
   });
 
   it("acusa o gerador quando foi ele o limite", () => {
-    const analysis = analyzeObserved(architecture(), observation({ droppedIterations: 340 }));
+    const analysis = analyzeObserved(
+      architecture(),
+      observation({ droppedIterations: 340, loadCeiling: "generator" }),
+    );
 
     assert.deepEqual(analysis.candidates, []);
     assert.match(analysis.inconclusive ?? "", /máquina que gera/);
+  });
+
+  it("não descarta a leitura quando quem cedeu foi a arquitetura", () => {
+    // Alvo saturado descarta iterações do mesmo jeito que gerador fraco. Tratar
+    // os dois como inconclusivos jogaria fora o platô — que é o resultado.
+    const analysis = analyzeObserved(
+      architecture(),
+      observation({ droppedIterations: 340, loadCeiling: "architecture" }),
+    );
+
+    assert.equal(analysis.inconclusive, undefined);
+    assert.ok(analysis.candidates.length > 0, "o gargalo deveria ter sido atribuído");
   });
 
   it("não atribui recurso sem métrica coletada", () => {
