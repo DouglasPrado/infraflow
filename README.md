@@ -22,7 +22,8 @@ apps/
   api       Fastify + Prisma — persistência (PRD §48, §49, §71)
 packages/
   infra-schema    Contrato do grafo e do architecture.json (PRD §33, §70)
-  infra-registry  Catálogo de componentes, livre de UI (PRD §10, §42)
+  infra-registry  Catálogo e características de carga, livre de UI (§10, §42)
+  infra-analyzer  Motor de capacidade e gargalo (§37, §46)
 ```
 
 `infra-registry` não importa React: a API e os workers precisam dele para
@@ -85,9 +86,38 @@ Toda leitura e escrita é escopada ao dono. Arquitetura de outro usuário respon
 A API é fina de propósito (PRD §51): OpenTofu e k6 rodarão em workers isolados,
 nunca nela.
 
-## Dados mockados
+## Como a capacidade é calculada
 
-`capacityRps`, `monthlyCostUsd`, os coeficientes de métrica e o resultado do
-teste de carga seguem **determinísticos e mockados**, declarados no registry.
-Nada é medido até a Observabilidade do Milestone 9 (§78). O compiler
-determinístico de OpenTofu entra no Milestone 5 (§74).
+Não há curva ajustada à mão. O `infra-analyzer` trabalha com três coisas que se
+sustentam sozinhas:
+
+**Propagação de tráfego.** A carga percorre o grafo e é atenuada por quem guarda
+cache — um CDN com 72% de acerto entrega 28% à origem. Cada trecho exibe a sua
+própria vazão (§22).
+
+**Teoria de filas.** A latência sob carga vem de `W = S / (1 − ρ)`, a fórmula de
+M/M/1, com `S` — tempo de serviço — declarado por recurso no registry. É ela que
+faz a latência explodir perto da saturação, como o §24 descreve. O p95 sai do
+quantil da soma ao longo do caminho, corrigido pela expansão de Cornish-Fisher.
+
+**Saudável é o SLO.** A capacidade máxima saudável é o maior RPS em que os
+critérios do §19 ainda são cumpridos, achado por busca binária. `Estimated`
+guarda 30% de folga de planejamento; `Observed` vai até o limite — é o que
+mantém os dois distinguíveis (§85).
+
+Conexões simultâneas saem da **Lei de Little** (`L = λ·W`), não de um
+coeficiente.
+
+### O que ainda é estimativa
+
+`capacityRps`, `monthlyCostUsd` e os tempos de serviço são valores de ordem de
+grandeza declarados no registry, não medições. O motor é honesto; as entradas
+ainda não vêm de observação. Isso muda com o k6 do Milestone 8 (§77) e a
+Observabilidade do Milestone 9 (§78), quando estes números viram o ponto de
+partida que a medição corrige.
+
+Também se assume que **toda requisição exercita todas as dependências** do
+recurso. É a hipótese conservadora; refinar isso pede peso por conexão, que
+ainda não existe no schema.
+
+O compiler determinístico de OpenTofu entra no Milestone 5 (§74).

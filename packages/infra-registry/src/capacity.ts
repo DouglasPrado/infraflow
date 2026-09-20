@@ -43,8 +43,8 @@ function numberAt(props: Props, key: string, fallback: number): number {
   return typeof value === "number" && Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
-/** Multiplicadores e tetos de um conjunto de fatores. */
-function apply(base: number, factors: Factor[], props: Props): number {
+/** Multiplicadores e tetos de um conjunto de fatores, sem arredondar. */
+export function resolve(base: number, factors: Factor[], props: Props): number {
   let multiplier = 1;
   let ceiling = Number.POSITIVE_INFINITY;
 
@@ -74,7 +74,7 @@ function apply(base: number, factors: Factor[], props: Props): number {
     }
   }
 
-  return Math.max(1, Math.round(Math.min(base * multiplier, ceiling)));
+  return Math.min(base * multiplier, ceiling);
 }
 
 /**
@@ -239,10 +239,10 @@ export const COST_MODEL: Record<string, Factor[]> = {
 
 /** Capacidade em req/s do recurso **como está configurado**. */
 export function capacityFor(item: CatalogItem, props: Props): number {
-  return apply(item.capacityRps, CAPACITY_MODEL[item.type] ?? [], props);
+  return Math.max(1, Math.round(resolve(item.capacityRps, CAPACITY_MODEL[item.type] ?? [], props)));
 }
 
 /** Custo mensal em USD do recurso **como está configurado**. */
 export function monthlyCostFor(item: CatalogItem, props: Props): number {
-  return apply(item.monthlyCostUsd, COST_MODEL[item.type] ?? [], props);
+  return Math.max(1, Math.round(resolve(item.monthlyCostUsd, COST_MODEL[item.type] ?? [], props)));
 }

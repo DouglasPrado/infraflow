@@ -413,10 +413,6 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
     }
 
     const byNode = new Map(step.readings.map((reading) => [reading.nodeId, reading]));
-    const loaded = new Set([
-      ...byNode.keys(),
-      ...get().nodes.filter((node) => node.type === "loadGenerator").map((node) => node.id),
-    ]);
 
     set({
       currentRps: step.rps,
@@ -438,12 +434,15 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
           },
         };
       }) as InfraNode[],
-      // Só os edges do caminho da carga exibem métrica ao vivo (PRD §22).
+      // Cada trecho exibe a sua própria vazão: um CDN absorve parte da carga,
+      // então o que chega à origem é menor que o que foi gerado (PRD §22).
       edges: get().edges.map((edge) => {
-        const onPath = loaded.has(edge.source) && loaded.has(edge.target);
+        const flow = step.edgeReadings.find(
+          (reading) => reading.source === edge.source && reading.target === edge.target,
+        );
         return {
           ...edge,
-          data: { ...(edge.data ?? { kind: "HTTP" as EdgeKind }), rps: onPath ? step.rps : undefined },
+          data: { ...(edge.data ?? { kind: "HTTP" as EdgeKind }), rps: flow?.rps },
         };
       }),
     });

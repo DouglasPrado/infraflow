@@ -37,7 +37,8 @@ function FlowEdgeComponent({
   });
 
   const rps = data?.rps;
-  const live = rps !== undefined;
+  // Trecho fora do caminho da carga volta a mostrar o tipo de tráfego.
+  const live = rps !== undefined && rps > 0;
 
   return (
     <>
