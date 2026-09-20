@@ -1,0 +1,19 @@
+- generic [active] [ref=f9e1]:
+  - main [ref=f9e2]:
+    - generic [ref=f9e3]:
+      - generic [ref=f9e4]: InfraFlow
+      - heading "Planeje. Teste. Evolua sua infraestrutura." [level=1] [ref=f9e9]: Planeje.Teste.Evolua sua infraestrutura.
+      - generic [ref=f9e10]:
+        - button "Continuar com GitHub" [disabled]
+        - paragraph [ref=f9e11]: Indisponível — falta configurar o OAuth App
+        - generic [ref=f9e12]: ou
+        - generic [ref=f9e16]:
+          - generic [ref=f9e17]:
+            - generic [ref=f9e18]: E-mail
+            - textbox "E-mail" [ref=f9e19]
+          - generic [ref=f9e20]:
+            - generic [ref=f9e21]: Senha
+            - textbox "Senha" [ref=f9e22]
+          - button "Entrar" [ref=f9e23]
+        - button "Criar uma conta" [ref=f9e24]
+  - alert [ref=f9e25]

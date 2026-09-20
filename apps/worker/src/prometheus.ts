@@ -24,7 +24,13 @@ const QUERIES: RangeQuery[] = [
     metric: "cpu",
     unit: "%",
     promql: (lab) => `container_cpu_utilization_ratio{infraflow_lab="${lab}"}`,
-    scale: (value) => value * 100,
+    /**
+     * Já vem em porcentagem, apesar do sufixo `_ratio` que o exportador do
+     * Prometheus acrescenta. Conferido contra o `docker stats`: o mesmo
+     * container marca 0,11% lá e 0,1027 aqui. Multiplicar por cem produzia
+     * leituras impossíveis — 2600% de CPU numa máquina de quatro núcleos.
+     */
+    scale: (value) => value,
   },
   {
     metric: "memory",

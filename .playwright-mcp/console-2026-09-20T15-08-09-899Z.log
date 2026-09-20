@@ -1,0 +1,2 @@
+[  248399ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/api/architectures/621cd267-4452-447b-acda-b8c99163d537/runs:0
+[  293425ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:3000/api/runs/5196b3b7-2e0b-4cb8-be25-f6cb1f1ab996:0
