@@ -19,22 +19,33 @@ async function isFree(port: number): Promise<boolean> {
   });
 }
 
-export async function reserveLabPort(): Promise<number> {
+/**
+ * Portas de um laboratório: a de entrada e a do Prometheus (§78).
+ *
+ * São reservadas juntas para não haver o intervalo em que outra execução
+ * escolhe a mesma.
+ */
+export async function reserveLabPorts(): Promise<{ entry: number; observability: number }> {
   const [min, max] = env.labPortRange;
 
   const taken = new Set(
     (
       await db.lab.findMany({
-        where: { status: { in: ["CREATING", "READY", "DESTROYING"] }, entryPort: { not: null } },
-        select: { entryPort: true },
+        where: { status: { in: ["CREATING", "READY", "DESTROYING"] } },
+        select: { entryPort: true, observabilityPort: true },
       })
-    ).flatMap((lab) => (lab.entryPort === null ? [] : [lab.entryPort])),
+    ).flatMap((lab) => [lab.entryPort, lab.observabilityPort].filter((port) => port !== null)),
   );
 
-  for (let port = min; port <= max; port += 1) {
+  const chosen: number[] = [];
+  for (let port = min; port <= max && chosen.length < 2; port += 1) {
     if (taken.has(port)) continue;
-    if (await isFree(port)) return port;
+    if (await isFree(port)) chosen.push(port);
   }
 
-  throw new Error(`Nenhuma porta livre entre ${min} e ${max} para publicar o laboratório.`);
+  if (chosen.length < 2) {
+    throw new Error(`Não há duas portas livres entre ${min} e ${max} para o laboratório.`);
+  }
+
+  return { entry: chosen[0]!, observability: chosen[1]! };
 }

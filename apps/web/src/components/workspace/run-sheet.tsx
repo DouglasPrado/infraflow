@@ -52,6 +52,33 @@ function Counter({ label, value, tone }: { label: string; value: number; tone?: 
   );
 }
 
+/** Série medida → pico e média por recurso, que é o que se lê de relance. */
+function aggregate(metrics: LoadTestObservation["metrics"]) {
+  const byKey = new Map<string, { nodeId: string; metric: string; unit: string; peak: number; total: number; count: number }>();
+
+  for (const sample of metrics) {
+    const key = `${sample.nodeId}:${sample.metric}`;
+    const current = byKey.get(key) ?? {
+      nodeId: sample.nodeId,
+      metric: sample.metric,
+      unit: sample.unit,
+      peak: 0,
+      total: 0,
+      count: 0,
+    };
+    byKey.set(key, {
+      ...current,
+      peak: Math.max(current.peak, sample.value),
+      total: current.total + sample.value,
+      count: current.count + 1,
+    });
+  }
+
+  return [...byKey.values()]
+    .map((entry) => ({ ...entry, mean: entry.total / entry.count }))
+    .sort((left, right) => (left.nodeId === right.nodeId ? left.metric.localeCompare(right.metric) : left.nodeId.localeCompare(right.nodeId)));
+}
+
 /** PRD §75 — o que o OpenTofu declarou que vai fazer. */
 function PlanResult({ summary }: { summary: PlanSummary }) {
   return (
@@ -191,6 +218,41 @@ function LoadTestResult({ observation }: { observation: LoadTestObservation }) {
           Maior degrau sustentado com menos de 1% de erro: {formatRps(Math.round(peak))}.
         </p>
       </section>
+
+      {observation.metrics.length > 0 && (
+        <>
+          <Separator />
+          <section className="space-y-2">
+            <Eyebrow>Métricas por recurso (§78)</Eyebrow>
+            <div className="space-y-1">
+              {aggregate(observation.metrics).map((entry) => (
+                <div
+                  key={`${entry.nodeId}-${entry.metric}`}
+                  className="flex items-baseline gap-2 text-[11px]"
+                >
+                  <span className="w-28 shrink-0 truncate font-mono text-muted-foreground">
+                    {entry.nodeId}
+                  </span>
+                  <span className="w-16 shrink-0 text-[10px] uppercase tracking-eyebrow text-muted-foreground">
+                    {entry.metric}
+                  </span>
+                  <span className="font-mono tabular-nums">
+                    pico {entry.peak.toFixed(1)}
+                    {entry.unit}
+                  </span>
+                  <span className="font-mono tabular-nums text-muted-foreground">
+                    · média {entry.mean.toFixed(1)}
+                    {entry.unit}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="text-[10px] leading-relaxed text-muted-foreground">
+              Coletadas do Prometheus do laboratório, já ligadas ao node do canvas.
+            </p>
+          </section>
+        </>
+      )}
 
       {observation.droppedIterations > 0 && (
         <>

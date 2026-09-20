@@ -145,6 +145,40 @@ describe(
       assert.match(done.logs, /k6 run/);
     });
 
+    it("associa métricas reais aos nodes do canvas (PRD §36, §78)", { timeout: 600_000 }, async () => {
+      const run = await db.run.findFirstOrThrow({
+        where: { architectureId, kind: "LOAD_TEST", status: "SUCCEEDED" },
+        orderBy: { finishedAt: "desc" },
+      });
+
+      const observation = LoadTestObservationSchema.parse(run.result);
+      assert.ok(observation.metrics.length > 0, "nenhuma métrica coletada do Prometheus");
+
+      // Cada amostra pertence a um node do canvas, não a um container anônimo.
+      const nodes = new Set(observation.metrics.map((sample) => sample.nodeId));
+      for (const nodeId of nodes) {
+        assert.ok(["proxy", "app", "cache"].includes(nodeId), `node inesperado: ${nodeId}`);
+      }
+      assert.ok(nodes.has("app"), "faltou métrica da aplicação");
+
+      const cpu = observation.metrics.filter((sample) => sample.metric === "cpu");
+      const memoria = observation.metrics.filter((sample) => sample.metric === "memory");
+      assert.ok(cpu.length > 0 && memoria.length > 0);
+      assert.equal(cpu[0]!.unit, "%");
+      assert.equal(memoria[0]!.unit, "MB");
+
+      // Medição, não estimativa: há consumo de memória de verdade.
+      assert.ok(memoria.some((sample) => sample.value > 1), "memória medida implausível");
+
+      // As amostras caem dentro da janela da execução.
+      const inicio = new Date(observation.startedAt).getTime();
+      const fim = new Date(observation.finishedAt).getTime();
+      for (const sample of observation.metrics) {
+        const at = new Date(sample.at).getTime();
+        assert.ok(at >= inicio - 5000 && at <= fim + 5000, `amostra fora da janela: ${sample.at}`);
+      }
+    });
+
     it("recusa medir quando não há laboratório pronto", { timeout: 60_000 }, async () => {
       const semLab = await db.run.create({
         data: { architectureId, versionId, kind: "LOAD_TEST", slug: slugFor("load-test"), params: { target: "docker" } },

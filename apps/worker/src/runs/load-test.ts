@@ -1,6 +1,7 @@
 import { ArchitectureDocumentSchema, isLoadGeneratorNode } from "@infraflow/schema";
 import { db } from "../db.ts";
 import { K6Failure, runK6 } from "../k6.ts";
+import { collectResourceMetrics } from "../prometheus.ts";
 import { createWorkspace } from "../workspace.ts";
 
 /**
@@ -40,12 +41,26 @@ export async function runLoadTest(runId: string): Promise<void> {
       (files) => workspace.write(files),
     );
 
+    /**
+     * PRD §36, §78 — a métrica volta para o grafo.
+     *
+     * A coleta é a última etapa e não derruba a execução: uma medição de
+     * requisição sem métrica de recurso continua sendo medição. O que falta
+     * fica visivelmente vazio, em vez de ser preenchido por estimativa.
+     */
+    const metrics = run.lab.observabilityUrl
+      ? await collectResourceMetrics(run.lab.observabilityUrl, run.lab.slug, {
+          startedAt: new Date(outcome.observation.startedAt),
+          finishedAt: new Date(outcome.observation.finishedAt),
+        }).catch(() => [])
+      : [];
+
     await db.run.update({
       where: { id: run.id },
       data: {
         status: "SUCCEEDED",
         finishedAt: new Date(),
-        result: outcome.observation,
+        result: { ...outcome.observation, metrics },
         logs: outcome.logs,
       },
     });

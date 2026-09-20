@@ -34,6 +34,8 @@ export interface DockerRuntime {
   }[];
   /** Recurso que recebe a carga e tem porta publicada. */
   entry?: { nodeId: string; port: number };
+  /** Containers da observabilidade do laboratório (PRD §36, §78). */
+  observability: { collector: string; prometheus: string };
 }
 
 export interface CompiledStack {

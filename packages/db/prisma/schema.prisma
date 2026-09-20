@@ -144,6 +144,9 @@ model Lab {
   /// Porta publicada em 127.0.0.1 — a única entrada do laboratório.
   entryPort      Int?
   entryUrl       String?
+  /// Prometheus do laboratório, consultado pelo worker (PRD §36, §78).
+  observabilityPort Int?
+  observabilityUrl  String?
   /// Container por node do canvas: é o que liga métrica a recurso (§78).
   containers     Json      @default("[]")
   /// Diretório que guarda o state desta infraestrutura.

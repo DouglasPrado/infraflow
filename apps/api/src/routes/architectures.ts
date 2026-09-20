@@ -64,7 +64,9 @@ async function latestObservation(architectureId: string) {
   if (!run) return undefined;
 
   const parsed = LoadTestObservationSchema.safeParse(run.result);
-  return parsed.success ? { run: parsed.data, runId: run.slug } : undefined;
+  if (!parsed.success) return undefined;
+  // As métricas por recurso viajam junto: é o que o §78 devolve ao grafo.
+  return { run: parsed.data, runId: run.slug, metrics: parsed.data.metrics };
 }
 
 /** Carrega a arquitetura só se ela pertencer ao usuário. */

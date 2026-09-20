@@ -2,10 +2,10 @@
 
 Plataforma visual para planejamento, validação e execução de infraestrutura.
 
-**Estágio:** Milestone 8 — Real Load Testing (PRD §77), concluído.
-O Load Generator do canvas virou script de k6 que roda contra o laboratório: o
-que volta é medição, não estimativa. Ainda **não** há observabilidade por
-recurso (§78) nem LLM.
+**Estágio:** Milestone 9 — Observability (PRD §78), concluído.
+O laboratório coleta métricas reais por recurso — `docker stats` →
+OpenTelemetry → Prometheus — e elas voltam para o grafo ligadas ao node que as
+produziu. Ainda **não** há análise de gargalo sobre medição (§79) nem LLM.
 
 ## Documentos
 
@@ -280,6 +280,25 @@ ficou abaixo da pedida e o limite encontrado foi o da máquina que gera, não o 
 arquitetura.
 
 A última execução bem-sucedida alimenta a seção `Observed` do CAPACITY.md (§73).
+
+## Observabilidade do laboratório (§36, §78)
+
+O caminho é o que o §36 desenha: containers → OpenTelemetry Collector →
+Prometheus. O coletor lê as estatísticas dos containers e **carrega o id do node
+do canvas como rótulo** (`infraflow_node`) — é o que faz a métrica voltar para o
+grafo em vez de virar número sem dono.
+
+Um filtro no coletor descarta tudo que não pertence ao laboratório: sem ele um
+ambiente enxergaria as métricas do outro (§52).
+
+Depois do teste de carga, o worker consulta o Prometheus na janela exata da
+execução e grava as amostras como `{ nodeId, metric, unit, value, at }` — o
+vocabulário do §37. Série ausente significa **ausência de medição**, nunca
+recurso ocioso: nada é preenchido por estimativa.
+
+O laboratório publica duas portas em `127.0.0.1`: a entrada da arquitetura e o
+Prometheus. A segunda é infraestrutura da plataforma, consultada só pelo worker;
+nenhum recurso da arquitetura sob teste ganha porta além da entrada.
 
 ## Como a capacidade é calculada
 

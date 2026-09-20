@@ -25,6 +25,7 @@ import {
 import { uniqueIdentifiers } from "../names.ts";
 import type { CompiledStack, CompileWarning, DockerRuntime } from "../types.ts";
 import { SYNTHETIC_APP, nginxConf } from "./app.ts";
+import { PROMETHEUS_PORT, collectorConfig, prometheusConfig } from "./observability.ts";
 
 /**
  * Grafo → containers, para o laboratório efêmero (PRD §76).
@@ -343,6 +344,80 @@ export function compileDocker(
     });
   }
 
+  // --- observabilidade do §36: docker stats → OpenTelemetry → Prometheus ---
+  const otelImage = resource("docker_image", "observability_collector", [
+    ["name", str("otel/opentelemetry-collector-contrib:0.144.0")],
+    ["keep_locally", bool(true)],
+  ]);
+
+  const collector = resource(
+    "docker_container",
+    "observability_collector",
+    [
+      ["name", str(`${prefix}-otel`)],
+      ["image", attributeOf(otelImage, "image_id")],
+      ["command", list([str("--config"), str("/etc/otelcol/config.yaml")])],
+      // Ler o socket do Docker exige root dentro do container.
+      ["user", str("0:0")],
+      ["restart", str("unless-stopped")],
+      ["must_run", bool(true)],
+    ],
+    [
+      block("networks_advanced", [], [["name", attributeOf(network, "name")]]),
+      block("volumes", [], [
+        ["host_path", str("/var/run/docker.sock")],
+        ["container_path", str("/var/run/docker.sock")],
+        ["read_only", bool(true)],
+      ]),
+      block("upload", [], [
+        ["file", str("/etc/otelcol/config.yaml")],
+        ["content", heredoc("OTEL", collectorConfig(options.slug))],
+      ]),
+    ],
+  );
+
+  const prometheusImage = resource("docker_image", "observability_prometheus", [
+    ["name", str("prom/prometheus:v3.7.3")],
+    ["keep_locally", bool(true)],
+  ]);
+
+  const prometheus = resource(
+    "docker_container",
+    "observability_prometheus",
+    [
+      ["name", str(`${prefix}-prometheus`)],
+      ["image", attributeOf(prometheusImage, "image_id")],
+      [
+        "command",
+        list([
+          str("--config.file=/etc/prometheus/prometheus.yml"),
+          // Sem caminho explícito a imagem tenta gravar num diretório relativo
+          // que não existe e o processo morre no arranque.
+          str("--storage.tsdb.path=/prometheus"),
+          // O laboratório é efêmero: a série não precisa sobreviver a ele.
+          str("--storage.tsdb.retention.time=1h"),
+        ]),
+      ],
+      ["restart", str("unless-stopped")],
+      ["must_run", bool(true)],
+    ],
+    [
+      block("networks_advanced", [], [["name", attributeOf(network, "name")]]),
+      block("upload", [], [
+        ["file", str("/etc/prometheus/prometheus.yml")],
+        ["content", heredoc("PROM", prometheusConfig(`${prefix}-otel`))],
+      ]),
+      // Publicada só em 127.0.0.1: é o worker que consulta, ninguém mais.
+      block("ports", [], [
+        ["internal", num(PROMETHEUS_PORT)],
+        ["external", ref("var.observability_port")],
+        ["ip", str("127.0.0.1")],
+      ]),
+    ],
+  );
+
+  blocks.push(otelImage, collector, prometheusImage, prometheus);
+
   const providers: TofuFile = {
     name: "providers.tf",
     header: [
@@ -378,6 +453,11 @@ export function compileDocker(
         ["description", str("Porta publicada em 127.0.0.1 para o teste de carga")],
         ["default", num(18080)],
       ]),
+      variable("observability_port", [
+        ["type", ref("number")],
+        ["description", str("Porta do Prometheus do laboratorio, em 127.0.0.1")],
+        ["default", num(19090)],
+      ]),
       variable("lab_password", [
         ["type", ref("string")],
         ["description", str("Senha dos servicos do laboratorio, efemera")],
@@ -392,6 +472,10 @@ export function compileDocker(
     name: "outputs.tf",
     blocks: [
       output("network", [["value", attributeOf(network, "name")]]),
+      output("observability_url", [
+        ["value", interpolated("http://127.0.0.1:${var.observability_port}")],
+        ["description", str("Prometheus do laboratorio (PRD §78)")],
+      ]),
       ...(entry
         ? [
             output("entry_url", [
@@ -406,6 +490,7 @@ export function compileDocker(
   const runtime: DockerRuntime = {
     network: prefix,
     containers: runtimeContainers,
+    observability: { collector: `${prefix}-otel`, prometheus: `${prefix}-prometheus` },
     ...(entryId && entry ? { entry: { nodeId: entryId, port: entry.spec.port } } : {}),
   };
 

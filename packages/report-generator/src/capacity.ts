@@ -123,16 +123,44 @@ function observedMd({ document, observed }: Required<Pick<ReportContext, "docume
   );
 
   const byId = new Map(document.nodes.map((node) => [node.id, node]));
+
+  /**
+   * Série medida vira pico e média por recurso.
+   *
+   * O relatório não é lugar de despejar cada amostra: a série de uma execução
+   * longa tem centenas de pontos, e quem lê quer saber onde apertou.
+   */
+  const aggregated = new Map<string, { peak: number; total: number; count: number; unit: string }>();
+  for (const sample of metrics ?? []) {
+    const key = `${sample.nodeId}\u0000${sample.metric}`;
+    const current = aggregated.get(key) ?? { peak: 0, total: 0, count: 0, unit: sample.unit };
+    aggregated.set(key, {
+      peak: Math.max(current.peak, sample.value),
+      total: current.total + sample.value,
+      count: current.count + 1,
+      unit: sample.unit,
+    });
+  }
+
   const resourceMetrics = table(
-    ["Resource", "Metric", "Value", "At"],
-    (metrics ?? []).map((sample) => {
-      const node = byId.get(sample.nodeId);
-      const title =
-        node && isResourceNode(node)
-          ? `${getCatalogItem(node.type)?.title ?? node.type} \`${node.name}\``
-          : sample.nodeId;
-      return [title, code(sample.metric), `${decimal(sample.value, 2)}${sample.unit}`, sample.at];
-    }),
+    ["Resource", "Metric", "Peak", "Mean", "Samples"],
+    [...aggregated.entries()]
+      .sort(([left], [right]) => (left < right ? -1 : 1))
+      .map(([key, entry]) => {
+        const [nodeId = "", metric = ""] = key.split("\u0000");
+        const node = byId.get(nodeId);
+        const title =
+          node && isResourceNode(node)
+            ? `${getCatalogItem(node.type)?.title ?? node.type} \`${node.name}\``
+            : nodeId;
+        return [
+          title,
+          code(metric),
+          `${decimal(entry.peak, 1)}${entry.unit}`,
+          `${decimal(entry.total / entry.count, 1)}${entry.unit}`,
+          String(entry.count),
+        ];
+      }),
     "Nenhuma métrica coletada",
   );
 

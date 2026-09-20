@@ -3,7 +3,7 @@ import { emit } from "@infraflow/compiler";
 import { ArchitectureDocumentSchema, LabApplyResultSchema } from "@infraflow/schema";
 import { db } from "../db.ts";
 import { env } from "../env.ts";
-import { reserveLabPort } from "../ports.ts";
+import { reserveLabPorts } from "../ports.ts";
 import { waitUntilReady } from "../ready.ts";
 import { TofuFailure, apply, destroy, outputs, transcript } from "../tofu.ts";
 import { createWorkspace } from "../workspace.ts";
@@ -48,8 +48,9 @@ export async function runLabApply(runId: string): Promise<void> {
       );
     }
 
-    const port = await reserveLabPort();
-    const entryUrl = `http://127.0.0.1:${port}`;
+    const ports = await reserveLabPorts();
+    const entryUrl = `http://127.0.0.1:${ports.entry}`;
+    const observabilityUrl = `http://127.0.0.1:${ports.observability}`;
 
     // O diretório do laboratório não é apagado: guarda o state (§54).
     const workspace = await createWorkspace(lab.slug, { root: env.labsRoot, fresh: false });
@@ -57,11 +58,19 @@ export async function runLabApply(runId: string): Promise<void> {
 
     await db.lab.update({
       where: { id: lab.id },
-      data: { entryPort: port, entryUrl, workdir: workspace.path, containers: stack.docker.containers },
+      data: {
+        entryPort: ports.entry,
+        entryUrl,
+        observabilityPort: ports.observability,
+        observabilityUrl,
+        workdir: workspace.path,
+        containers: stack.docker.containers,
+      },
     });
 
     const steps = await apply(workspace.path, {
-      entry_port: String(port),
+      entry_port: String(ports.entry),
+      observability_port: String(ports.observability),
       // Senha efêmera, válida só dentro da rede do laboratório. Não é gravada:
       // nada fora da rede alcança os serviços que a usam (§52).
       lab_password: randomBytes(12).toString("hex"),

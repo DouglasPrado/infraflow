@@ -28,6 +28,7 @@ const observation: LoadTestObservation = {
   errorRatePct: 0.4,
   meetsSlo: true,
   droppedIterations: 0,
+  metrics: [],
   stages: [
     { targetRps: 1000, rps: 998, p95Ms: 210, errorRatePct: 0 },
     { targetRps: 1500, rps: 1375, p95Ms: 412, errorRatePct: 0.4 },
@@ -118,18 +119,19 @@ describe("CAPACITY.md", () => {
     assert.doesNotMatch(content, /Nenhuma execução real registrada/);
   });
 
-  it("associa métrica observada ao recurso do canvas", () => {
+  it("resume a série medida em pico e média por recurso", () => {
     const content = contentOf("CAPACITY.md", {
       ...reference,
       observed: {
         run: observation,
         metrics: [
+          { nodeId: "rds", metric: "cpu", unit: "%", value: 61.4, at: "2026-09-20T10:03:00.000Z" },
           { nodeId: "rds", metric: "cpu", unit: "%", value: 96.2, at: "2026-09-20T10:04:00.000Z" },
         ],
       },
     });
 
-    assert.match(content, /RDS PostgreSQL `orders-db` \| `cpu` \| 96\.20%/);
+    assert.match(content, /RDS PostgreSQL `orders-db` \| `cpu` \| 96\.2%/);
   });
 
   it("muda quando a configuração do recurso muda", () => {

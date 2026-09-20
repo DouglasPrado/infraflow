@@ -139,20 +139,31 @@ describe(
       assert.equal(cache?.detail, "+PONG");
     });
 
-    it("só a porta de entrada é publicada (§52)", { timeout: 60_000 }, () => {
+    it("nenhum recurso do canvas é alcançável além da entrada (§52)", { timeout: 60_000 }, () => {
       // O filtro do docker é sensível a caixa e o prefixo do container é
       // minúsculo; a lista gravada no laboratório é a fonte certa.
-      const published = spawnSync(
+      const running = spawnSync(
         "docker",
         ["ps", "--filter", `name=${containerPrefix()}`, "--format", "{{.Names}} {{.Ports}}"],
         { encoding: "utf8" },
       ).stdout.trim().split("\n").filter(Boolean);
 
-      assert.equal(published.length, 3, `esperava três containers, veio:\n${published.join("\n")}`);
+      // Três do canvas mais os dois da observabilidade do §78.
+      assert.equal(running.length, 5, `containers inesperados:\n${running.join("\n")}`);
 
-      const expostos = published.filter((line) => line.includes("127.0.0.1:"));
-      assert.equal(expostos.length, 1, `esperava uma porta publicada, veio:\n${published.join("\n")}`);
-      assert.match(expostos[0]!, /borda/);
+      const expostos = running.filter((line) => line.includes("127.0.0.1:"));
+      assert.equal(expostos.length, 2, `portas publicadas:\n${expostos.join("\n")}`);
+
+      // Uma é a entrada; a outra é o Prometheus, que é infraestrutura da
+      // plataforma, não da arquitetura sob teste.
+      assert.ok(expostos.some((line) => line.startsWith(`${containerPrefix()}-borda`)));
+      assert.ok(expostos.some((line) => line.startsWith(`${containerPrefix()}-prometheus`)));
+
+      // O que é da arquitetura e não é entrada continua inalcançável.
+      for (const line of running) {
+        if (/-borda|-prometheus/.test(line)) continue;
+        assert.doesNotMatch(line, /127\.0\.0\.1:/, `recurso exposto indevidamente: ${line}`);
+      }
     });
 
     it("destrói tudo o que subiu (§54)", { timeout: 300_000 }, async () => {
