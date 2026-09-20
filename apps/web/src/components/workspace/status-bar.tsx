@@ -1,10 +1,11 @@
 "use client";
 
-import { Check, TriangleAlert } from "lucide-react";
+import { Check, CircleX, TriangleAlert } from "lucide-react";
 import { useMemo, type ReactNode } from "react";
 import { getCatalogItem } from "@infraflow/registry";
 import { formatCost, formatRps } from "@/lib/format";
 import { analyze } from "@/lib/simulation";
+import { summarize, validateCanvas } from "@/lib/validation";
 import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/store/workspace-store";
 
@@ -27,7 +28,15 @@ export function StatusBar() {
   const selectNode = useWorkspaceStore((state) => state.selectNode);
   const setInspectorTab = useWorkspaceStore((state) => state.setInspectorTab);
 
+  const projectName = useWorkspaceStore((state) => state.projectName);
+  const provider = useWorkspaceStore((state) => state.provider);
+  const environment = useWorkspaceStore((state) => state.environment);
+
   const analysis = useMemo(() => analyze(nodes, edges), [nodes, edges]);
+  const validation = useMemo(
+    () => summarize(validateCanvas({ name: projectName, provider, environment }, nodes, edges)),
+    [projectName, provider, environment, nodes, edges],
+  );
 
   const bottleneckNode = nodes.find(
     (node) => node.type === "resource" && node.data.state === "bottleneck",
@@ -35,7 +44,7 @@ export function StatusBar() {
   const bottleneckItem =
     bottleneckNode?.type === "resource" ? getCatalogItem(bottleneckNode.data.type) : undefined;
 
-  const valid = analysis.warnings.length === 0;
+  const findings = validation.errors + validation.warnings;
   const observed = status === "done" && result;
 
   return (
@@ -44,7 +53,7 @@ export function StatusBar() {
         <span className="text-[10px] uppercase tracking-eyebrow text-muted-foreground">
           Architecture
         </span>
-        {valid ? (
+        {findings === 0 ? (
           <span className="flex items-center gap-1 text-[11px] font-medium text-state-healthy">
             <Check className="size-3" strokeWidth={2.25} />
             Valid
@@ -53,10 +62,20 @@ export function StatusBar() {
           <button
             type="button"
             onClick={() => setInspectorTab("analysis")}
-            className="flex items-center gap-1 rounded text-[11px] font-medium text-state-warning transition-opacity duration-150 hover:opacity-75"
+            className={cn(
+              "flex items-center gap-1 rounded text-[11px] font-medium",
+              "transition-opacity duration-150 hover:opacity-75",
+              validation.blocking ? "text-state-error" : "text-state-warning",
+            )}
           >
-            <TriangleAlert className="size-3" strokeWidth={2.25} />
-            {analysis.warnings.length} {analysis.warnings.length === 1 ? "warning" : "warnings"}
+            {validation.blocking ? (
+              <CircleX className="size-3" strokeWidth={2.25} />
+            ) : (
+              <TriangleAlert className="size-3" strokeWidth={2.25} />
+            )}
+            {validation.blocking
+              ? `${validation.errors} ${validation.errors === 1 ? "error" : "errors"}`
+              : `${findings} ${findings === 1 ? "warning" : "warnings"}`}
           </button>
         )}
       </div>

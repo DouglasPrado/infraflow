@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { getCatalogItem } from "@infraflow/registry";
 import { formatCost, formatRps } from "@/lib/format";
 import { analyze, recommendationsFor } from "@/lib/simulation";
+import { summarize, validateCanvas, type ValidationIssue } from "@/lib/validation";
 import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/store/workspace-store";
 import { Eyebrow, FieldGroup, Provenance } from "./property-field";
@@ -26,6 +27,37 @@ const VERDICT_ICON: Record<string, ReactNode> = {
   fail: <CircleX className="size-3 text-state-error" strokeWidth={2.25} />,
 };
 
+/** PRD §72 — um achado do validator, clicável até o recurso que o causou. */
+function IssueRow({ issue, onSelect }: { issue: ValidationIssue; onSelect: () => void }) {
+  const Icon = issue.severity === "error" ? CircleX : TriangleAlert;
+
+  return (
+    <li>
+      <button
+        type="button"
+        onClick={onSelect}
+        className="flex w-full gap-1.5 rounded text-left transition-opacity duration-150 hover:opacity-75"
+      >
+        <Icon
+          className={cn(
+            "mt-0.5 size-3 shrink-0",
+            issue.severity === "error" ? "text-state-error" : "text-state-warning",
+          )}
+          strokeWidth={2.25}
+        />
+        <span className="min-w-0 space-y-0.5">
+          <span className="block text-[11px] leading-relaxed">{issue.message}</span>
+          {issue.hint && (
+            <span className="block text-[10px] leading-relaxed text-muted-foreground">
+              {issue.hint}
+            </span>
+          )}
+        </span>
+      </button>
+    </li>
+  );
+}
+
 /** PRD §23–§25 — Analysis, Bottleneck Analysis e Recomendações. */
 export function AnalysisPanel() {
   const runLog = useWorkspaceStore((state) => state.runLog);
@@ -35,7 +67,16 @@ export function AnalysisPanel() {
   const edges = useWorkspaceStore((state) => state.edges);
   const selectNode = useWorkspaceStore((state) => state.selectNode);
 
+  const projectName = useWorkspaceStore((state) => state.projectName);
+  const provider = useWorkspaceStore((state) => state.provider);
+  const environment = useWorkspaceStore((state) => state.environment);
+
   const analysis = useMemo(() => analyze(nodes, edges), [nodes, edges]);
+  const issues = useMemo(
+    () => validateCanvas({ name: projectName, provider, environment }, nodes, edges),
+    [projectName, provider, environment, nodes, edges],
+  );
+  const validation = summarize(issues);
 
   const bottleneckNode = result?.bottleneckNodeId
     ? nodes.find((node) => node.id === result.bottleneckNodeId)
@@ -172,26 +213,41 @@ export function AnalysisPanel() {
           <Stat label="Estimated cost" value={`${formatCost(analysis.monthlyCostUsd)}/mês`} />
           <Stat label="Resources" value={String(analysis.resourceCount)} />
           <Stat
-            label="Warnings"
-            value={String(analysis.warnings.length)}
-            tone={analysis.warnings.length > 0 ? "text-state-warning" : undefined}
+            label="Findings"
+            value={String(issues.length)}
+            tone={
+              validation.blocking
+                ? "text-state-error"
+                : validation.warnings > 0
+                  ? "text-state-warning"
+                  : undefined
+            }
           />
         </div>
+      </section>
 
-        {analysis.warnings.length > 0 && (
-          <ul className="space-y-1">
-            {analysis.warnings.map((warning) => (
-              <li key={warning} className="flex gap-1.5 text-[11px] leading-relaxed text-muted-foreground">
-                <TriangleAlert
-                  className="mt-0.5 size-3 shrink-0 text-state-warning"
-                  strokeWidth={2.25}
-                />
-                {warning}
-              </li>
+      <Separator />
+
+      {/* PRD §72 — conexão inválida, dependência ausente, recurso inalcançável,
+          exposição e ponto único de falha. */}
+      <FieldGroup title="Validação da arquitetura">
+        {issues.length === 0 ? (
+          <p className="flex gap-1.5 text-[11px] leading-relaxed text-muted-foreground">
+            <Check className="mt-0.5 size-3 shrink-0 text-state-healthy" strokeWidth={2.5} />
+            Nenhum problema encontrado no desenho.
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {issues.map((issue) => (
+              <IssueRow
+                key={`${issue.code}-${issue.subjectId}`}
+                issue={issue}
+                onSelect={() => selectNode(issue.subjectId)}
+              />
             ))}
           </ul>
         )}
-      </section>
+      </FieldGroup>
     </div>
   );
 }

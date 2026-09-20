@@ -2,10 +2,10 @@
 
 Plataforma visual para planejamento, validação e execução de infraestrutura.
 
-**Estágio:** Milestone 2 — Persistence (PRD §71), concluído.
+**Estágio:** Milestone 3 — Architecture Validator (PRD §72), concluído.
 O protótipo foi aprovado (§68), o modelo de domínio é real (§70), a API persiste
-em PostgreSQL e a web salva sozinha. Ainda **não** existem OpenTofu, k6,
-integração com AWS nem LLM.
+em PostgreSQL, a web salva sozinha e a arquitetura é validada semanticamente.
+Ainda **não** existem OpenTofu, k6, integração com AWS nem LLM.
 
 ## Documentos
 
@@ -23,6 +23,7 @@ apps/
 packages/
   infra-schema    Contrato do grafo e do architecture.json (PRD §33, §70)
   infra-registry  Catálogo e características de carga, livre de UI (§10, §42)
+  infra-validator Validação semântica da arquitetura (§72)
   infra-analyzer  Motor de capacidade e gargalo (§37, §46)
 ```
 
@@ -68,6 +69,7 @@ Os testes da API são de integração e **exigem o Postgres de pé**.
 | `GET /architectures/:id` | Versão corrente do documento |
 | `PUT /architectures/:id` | Autosave — grava por cima, não cria versão |
 | `POST /architectures/:id/versions` | Snapshot explícito (§38) |
+| `GET /architectures/:id/validation` | Validação semântica (§72) |
 | `GET /architectures/:id/architecture.json` | Projeção de automação (§33) |
 
 Todo documento é validado contra `@infraflow/schema` na entrada. Um documento
@@ -85,6 +87,28 @@ Toda leitura e escrita é escopada ao dono. Arquitetura de outro usuário respon
 
 A API é fina de propósito (PRD §51): OpenTofu e k6 rodarão em workers isolados,
 nunca nela.
+
+## O que o validator olha
+
+`@infraflow/validator` responde se a arquitetura **faz sentido** — distinto do
+`validateIntegrity` do schema, que só pergunta se o documento é coerente consigo
+mesmo. São as cinco famílias do §72:
+
+| Família | Exemplos |
+| --- | --- |
+| `connection` | Banco originando tráfego para a aplicação; Load Generator entrando direto no banco; conexão marcada com o tipo errado |
+| `dependency` | Balanceador sem destino; CDN sem origem; fila sem consumidor; Grafana sem fonte |
+| `reachability` | Recurso solto no canvas; ilha que nenhuma origem alcança; dependência circular |
+| `security` | Dado exposto na borda; bucket sem criptografia; balanceador sem HTTPS |
+| `availability` | Uma réplica só; banco em zona única; cache que recusa escrita ao encher; teto de réplicas abaixo do desejado |
+
+`error` bloqueia; `warning` informa. O resultado é determinístico — o mesmo
+documento devolve a mesma lista, na mesma ordem, porque ela entra em relatório.
+
+A validação **não bloqueia o autosave**: o canvas fica incoerente o tempo todo
+enquanto se desenha. O mesmo pacote roda no cliente (feedback ao vivo no
+Analysis Panel e na status bar) e na API (`GET /architectures/:id/validation`),
+então as duas leituras nunca divergem.
 
 ## Como a capacidade é calculada
 

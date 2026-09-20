@@ -1,6 +1,7 @@
 import { getCatalogItem } from "@infraflow/registry";
 import { fromFlow, serializeArchitectureJson } from "@infraflow/schema";
 import { analyze, type SimulationResult } from "./simulation";
+import { validateCanvas } from "./validation";
 import type { InfraEdge, InfraNode } from "./types";
 
 /**
@@ -84,6 +85,11 @@ ${chain || "_Nenhuma conexão definida._"}
 function capacityMd(context: ReportContext): string {
   const { nodes, edges, result } = context;
   const analysis = analyze(nodes, edges);
+  const issues = validateCanvas(
+    { name: context.projectName, provider: context.provider, environment: context.environment },
+    nodes,
+    edges,
+  );
 
   const observed = result
     ? `## Observed
@@ -112,7 +118,7 @@ _Nenhum teste executado._
 - Estimated capacity: ${analysis.capacityRps} req/s
 - Estimated cost: US$ ${analysis.monthlyCostUsd}/month
 - Resources: ${analysis.resourceCount}
-- Warnings: ${analysis.warnings.length}
+- Findings: ${issues.length}
 
 ${observed}
 ## Per resource

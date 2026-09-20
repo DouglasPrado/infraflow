@@ -145,27 +145,23 @@ export function simulate(nodes: InfraNode[], edges: InfraEdge[]): SimulationResu
   };
 }
 
-/** PRD §23, §26 — leitura estática, antes de qualquer teste. */
+/**
+ * PRD §23, §26 — leitura estática, antes de qualquer teste.
+ *
+ * Só números. O julgamento da arquitetura — conexão inválida, dependência
+ * faltando, exposição, ponto único de falha — é do `@infraflow/validator`
+ * (PRD §72), não daqui.
+ */
 export interface Analysis {
   capacityRps: number;
   monthlyCostUsd: number;
   resourceCount: number;
-  warnings: string[];
 }
 
 export function analyze(nodes: InfraNode[], edges: InfraEdge[]): Analysis {
   const generator = loadGeneratorOf(nodes);
   const slo = generator?.data.slo ?? DEFAULT_SLO;
   const ceiling = generator?.data.profile.maxRps ?? DEFAULT_PROFILE.maxRps;
-
-  const graph = toGraph(nodes, edges);
-  const warnings: string[] = [];
-
-  const connected = new Set<string>();
-  for (const edge of edges) {
-    connected.add(edge.source);
-    connected.add(edge.target);
-  }
 
   let monthlyCostUsd = 0;
   let resourceCount = 0;
@@ -177,22 +173,13 @@ export function analyze(nodes: InfraNode[], edges: InfraEdge[]): Analysis {
 
     resourceCount += 1;
     monthlyCostUsd += monthlyCostFor(item, node.data.props);
-
-    if (!connected.has(node.id)) {
-      warnings.push(`${item.title} não está conectado a nenhum recurso.`);
-    }
-  }
-
-  if (!generator) {
-    warnings.push("Nenhum Load Generator definido — a capacidade não pode ser estimada.");
   }
 
   return {
     // Planejamento guarda folga; o teste vai até o limite (PRD §85).
-    capacityRps: plannedCapacityRps(graph, slo, ceiling),
+    capacityRps: plannedCapacityRps(toGraph(nodes, edges), slo, ceiling),
     monthlyCostUsd,
     resourceCount,
-    warnings,
   };
 }
 

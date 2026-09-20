@@ -86,6 +86,7 @@ describe("acesso", () => {
       ["PUT", `/architectures/${architectureId}`],
       ["POST", `/architectures/${architectureId}/versions`],
       ["GET", `/architectures/${architectureId}/architecture.json`],
+      ["GET", `/architectures/${architectureId}/validation`],
     ] as const) {
       const response = await app.inject({ method, url, payload: {} });
       assert.equal(response.statusCode, 401, `${method} ${url}`);
@@ -217,5 +218,34 @@ describe("persistência", () => {
       response.json<{ nodes: { id: string }[] }>().nodes.map((node) => node.id),
       ["alb"],
     );
+  });
+});
+
+describe("validação semântica (PRD §72)", () => {
+  it("aponta o balanceador sem destino do documento gravado", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}/validation`,
+      cookies: as(sessaoDono),
+    });
+
+    assert.equal(response.statusCode, 200);
+    const body = response.json<{
+      summary: { errors: number; blocking: boolean };
+      issues: { code: string; subjectId: string }[];
+    }>();
+
+    // O documento de teste tem um ALB sozinho: sem destino e sem quem o alcance.
+    assert.ok(body.issues.some((issue) => issue.code === "missing-dependency"));
+    assert.equal(body.summary.blocking, true);
+  });
+
+  it("não valida arquitetura de outro usuário", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}/validation`,
+      cookies: as(sessaoIntruso),
+    });
+    assert.equal(response.statusCode, 404);
   });
 });

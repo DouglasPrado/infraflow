@@ -1,4 +1,5 @@
 import { ArchitectureDocumentSchema, toArchitectureJson, validateIntegrity } from "@infraflow/schema";
+import { summarize, validateArchitecture } from "@infraflow/validator";
 import type { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { requireUser } from "../auth/guard.ts";
@@ -199,6 +200,31 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
     });
 
     return reply.status(201).send({ version: version.number, label: version.label });
+  });
+
+  /**
+   * Validação semântica (PRD §72).
+   *
+   * Não bloqueia o autosave: o canvas fica incoerente o tempo todo enquanto se
+   * desenha. É leitura sob demanda — a UI mostra o mesmo resultado ao vivo
+   * rodando o mesmo pacote no cliente.
+   */
+  app.get("/architectures/:id/validation", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+
+    const params = idParams.safeParse(request.params);
+    if (!params.success) return reply.status(400).send(invalid(params.error.issues));
+
+    const architecture = await ownedArchitecture(params.data.id, user.id);
+    const latest = architecture?.versions[0];
+    if (!latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
+
+    const parsed = ArchitectureDocumentSchema.safeParse(latest.graph);
+    if (!parsed.success) return reply.status(500).send(invalid(parsed.error.issues));
+
+    const issues = validateArchitecture(parsed.data);
+    return { version: latest.number, summary: summarize(issues), issues };
   });
 
   /** Projeção de automação (PRD §33, §34). */

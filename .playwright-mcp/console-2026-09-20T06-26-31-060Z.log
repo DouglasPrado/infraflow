@@ -1,0 +1,1392 @@
+[   35303ms] [WARNING] [GSI_LOGGER]: Your client application uses one of the Google One Tap prompt UI status methods that may stop functioning when FedCM becomes mandatory. Refer to the migration guide to update your code accordingly and opt-in to FedCM to test your changes. Learn more: https://developers.google.com/identity/gsi/web/guides/fedcm-migration?s=dc#display_moment and https://developers.google.com/identity/gsi/web/guides/fedcm-migration?s=dc#skipped_moment @ https://accounts.google.com/gsi/client:86
+[   36602ms] [ERROR] The request has been aborted. @ https://chatgpt.com/:0
+[   36603ms] [ERROR] [GSI_LOGGER]: FedCM get() rejects with AbortError: signal is aborted without reason @ https://accounts.google.com/gsi/client:87
+[   38218ms] Transition was aborted because of invalid state. ViewTransition opt-in disabled
+[   43757ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at qd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126921)
+    at Kd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126780) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   43901ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   43924ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44195ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44196ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44197ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44202ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44203ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44207ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44207ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44238ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44238ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44239ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44309ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44309ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44311ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44345ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44345ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44347ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44553ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44553ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44588ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44588ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44629ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44630ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44646ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44796ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44796ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   44871ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   45169ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   45333ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://chatgpt.com/backend-api/estuary/content?id=file-T1ZKQjj9xum2pXCuKzWiLi&gizmo_id=g-6807d4f0d01c81918c8e356d4db72581&ts=497190&p=gpp&cid=1&sig=8da32d20f630c66500cf8b082f68730f9cecc62015a123e82d2383c31580e63d&v=0:0
+[   45334ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://chatgpt.com/backend-api/estuary/content?id=file-QsSxK4mpFjpWgZCCh8E2cu&gizmo_id=g-68246bec9c8c8191a345f39586e63e0d&ts=497190&p=gpp&cid=1&sig=5e0bc990bf5e8720b7c994ae2f1c068577d950049293a9ca2ed24286ce4e7d86&v=0:0
+[   45402ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://chatgpt.com/backend-api/estuary/content?id=file-QsSxK4mpFjpWgZCCh8E2cu&gizmo_id=g-6823ee689f208191a3701ab7997d778f&ts=497190&p=gpp&cid=1&sig=0ffdc8b92a377421ef04143bd0283def8da8a069b69c93c54ceb1f1d85eae2cd&v=0:0
+[   48532ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48532ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48533ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48669ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48670ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48672ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at new Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at qd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126921)
+    at Kd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126780) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48712ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48712ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48713ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48714ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48726ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48727ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48727ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48728ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48743ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48743ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48746ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.college_plan.homepage_starter.opening.label" for locale "pt-BR", using default message (Opening College Plan…) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at ncr (https://chatgpt.com/cdn/assets/8b34dbc2-lcl4lqvg2jgttftg.js:91:74426)
+    at Zo (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:48800)
+    at Wc (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:71493)
+    at ll (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:82144)
+    at Jd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126948)
+    at Gd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:126009)
+    at Wd (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:36:125845) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48987ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   48988ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   51037ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   51037ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76338ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76339ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76380ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76381ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76381ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76381ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76382ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76382ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76382ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76382ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76387ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76388ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76388ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76389ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60206
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at e.onInvalidate_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60189) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76404ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76404ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76424ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   76424ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   77902ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   77902ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   77937ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   77937ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   77954ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   77955ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   77960ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   77960ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   77981ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   77981ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78018ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78018ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78079ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78080ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78184ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78184ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78288ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78289ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78390ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78390ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78410ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://chatgpt.com/backend-api/conversation/6aaf7cca-6b2c-83e9-abca-8c81d250b74e/textdocs:0
+[   78412ms] [ERROR] RequestError: Conversation not found
+    at awe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:37370)
+    at async hcr (https://chatgpt.com/cdn/assets/conversation-small-8auz4n865vyash62.js:88:250865)
+    at async gcr (https://chatgpt.com/cdn/assets/conversation-small-8auz4n865vyash62.js:88:251071) undefined @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78503ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78504ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78600ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   78600ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   81888ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   81889ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   89532ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[   89532ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  102138ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  102138ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  107199ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  107199ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  114657ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  114657ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  116863ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  116863ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  116868ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  116868ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  116885ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  116885ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  116894ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  116894ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  128018ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  128018ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  128072ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.label" for locale "pt-BR", using default message (Audio) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7562)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
+[  128073ms] [ERROR] Rt: [@formatjs/intl Error MISSING_TRANSLATION] Missing message: "chatgpt.voice.audio_attachment.menu_item.description" for locale "pt-BR", using default message (Record an audio attachment) as fallback.
+
+    at Rt (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:20:79)
+    at Ht (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:287)
+    at Dn (https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:24:5318)
+    at Bl (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:7598)
+    at ci (https://chatgpt.com/cdn/assets/30f82755-n9ywu5sq972ypxnt.js:1:127087)
+    at h_ (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:389:108886)
+    at https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60985
+    at dOe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:6090)
+    at t.track (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:32952)
+    at JAe (https://chatgpt.com/cdn/assets/4813494d-dbc08vb642hnn0un.js:391:60968) @ https://chatgpt.com/cdn/assets/2340486e-b3t78qt0psmq9d8c.js:27
