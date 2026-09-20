@@ -1,16 +1,45 @@
-import { getCatalogItem } from "@infraflow/registry";
+import { capacityFor, getCatalogItem, monthlyCostFor } from "@infraflow/registry";
 import type { InfraEdge, InfraNode, NodeState } from "./types";
 
 /**
- * Motor de simulação mockado do protótipo (PRD §20, §21, §61, §67).
+ * Motor de simulação mockado (PRD §20, §21, §61, §67).
  *
- * Nada aqui executa k6 ou lê métricas reais. O estado de cada node é derivado
- * de `capacityRps` — uma capacidade mockada declarada no catálogo — e o resultado
- * é determinístico: a mesma arquitetura produz sempre o mesmo gargalo.
+ * Nada aqui executa k6 ou lê métricas reais. A capacidade de cada recurso sai da
+ * sua **configuração** — instância, réplicas, memória, conexões — pelo modelo do
+ * `@infraflow/registry`. É isso que faz trocar a instância do banco mover o
+ * gargalo, como o PRD §38 descreve. O resultado é determinístico: a mesma
+ * arquitetura configurada do mesmo jeito produz sempre o mesmo gargalo.
  */
 
-/** Degraus de RPS da simulação (PRD §20, §61). */
-export const LOAD_STEPS = [100, 250, 500, 1000, 1500, 2000, 2500, 3000];
+/**
+ * Degraus de RPS da simulação (PRD §18, §20, §61).
+ *
+ * Saem do perfil configurado no Load Generator — start, increment e maximum —
+ * e não de uma lista fixa. Com a capacidade dependendo da configuração dos
+ * recursos, uma escada travada num teto deixaria de medir qualquer arquitetura
+ * que crescesse além dele: o teste responderia "breaking point —" justamente
+ * para quem acabou de reforçar a infraestrutura.
+ */
+const MAX_STEPS = 40;
+
+export function ladderFor(profile: {
+  startRps: number;
+  incrementRps: number;
+  maxRps: number;
+}): number[] {
+  const start = Math.max(1, Math.round(profile.startRps));
+  const increment = Math.max(1, Math.round(profile.incrementRps));
+  const max = Math.max(start, Math.round(profile.maxRps));
+
+  const steps: number[] = [];
+  for (let rps = start; rps <= max && steps.length < MAX_STEPS; rps += increment) {
+    steps.push(rps);
+  }
+  return steps;
+}
+
+/** Perfil usado quando não há Load Generator no canvas. */
+const DEFAULT_PROFILE = { startRps: 100, incrementRps: 250, maxRps: 5000 };
 
 /** Limiar de utilização a partir do qual o node entra em warning. */
 const WARNING_AT = 0.9;
@@ -63,7 +92,16 @@ function resourceEntries(nodes: InfraNode[]) {
     if (node.data.state === "disabled") return [];
     const item = getCatalogItem(node.data.type);
     if (!item) return [];
-    return [{ id: node.id, item }];
+
+    // Resolvido uma vez: a capacidade depende de como o recurso está configurado.
+    return [
+      {
+        id: node.id,
+        item,
+        capacityRps: capacityFor(item, node.data.props),
+        monthlyCostUsd: monthlyCostFor(item, node.data.props),
+      },
+    ];
   });
 }
 
@@ -106,7 +144,7 @@ function stateFor(utilization: number, isBottleneck: boolean): NodeState {
 function readStep(rps: number, nodes: ReturnType<typeof simulatedNodes>): SimulationStep {
   const utilizations = nodes.map((node) => ({
     nodeId: node.id,
-    utilization: rps / node.item.capacityRps,
+    utilization: rps / node.capacityRps,
   }));
 
   const worst = utilizations.reduce<{ nodeId: string; utilization: number } | undefined>(
@@ -151,10 +189,20 @@ export function simulate(nodes: InfraNode[], edges: InfraEdge[]): SimulationResu
     };
   }
 
-  const steps = LOAD_STEPS.map((rps) => readStep(rps, participants));
+  // Um teste de capacidade para quando quebra — não continua empilhando carga
+  // sobre uma arquitetura que já cedeu.
+  const profile =
+    nodes.find((node) => node.type === "loadGenerator")?.data.profile ?? DEFAULT_PROFILE;
+
+  const steps: SimulationStep[] = [];
+  for (const rps of ladderFor(profile)) {
+    const step = readStep(rps, participants);
+    steps.push(step);
+    if (step.verdict === "fail") break;
+  }
 
   // O recurso de menor capacidade define o teto saudável (PRD §20).
-  const bindingCapacity = Math.min(...participants.map((node) => node.item.capacityRps));
+  const bindingCapacity = Math.min(...participants.map((node) => node.capacityRps));
   const maxHealthyRps = Math.round((bindingCapacity * WARNING_AT * 1.0256) / 100) * 100;
 
   const firstFailure = steps.find((step) => step.verdict === "fail");
@@ -163,13 +211,13 @@ export function simulate(nodes: InfraNode[], edges: InfraEdge[]): SimulationResu
   const bottleneckNodeId =
     firstFailure?.bottleneckNodeId ??
     participants.reduce((acc, node) =>
-      node.item.capacityRps < acc.item.capacityRps ? node : acc,
+      node.capacityRps < acc.capacityRps ? node : acc,
     ).id;
 
   const bottleneck = participants.find((node) => node.id === bottleneckNodeId);
   const bottleneckUtilization = firstFailure
-    ? firstFailure.rps / (bottleneck?.item.capacityRps ?? 1)
-    : maxHealthyRps / (bottleneck?.item.capacityRps ?? 1);
+    ? firstFailure.rps / (bottleneck?.capacityRps ?? 1)
+    : maxHealthyRps / (bottleneck?.capacityRps ?? 1);
 
   const bottleneckMetrics: BottleneckMetric[] =
     bottleneck?.item.metrics.map((metric) => ({
@@ -226,9 +274,9 @@ export function analyze(nodes: InfraNode[], edges: InfraEdge[]): Analysis {
   const capacityRps =
     participants.length === 0
       ? 0
-      : Math.round((Math.min(...participants.map((n) => n.item.capacityRps)) * STATIC_DERATE) / 100) * 100;
+      : Math.round((Math.min(...participants.map((n) => n.capacityRps)) * STATIC_DERATE) / 100) * 100;
 
-  const monthlyCostUsd = allResources.reduce((total, node) => total + node.item.monthlyCostUsd, 0);
+  const monthlyCostUsd = allResources.reduce((total, node) => total + node.monthlyCostUsd, 0);
 
   return {
     capacityRps,

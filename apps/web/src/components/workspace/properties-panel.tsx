@@ -4,7 +4,7 @@ import { ArrowLeftRight, MousePointerClick } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { getCatalogItem } from "@infraflow/registry";
+import { capacityFor, getCatalogItem, monthlyCostFor } from "@infraflow/registry";
 import { ServiceIcon } from "@/components/service-icon";
 import type { InfraNode } from "@/lib/types";
 import { useWorkspaceStore } from "@/store/workspace-store";
@@ -87,13 +87,21 @@ function ResourceProperties({ node }: { node: Extract<InfraNode, { type: "resour
 
       <FieldGroup title="Capacidade estimada">
         <div className="flex items-baseline justify-between">
-          <span className="text-sm text-muted-foreground">Mocked capacity</span>
-          <span className="font-mono text-sm tabular-nums">{item.capacityRps.toLocaleString("pt-BR")} req/s</span>
+          <span className="text-sm text-muted-foreground">Capacity</span>
+          <span className="font-mono text-sm tabular-nums">
+            {capacityFor(item, node.data.props).toLocaleString("pt-BR")} req/s
+          </span>
         </div>
         <div className="flex items-baseline justify-between">
-          <span className="text-sm text-muted-foreground">Estimated cost</span>
-          <span className="font-mono text-sm tabular-nums">US$ {item.monthlyCostUsd}/mês</span>
+          <span className="text-sm text-muted-foreground">Cost</span>
+          <span className="font-mono text-sm tabular-nums">
+            US$ {monthlyCostFor(item, node.data.props).toLocaleString("pt-BR")}/mês
+          </span>
         </div>
+        <p className="text-[11px] leading-relaxed text-muted-foreground">
+          Deriva da configuração acima. Mude a instância ou as réplicas e estes
+          números mudam junto.
+        </p>
         <Provenance kind="Estimated" />
       </FieldGroup>
     </div>
