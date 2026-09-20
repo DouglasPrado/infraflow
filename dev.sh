@@ -39,11 +39,10 @@ case "${1:-start}" in
     ;;
 
   status)
-    for porta in 3000 3333; do
-      printf "porta %s: " "$porta"
-      lsof -nP -iTCP:"$porta" -sTCP:LISTEN >/dev/null 2>&1 && echo "no ar" || echo "parada"
-    done
-    pgrep -f "experimental-strip-types src/index.ts" >/dev/null && echo "worker:   no ar" || echo "worker:   parado"
+    # Responder é o que importa; porta aberta não garante serviço de pé.
+    printf "web    "; curl -sf -o /dev/null http://127.0.0.1:3000/login  && echo "no ar" || echo "parado"
+    printf "api    "; curl -sf -o /dev/null http://127.0.0.1:3333/health && echo "no ar" || echo "parado"
+    printf "worker "; pgrep -qf "apps/worker && exec node" && echo "no ar" || echo "parado"
     ;;
 
   logs)
