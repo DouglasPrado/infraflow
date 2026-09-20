@@ -1,0 +1,24 @@
+# Postgres de desenvolvimento (PRD §49).
+# Ambientes de teste de infraestrutura são isolados e efêmeros (§52, §53) — este
+# container é só o banco da aplicação.
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: infraflow-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: infraflow
+      POSTGRES_PASSWORD: infraflow
+      POSTGRES_DB: infraflow
+    ports:
+      - "5434:5432"
+    volumes:
+      - infraflow-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U infraflow -d infraflow"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  infraflow-postgres:

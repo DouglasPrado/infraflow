@@ -1,0 +1,68 @@
+// Persistência do InfraFlow (PRD §49, §71).
+//
+// O grafo é gravado como documento JSONB numa versão, não como tabelas de nodes
+// e edges. O §33 define o architecture.json como fonte estruturada com
+// prioridade sobre o resto, e o §38/§80 pedem versões clonáveis e comparáveis:
+// um documento validado por versão dá atomicidade no autosave e torna clone e
+// comparação triviais. Nenhum requisito do produto consulta um node isolado.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Project {
+  id        String   @id @default(uuid()) @db.Uuid
+  slug      String   @unique
+  name      String
+  /// Preferências do projeto (PRD §71 — settings).
+  settings  Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  architectures Architecture[]
+
+  @@map("projects")
+}
+
+model Architecture {
+  id          String @id @default(uuid()) @db.Uuid
+  projectId   String @db.Uuid
+  name        String
+  /// PRD §9 — provider e environment do canvas.
+  provider    String
+  environment String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project  Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  versions ArchitectureVersion[]
+
+  @@unique([projectId, name])
+  @@map("architectures")
+}
+
+/// PRD §38 — cada mudança relevante vira uma versão.
+model ArchitectureVersion {
+  id             String @id @default(uuid()) @db.Uuid
+  architectureId String @db.Uuid
+  /// Sequencial por arquitetura: v1, v2, v3.
+  number         Int
+  /// Documento do canvas validado por @infraflow/schema.
+  graph          Json
+  label          String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  architecture Architecture @relation(fields: [architectureId], references: [id], onDelete: Cascade)
+
+  @@unique([architectureId, number])
+  @@index([architectureId, createdAt])
+  @@map("architecture_versions")
+}

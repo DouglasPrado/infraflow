@@ -2,61 +2,75 @@
 
 Plataforma visual para planejamento, validação e execução de infraestrutura.
 
-**Estágio atual: Milestone 0 — Prototype.**
-Nenhuma infraestrutura real é provisionada. Não há backend, banco de dados,
-autenticação real, OpenTofu, k6, AWS ou LLM (PRD §55, §88).
+**Estágio:** Milestone 2 — Persistence (PRD §71).
+O protótipo foi aprovado (§68), o modelo de domínio é real (§70) e a API persiste
+arquiteturas em PostgreSQL. Ainda **não** existem OpenTofu, k6, integração com
+AWS nem LLM.
 
 ## Documentos
 
 | Arquivo | Conteúdo |
 | --- | --- |
 | [`PRD.md`](PRD.md) | Fonte de verdade de escopo e comportamento |
-| [`design.md`](design.md) | Design system do protótipo |
+| [`design.md`](design.md) | Design system do produto |
+
+## Estrutura
+
+```text
+apps/
+  web       Next.js — canvas, inspector, simulação (PRD §6–§30)
+  api       Fastify + Prisma — persistência (PRD §48, §49, §71)
+packages/
+  infra-schema    Contrato do grafo e do architecture.json (PRD §33, §70)
+  infra-registry  Catálogo de componentes, livre de UI (PRD §10, §42)
+```
+
+`infra-registry` não importa React: a API e os workers precisam dele para
+estimar capacidade e, mais adiante, compilar OpenTofu. O ícone viaja como
+identificador string e só vira componente na web.
 
 ## Rodando
 
 ```bash
 pnpm install
-pnpm dev
+docker compose up -d          # PostgreSQL 17 na porta 5434
+pnpm --filter @infraflow/api db:deploy
+pnpm dev                      # web em :3000, api em :3333
 ```
 
-Abra [http://localhost:3000](http://localhost:3000). O login é simulado e leva a
-`/workspace/demo`, que abre com a arquitetura demo do PRD §65.
+A web abre em [localhost:3000](http://localhost:3000). O login é simulado e leva
+a `/workspace/demo`, que carrega a arquitetura demo do PRD §65.
 
 ## Qualidade
 
 ```bash
-pnpm lint          # ESLint
-pnpm exec tsc --noEmit
-pnpm build
+pnpm ci    # lint + typecheck + test + build em todos os workspaces
 ```
 
-## Stack
+Os testes da API são de integração e **exigem o Postgres de pé**.
 
-Next.js · React · TypeScript · React Flow (`@xyflow/react`) · Tailwind CSS ·
-shadcn/ui · Zustand · Lucide.
+## API
 
-## Estrutura
+| Rota | O quê |
+| --- | --- |
+| `GET /health` | Saúde do processo e do banco |
+| `GET/POST /projects` | Projetos |
+| `GET/POST /projects/:slug/architectures` | Arquiteturas do projeto |
+| `GET /architectures/:id` | Versão corrente do documento |
+| `PUT /architectures/:id` | Autosave — grava por cima, não cria versão |
+| `POST /architectures/:id/versions` | Snapshot explícito (§38) |
+| `GET /architectures/:id/architecture.json` | Projeção de automação (§33) |
 
-```text
-src/
-  app/                      /login e /workspace/[id] (PRD §6)
-  components/
-    canvas/                 nodes e edges do React Flow
-    workspace/              top bar, library, inspector, status bar
-    ui/                     shadcn/ui
-  lib/
-    catalog.ts              catálogo de componentes, mockado (PRD §10)
-    demo-architecture.ts    cenário inicial (PRD §65, §66)
-    simulation.ts           simulação e análise mockadas (PRD §20, §21, §24)
-    reports.ts              artefatos de exportação (PRD §30–§34)
-  store/
-    workspace-store.ts      canvas, histórico e simulação
-```
+Todo documento é validado contra `@infraflow/schema` na entrada. Um documento
+que passa no schema mas é incoerente — conexão apontando para node inexistente,
+id duplicado — recebe `422`, não é gravado.
+
+A API é fina de propósito (PRD §51): OpenTofu e k6 rodarão em workers isolados,
+nunca nela.
 
 ## Dados mockados
 
-Capacidade, custo, métricas de gargalo e resultado do teste de carga são
-**determinísticos e mockados** — derivados de `capacityRps` e `monthlyCostUsd`
-declarados no catálogo. Nada é medido. O compiler determinístico de OpenTofu só
-entra no Milestone 5 (PRD §74).
+`capacityRps`, `monthlyCostUsd`, os coeficientes de métrica e o resultado do
+teste de carga seguem **determinísticos e mockados**, declarados no registry.
+Nada é medido até a Observabilidade do Milestone 9 (§78). O compiler
+determinístico de OpenTofu entra no Milestone 5 (§74).

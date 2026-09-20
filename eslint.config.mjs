@@ -3,12 +3,12 @@ import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 
 /**
- * Config dos pacotes do domínio (`packages/*`).
+ * Config do domínio (`packages/*`) e da API (`apps/api`).
  * O `apps/web` tem a sua própria, herdada do `eslint-config-next`.
  */
 export default tseslint.config(
   {
-    ignores: ["**/dist/**", "**/node_modules/**", "apps/**"],
+    ignores: ["**/dist/**", "**/node_modules/**", "**/generated/**", "apps/web/**"],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
@@ -23,6 +23,14 @@ export default tseslint.config(
     rules: {
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    },
+  },
+  {
+    files: ["**/routes/*.ts"],
+    rules: {
+      // `FastifyPluginAsync` exige uma função async por contrato de tipo; a
+      // ausência de `await` no corpo não indica engano.
+      "@typescript-eslint/require-await": "off",
     },
   },
   {

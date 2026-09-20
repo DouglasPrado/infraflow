@@ -1,0 +1,34 @@
+{
+  "name": "@infraflow/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --experimental-strip-types src/index.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --experimental-strip-types \"src/**/*.test.ts\"",
+    "lint": "eslint --config ../../eslint.config.mjs src",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "@infraflow/schema": "workspace:*",
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "fastify": "^5.12.5",
+    "pg": "^8.16.3",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/pg": "^8.15.6",
+    "dotenv": "^17.2.3",
+    "prisma": "7.10.0",
+    "typescript": "^5.9.3"
+  }
+}
