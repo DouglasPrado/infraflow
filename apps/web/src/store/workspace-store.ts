@@ -11,7 +11,9 @@ import {
 } from "@xyflow/react";
 import { create } from "zustand";
 import { getCatalogItem, LOAD_GENERATOR_TYPE } from "@infraflow/registry";
+import type { ArchitectureDocument } from "@infraflow/schema";
 import { createDemoEdges, createDemoNodes, DEMO_LOAD_GENERATOR } from "@/lib/demo-architecture";
+import { fromDocument } from "@/lib/document";
 import { simulate, type SimulationResult } from "@/lib/simulation";
 import type {
   EdgeKind,
@@ -24,6 +26,9 @@ import type {
 
 export type InspectorTab = "properties" | "analysis" | "commands";
 export type SimulationStatus = "idle" | "running" | "done";
+
+/** Estado do autosave, exibido na top bar (PRD §71). */
+export type SaveStatus = "idle" | "pending" | "saving" | "saved" | "error";
 
 /** Passo da simulação renderizado na UI (PRD §20). */
 export interface RunLogEntry {
@@ -42,6 +47,14 @@ interface WorkspaceState extends Snapshot {
   provider: string;
   environment: string;
   dirty: boolean;
+
+  // --- persistência (PRD §71) ---
+  architectureId: string | null;
+  saveStatus: SaveStatus;
+  saveError: string | null;
+  savedAt: number | null;
+  hydrate: (architectureId: string, document: ArchitectureDocument) => void;
+  setSaveStatus: (status: SaveStatus, error?: string | null) => void;
 
   // --- canvas ---
   onNodesChange: (changes: NodeChange<InfraNode>[]) => void;
@@ -117,6 +130,44 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   provider: "AWS",
   environment: "dev",
   dirty: false,
+
+  architectureId: null,
+  saveStatus: "idle",
+  saveError: null,
+  savedAt: null,
+
+  /**
+   * Carrega o documento vindo da API. Zera o histórico e a simulação: undo não
+   * deve atravessar o carregamento, e o resultado do teste é da sessão anterior.
+   */
+  hydrate: (architectureId, document) => {
+    const { nodes, edges } = fromDocument(document);
+    set({
+      architectureId,
+      nodes,
+      edges,
+      projectName: document.name,
+      provider: document.provider,
+      environment: document.environment,
+      past: [],
+      future: [],
+      dirty: false,
+      saveStatus: "saved",
+      saveError: null,
+      savedAt: Date.now(),
+      simulationStatus: "idle",
+      runLog: [],
+      currentRps: null,
+      result: null,
+    });
+  },
+
+  setSaveStatus: (status, error = null) =>
+    set({
+      saveStatus: status,
+      saveError: error,
+      ...(status === "saved" ? { savedAt: Date.now(), dirty: false } : {}),
+    }),
 
   inspectorTab: "properties",
   simulationStatus: "idle",
@@ -426,7 +477,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
     });
   },
 
-  save: () => set({ dirty: false }),
+  /** Força um ciclo de autosave — o ⌘S do usuário. */
+  save: () => set({ dirty: true, saveStatus: "pending" }),
 }));
 
 function deselectAll(nodes: InfraNode[]): InfraNode[] {

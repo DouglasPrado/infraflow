@@ -2,18 +2,31 @@
 
 import { useReactFlow } from "@xyflow/react";
 import {
+  Check,
+  CloudAlert,
   FileCode,
   FileText,
+  LoaderCircle,
+  LogOut,
   Play,
   Redo2,
   RotateCcw,
-  Save,
   Undo2,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { api, type SessionUser } from "@/lib/api";
 import {
   Select,
   SelectContent,
@@ -71,11 +84,96 @@ function Mark() {
   );
 }
 
+/** Estado do autosave, em palavras (PRD §71). */
+function SaveIndicator() {
+  const status = useWorkspaceStore((state) => state.saveStatus);
+  const error = useWorkspaceStore((state) => state.saveError);
+
+  if (status === "error") {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="flex items-center gap-1.5 text-[11px] font-medium text-state-error">
+            <CloudAlert className="size-3.5" strokeWidth={1.75} />
+            Não salvo
+          </span>
+        </TooltipTrigger>
+        <TooltipContent>{error ?? "Falha ao salvar."}</TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  if (status === "saving" || status === "pending") {
+    return (
+      <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        <LoaderCircle className="size-3.5 animate-spin" strokeWidth={1.75} />
+        Salvando
+      </span>
+    );
+  }
+
+  if (status === "saved") {
+    return (
+      <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        <Check className="size-3.5 text-state-healthy" strokeWidth={2.25} />
+        Salvo
+      </span>
+    );
+  }
+
+  return null;
+}
+
+function UserMenu({ user }: { user: SessionUser }) {
+  const router = useRouter();
+
+  const initials = user.name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-7 rounded-full bg-secondary text-[11px] font-medium"
+        >
+          {initials || "?"}
+          <span className="sr-only">Conta</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel className="font-normal">
+          <div className="truncate text-sm font-medium">{user.name}</div>
+          <div className="truncate font-mono text-[11px] text-muted-foreground">{user.email}</div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onSelect={() => {
+            void api.logout().finally(() => {
+              router.replace("/login");
+              router.refresh();
+            });
+          }}
+        >
+          <LogOut />
+          Sair
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 /** PRD §9 — Top Bar. */
 export function TopBar({
+  user,
   onOpenExport,
   onOpenPalette,
 }: {
+  user: SessionUser;
   onOpenExport: (file?: string) => void;
   onOpenPalette: () => void;
 }) {
@@ -84,12 +182,10 @@ export function TopBar({
   const projectName = useWorkspaceStore((state) => state.projectName);
   const provider = useWorkspaceStore((state) => state.provider);
   const environment = useWorkspaceStore((state) => state.environment);
-  const dirty = useWorkspaceStore((state) => state.dirty);
   const canUndo = useWorkspaceStore((state) => state.past.length > 0);
   const canRedo = useWorkspaceStore((state) => state.future.length > 0);
   const undo = useWorkspaceStore((state) => state.undo);
   const redo = useWorkspaceStore((state) => state.redo);
-  const save = useWorkspaceStore((state) => state.save);
   const setInspectorTab = useWorkspaceStore((state) => state.setInspectorTab);
   const startSimulation = useWorkspaceStore((state) => state.startSimulation);
   const resetSimulation = useWorkspaceStore((state) => state.resetSimulation);
@@ -182,19 +278,6 @@ export function TopBar({
         <IconAction className="hidden text-muted-foreground lg:inline-flex" label="Aumentar zoom" icon={ZoomIn} onClick={() => zoomIn()} />
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" className="hidden size-7 md:inline-flex" onClick={save}>
-              <Save
-                className={cn("size-3.5", dirty ? "text-brand" : "text-muted-foreground")}
-                strokeWidth={1.75}
-              />
-              <span className="sr-only">Salvar</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>{dirty ? "Alterações não salvas" : "Salvo"}</TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger asChild>
             <Button
               variant="ghost"
               size="sm"
@@ -208,6 +291,10 @@ export function TopBar({
         </Tooltip>
 
         <span aria-hidden className="mx-1 hidden h-4 w-px bg-border sm:block" />
+
+        <div className="hidden min-w-[74px] justify-end sm:flex">
+          <SaveIndicator />
+        </div>
 
         {/* Verbo do produto: a única ação preenchida da barra. */}
         <Button
@@ -223,6 +310,8 @@ export function TopBar({
           )}
           {running ? "Parar" : "Teste de carga"}
         </Button>
+
+        <UserMenu user={user} />
       </div>
     </header>
   );

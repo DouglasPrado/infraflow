@@ -4,14 +4,16 @@ import type { FastifyInstance } from "fastify";
 import { buildApp } from "../app.ts";
 import { db } from "../db.ts";
 
-/**
- * Testes de integração — exigem o Postgres do `docker compose up -d`.
- * A API é fina, então o que vale testar é a fronteira: o que ela aceita, o que
- * rejeita e com qual código.
- */
+/** Testes de integração — exigem o Postgres do `docker compose up -d`. */
 
-const slug = `test-${Date.now().toString(36)}`;
+const suffix = Date.now().toString(36);
+const dono = `dono-${suffix}@exemplo.test`;
+const intruso = `intruso-${suffix}@exemplo.test`;
+const password = "uma-senha-boa-123";
+
 let app: FastifyInstance;
+let sessaoDono: string;
+let sessaoIntruso: string;
 let architectureId: string;
 
 function document(overrides: Record<string, unknown> = {}) {
@@ -44,73 +46,123 @@ function document(overrides: Record<string, unknown> = {}) {
   };
 }
 
+async function registrar(email: string): Promise<string> {
+  const response = await app.inject({
+    method: "POST",
+    url: "/auth/register",
+    payload: { name: email, email, password },
+  });
+  return response.cookies.find((cookie) => cookie.name === "infraflow_session")!.value;
+}
+
+const as = (token: string) => ({ infraflow_session: token });
+
 before(async () => {
   app = await buildApp();
-  await app.inject({ method: "POST", url: "/projects", payload: { name: "Teste", slug } });
+  sessaoDono = await registrar(dono);
+  sessaoIntruso = await registrar(intruso);
 
-  const created = await app.inject({
+  const workspace = await app.inject({
     method: "POST",
-    url: `/projects/${slug}/architectures`,
+    url: "/me/workspace",
+    cookies: as(sessaoDono),
     payload: { document: document() },
   });
-  architectureId = created.json<{ id: string }>().id;
+  architectureId = workspace.json<{ architectureId: string }>().architectureId;
 });
 
 after(async () => {
-  await db.project.deleteMany({ where: { slug } });
+  await db.user.deleteMany({ where: { email: { in: [dono, intruso] } } });
   await db.$disconnect();
   await app.close();
 });
 
-describe("health", () => {
-  it("reporta o banco de pé", async () => {
-    const response = await app.inject({ method: "GET", url: "/health" });
-    assert.equal(response.statusCode, 200);
-    assert.equal(response.json<{ database: string }>().database, "up");
+describe("acesso", () => {
+  it("recusa tudo sem sessão", async () => {
+    for (const [method, url] of [
+      ["GET", "/me/architectures"],
+      ["POST", "/me/workspace"],
+      ["GET", `/architectures/${architectureId}`],
+      ["PUT", `/architectures/${architectureId}`],
+      ["POST", `/architectures/${architectureId}/versions`],
+      ["GET", `/architectures/${architectureId}/architecture.json`],
+    ] as const) {
+      const response = await app.inject({ method, url, payload: {} });
+      assert.equal(response.statusCode, 401, `${method} ${url}`);
+    }
   });
-});
 
-describe("projects", () => {
-  it("recusa slug já usado", async () => {
+  it("esconde a arquitetura de outro usuário com 404, não 403", async () => {
     const response = await app.inject({
-      method: "POST",
-      url: "/projects",
-      payload: { name: "Outro", slug },
+      method: "GET",
+      url: `/architectures/${architectureId}`,
+      cookies: as(sessaoIntruso),
     });
-    assert.equal(response.statusCode, 409);
-  });
-
-  it("recusa slug com formato inválido", async () => {
-    const response = await app.inject({
-      method: "POST",
-      url: "/projects",
-      payload: { name: "Outro", slug: "Com Espaço" },
-    });
-    assert.equal(response.statusCode, 400);
-  });
-
-  it("devolve 404 para projeto inexistente", async () => {
-    const response = await app.inject({ method: "GET", url: "/projects/nao-existe/architectures" });
+    // 403 confirmaria que o recurso existe.
     assert.equal(response.statusCode, 404);
   });
+
+  it("impede outro usuário de gravar por cima", async () => {
+    const response = await app.inject({
+      method: "PUT",
+      url: `/architectures/${architectureId}`,
+      cookies: as(sessaoIntruso),
+      payload: { document: document({ name: "invadida" }) },
+    });
+    assert.equal(response.statusCode, 404);
+
+    const leitura = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}`,
+      cookies: as(sessaoDono),
+    });
+    assert.equal(leitura.json<{ document: { name: string } }>().document.name, "Arquitetura de teste");
+  });
+
+  it("não lista a arquitetura alheia", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: "/me/architectures",
+      cookies: as(sessaoIntruso),
+    });
+    assert.deepEqual(response.json(), []);
+  });
 });
 
-describe("architectures", () => {
-  it("recusa documento que não bate com o schema", async () => {
+describe("workspace", () => {
+  it("é idempotente: não cria uma segunda arquitetura", async () => {
     const response = await app.inject({
       method: "POST",
-      url: `/projects/${slug}/architectures`,
+      url: "/me/workspace",
+      cookies: as(sessaoDono),
+      payload: { document: document({ name: "outra" }) },
+    });
+
+    assert.equal(response.json<{ created: boolean }>().created, false);
+    assert.equal(response.json<{ architectureId: string }>().architectureId, architectureId);
+  });
+});
+
+describe("persistência", () => {
+  it("recusa documento que não bate com o schema", async () => {
+    const response = await app.inject({
+      method: "PUT",
+      url: `/architectures/${architectureId}`,
+      cookies: as(sessaoDono),
       payload: { document: { version: 1, name: "x" } },
     });
     assert.equal(response.statusCode, 400);
     assert.equal(response.json<{ error: string }>().error, "documento_invalido");
   });
 
-  it("recusa documento estruturalmente válido mas incoerente", async () => {
+  it("recusa documento válido no schema mas incoerente", async () => {
     const response = await app.inject({
       method: "PUT",
       url: `/architectures/${architectureId}`,
-      payload: { document: document({ edges: [{ id: "e", source: "alb", target: "fantasma", kind: "HTTP" }] }) },
+      cookies: as(sessaoDono),
+      payload: {
+        document: document({ edges: [{ id: "e", source: "alb", target: "fantasma", kind: "HTTP" }] }),
+      },
     });
     assert.equal(response.statusCode, 422);
     assert.equal(response.json<{ error: string }>().error, "documento_incoerente");
@@ -120,35 +172,37 @@ describe("architectures", () => {
     const response = await app.inject({
       method: "PUT",
       url: `/architectures/${architectureId}`,
+      cookies: as(sessaoDono),
       payload: { document: document({ environment: "staging" }) },
     });
     assert.equal(response.statusCode, 200);
     assert.equal(response.json<{ version: number }>().version, 1);
 
-    const read = await app.inject({ method: "GET", url: `/architectures/${architectureId}` });
-    assert.equal(read.json<{ document: { environment: string } }>().document.environment, "staging");
+    const leitura = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}`,
+      cookies: as(sessaoDono),
+    });
+    assert.equal(leitura.json<{ document: { environment: string } }>().document.environment, "staging");
   });
 
   it("snapshot cria a próxima versão", async () => {
     const response = await app.inject({
       method: "POST",
       url: `/architectures/${architectureId}/versions`,
+      cookies: as(sessaoDono),
       payload: { label: "marco" },
     });
     assert.equal(response.statusCode, 201);
     assert.equal(response.json<{ version: number }>().version, 2);
   });
 
-  it("devolve 404 para arquitetura inexistente", async () => {
+  it("recusa id que não é uuid", async () => {
     const response = await app.inject({
       method: "GET",
-      url: "/architectures/00000000-0000-4000-8000-000000000000",
+      url: "/architectures/abc",
+      cookies: as(sessaoDono),
     });
-    assert.equal(response.statusCode, 404);
-  });
-
-  it("recusa id que não é uuid", async () => {
-    const response = await app.inject({ method: "GET", url: "/architectures/abc" });
     assert.equal(response.statusCode, 400);
   });
 
@@ -156,12 +210,11 @@ describe("architectures", () => {
     const response = await app.inject({
       method: "GET",
       url: `/architectures/${architectureId}/architecture.json`,
+      cookies: as(sessaoDono),
     });
     assert.equal(response.statusCode, 200);
-
-    const json = response.json<{ nodes: { id: string }[] }>();
     assert.deepEqual(
-      json.nodes.map((node) => node.id),
+      response.json<{ nodes: { id: string }[] }>().nodes.map((node) => node.id),
       ["alb"],
     );
   });

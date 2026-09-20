@@ -1,9 +1,12 @@
 "use client";
 
 import { ReactFlowProvider } from "@xyflow/react";
+import type { ArchitectureDocument } from "@infraflow/schema";
 import { useCallback, useEffect, useState } from "react";
 import { InfraCanvas } from "@/components/canvas/infra-canvas";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useAutosave } from "@/hooks/use-autosave";
+import type { SessionUser } from "@/lib/api";
 import { useWorkspaceStore } from "@/store/workspace-store";
 import { CommandPalette } from "./command-palette";
 import { ComponentLibrary } from "./component-library";
@@ -32,11 +35,12 @@ function isEditableTarget(target: EventTarget | null): boolean {
   return target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
 }
 
-function WorkspaceShellInner() {
+function WorkspaceShellInner({ user }: { user: SessionUser }) {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [exportFile, setExportFile] = useState<string | null>(null);
 
   useSimulationRunner();
+  useAutosave();
 
   const undo = useWorkspaceStore((state) => state.undo);
   const redo = useWorkspaceStore((state) => state.redo);
@@ -82,7 +86,7 @@ function WorkspaceShellInner() {
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
-      <TopBar onOpenExport={openFile} onOpenPalette={() => setPaletteOpen(true)} />
+      <TopBar user={user} onOpenExport={openFile} onOpenPalette={() => setPaletteOpen(true)} />
 
       <div className="flex min-h-0 flex-1">
         <ComponentLibrary />
@@ -101,11 +105,26 @@ function WorkspaceShellInner() {
 }
 
 /** PRD §8 — estrutura do workspace. */
-export function WorkspaceShell() {
+export function WorkspaceShell({
+  architectureId,
+  document,
+  user,
+}: {
+  architectureId: string;
+  document: ArchitectureDocument;
+  user: SessionUser;
+}) {
+  const hydrate = useWorkspaceStore((state) => state.hydrate);
+  const loadedId = useWorkspaceStore((state) => state.architectureId);
+
+  // Carrega antes da primeira pintura, para o canvas nunca mostrar a demo
+  // local no lugar do que está gravado.
+  if (loadedId !== architectureId) hydrate(architectureId, document);
+
   return (
     <ReactFlowProvider>
       <TooltipProvider delayDuration={300}>
-        <WorkspaceShellInner />
+        <WorkspaceShellInner user={user} />
       </TooltipProvider>
     </ReactFlowProvider>
   );
