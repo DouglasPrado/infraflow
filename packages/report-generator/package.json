@@ -1,5 +1,5 @@
 {
-  "name": "@infraflow/analyzer",
+  "name": "@infraflow/report-generator",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -18,8 +18,10 @@
     "lint": "eslint --config ../../eslint.config.mjs src"
   },
   "dependencies": {
+    "@infraflow/analyzer": "workspace:*",
     "@infraflow/registry": "workspace:*",
-    "@infraflow/schema": "workspace:*"
+    "@infraflow/schema": "workspace:*",
+    "@infraflow/validator": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22",

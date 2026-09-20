@@ -1,4 +1,10 @@
 import { ArchitectureDocumentSchema, toArchitectureJson, validateIntegrity } from "@infraflow/schema";
+import {
+  generateReport,
+  isReportName,
+  mediaTypeOf,
+  REPORT_FILES,
+} from "@infraflow/report-generator";
 import { summarize, validateArchitecture } from "@infraflow/validator";
 import type { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
@@ -16,6 +22,11 @@ import { db } from "../db.ts";
  */
 
 const idParams = z.object({ id: z.uuid() });
+
+/** O nome só pode ser um dos artefatos conhecidos — nunca um caminho. */
+const reportParams = idParams.extend({
+  file: z.string().refine(isReportName, "artefato desconhecido"),
+});
 
 const saveBody = z.object({ document: ArchitectureDocumentSchema });
 const snapshotBody = z.object({ label: z.string().min(1).max(200).optional() });
@@ -225,6 +236,53 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
 
     const issues = validateArchitecture(parsed.data);
     return { version: latest.number, summary: summarize(issues), issues };
+  });
+
+  /** PRD §73 — o que dá para exportar da versão corrente. */
+  app.get("/architectures/:id/reports", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+
+    const params = idParams.safeParse(request.params);
+    if (!params.success) return reply.status(400).send(invalid(params.error.issues));
+
+    const architecture = await ownedArchitecture(params.data.id, user.id);
+    const latest = architecture?.versions[0];
+    if (!latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
+
+    return { version: latest.number, files: REPORT_FILES };
+  });
+
+  /**
+   * PRD §73 — gera o artefato a partir do documento **gravado**.
+   *
+   * Sempre como anexo: o §30 chama isto de Export, e o que sai daqui é o que o
+   * agente do §32 vai ler.
+   */
+  app.get("/architectures/:id/reports/:file", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+
+    const params = reportParams.safeParse(request.params);
+    if (!params.success) return reply.status(400).send(invalid(params.error.issues));
+
+    const architecture = await ownedArchitecture(params.data.id, user.id);
+    const latest = architecture?.versions[0];
+    if (!latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
+
+    const parsed = ArchitectureDocumentSchema.safeParse(latest.graph);
+    if (!parsed.success) return reply.status(500).send(invalid(parsed.error.issues));
+
+    const report = generateReport(params.data.file, {
+      document: parsed.data,
+      version: latest.number,
+    });
+    if (!report) return reply.status(404).send({ error: "relatorio_nao_encontrado" });
+
+    return reply
+      .header("content-type", mediaTypeOf(report.language))
+      .header("content-disposition", `attachment; filename="${report.name}"`)
+      .send(report.content);
   });
 
   /** Projeção de automação (PRD §33, §34). */

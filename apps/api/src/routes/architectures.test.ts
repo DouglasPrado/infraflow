@@ -87,6 +87,8 @@ describe("acesso", () => {
       ["POST", `/architectures/${architectureId}/versions`],
       ["GET", `/architectures/${architectureId}/architecture.json`],
       ["GET", `/architectures/${architectureId}/validation`],
+      ["GET", `/architectures/${architectureId}/reports`],
+      ["GET", `/architectures/${architectureId}/reports/GOAL.md`],
     ] as const) {
       const response = await app.inject({ method, url, payload: {} });
       assert.equal(response.statusCode, 401, `${method} ${url}`);
@@ -244,6 +246,57 @@ describe("validação semântica (PRD §72)", () => {
     const response = await app.inject({
       method: "GET",
       url: `/architectures/${architectureId}/validation`,
+      cookies: as(sessaoIntruso),
+    });
+    assert.equal(response.statusCode, 404);
+  });
+});
+
+describe("relatórios (PRD §73)", () => {
+  it("lista os artefatos da versão corrente", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}/reports`,
+      cookies: as(sessaoDono),
+    });
+
+    assert.equal(response.statusCode, 200);
+    assert.deepEqual(
+      response.json<{ files: { name: string }[] }>().files.map((file) => file.name),
+      ["ARCHITECTURE.md", "CAPACITY.md", "LOAD-TEST.md", "GOAL.md", "architecture.json"],
+    );
+  });
+
+  it("entrega o artefato como anexo, gerado do documento gravado", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}/reports/ARCHITECTURE.md`,
+      cookies: as(sessaoDono),
+    });
+
+    assert.equal(response.statusCode, 200);
+    assert.match(response.headers["content-type"] as string, /text\/markdown/);
+    assert.equal(
+      response.headers["content-disposition"],
+      'attachment; filename="ARCHITECTURE.md"',
+    );
+    // O nome do recurso vem do documento persistido, não de texto fixo.
+    assert.match(response.body, /`public-alb`/);
+  });
+
+  it("recusa nome que não é artefato conhecido", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}/reports/..%2F..%2Fetc%2Fpasswd`,
+      cookies: as(sessaoDono),
+    });
+    assert.equal(response.statusCode, 400);
+  });
+
+  it("não gera relatório de arquitetura alheia", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: `/architectures/${architectureId}/reports/GOAL.md`,
       cookies: as(sessaoIntruso),
     });
     assert.equal(response.statusCode, 404);

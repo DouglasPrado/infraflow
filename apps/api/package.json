@@ -19,6 +19,7 @@
     "@fastify/cookie": "^11.1.2",
     "@fastify/cors": "^11.1.0",
     "@fastify/rate-limit": "^11.2.0",
+    "@infraflow/report-generator": "workspace:*",
     "@infraflow/schema": "workspace:*",
     "@infraflow/validator": "workspace:*",
     "@prisma/adapter-pg": "7.10.0",

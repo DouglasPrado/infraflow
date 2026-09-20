@@ -106,6 +106,17 @@ export const api = {
       body: JSON.stringify({ document }),
     }),
 
+  /** PRD §73 — artefato gerado da versão gravada, em texto. */
+  report: async (id: string, file: string): Promise<string> => {
+    const response = await fetch(`${API_BASE}/architectures/${id}/reports/${file}`, {
+      credentials: "same-origin",
+    });
+    if (!response.ok) {
+      throw new ApiError(response.status, "relatorio_indisponivel", "Não foi possível gerar o artefato.");
+    }
+    return response.text();
+  },
+
   snapshot: (id: string, label?: string) =>
     request<{ version: number; label: string | null }>(`/architectures/${id}/versions`, {
       method: "POST",

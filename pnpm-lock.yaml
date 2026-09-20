@@ -35,6 +35,9 @@ importers:
       '@fastify/rate-limit':
         specifier: ^11.2.0
         version: 11.2.0
+      '@infraflow/report-generator':
+        specifier: workspace:*
+        version: link:../../packages/report-generator
       '@infraflow/schema':
         specifier: workspace:*
         version: link:../../packages/infra-schema
@@ -81,6 +84,9 @@ importers:
       '@infraflow/registry':
         specifier: workspace:*
         version: link:../../packages/infra-registry
+      '@infraflow/report-generator':
+        specifier: workspace:*
+        version: link:../../packages/report-generator
       '@infraflow/schema':
         specifier: workspace:*
         version: link:../../packages/infra-schema
@@ -156,6 +162,13 @@ importers:
         version: 5.9.3
 
   packages/infra-analyzer:
+    dependencies:
+      '@infraflow/registry':
+        specifier: workspace:*
+        version: link:../infra-registry
+      '@infraflow/schema':
+        specifier: workspace:*
+        version: link:../infra-schema
     devDependencies:
       '@types/node':
         specifier: ^22
@@ -198,6 +211,28 @@ importers:
       '@infraflow/schema':
         specifier: workspace:*
         version: link:../infra-schema
+    devDependencies:
+      '@types/node':
+        specifier: ^22
+        version: 22.20.4
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/report-generator:
+    dependencies:
+      '@infraflow/analyzer':
+        specifier: workspace:*
+        version: link:../infra-analyzer
+      '@infraflow/registry':
+        specifier: workspace:*
+        version: link:../infra-registry
+      '@infraflow/schema':
+        specifier: workspace:*
+        version: link:../infra-schema
+      '@infraflow/validator':
+        specifier: workspace:*
+        version: link:../infra-validator
     devDependencies:
       '@types/node':
         specifier: ^22

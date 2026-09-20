@@ -1,13 +1,12 @@
 "use client";
 
-import { FileCode, FileJson, FileText } from "lucide-react";
-import { EXPORT_FILES } from "@/lib/reports";
+import { FileJson, FileText } from "lucide-react";
+import { REPORT_FILES } from "@infraflow/report-generator";
 import { FieldGroup } from "./property-field";
 
 const FILE_ICON = {
   markdown: FileText,
   json: FileJson,
-  hcl: FileCode,
 } as const;
 
 /**
@@ -19,7 +18,7 @@ export function CommandsPanel({ onOpenFile }: { onOpenFile: (file: string) => vo
     <div className="space-y-5 p-3">
       <FieldGroup title="Exportação">
         <div className="space-y-1">
-          {EXPORT_FILES.map((file) => {
+          {REPORT_FILES.map((file) => {
             const Icon = FILE_ICON[file.language];
             return (
               <button
@@ -40,8 +39,9 @@ export function CommandsPanel({ onOpenFile }: { onOpenFile: (file: string) => vo
       </FieldGroup>
 
       <p className="text-[11px] leading-relaxed text-muted-foreground">
-        No protótipo os artefatos são gerados a partir do canvas, mas não substituem o compiler
-        determinístico — ele entra a partir do Milestone 5.
+        Os artefatos são gerados pela API a partir da versão gravada. O
+        <code className="mx-1 font-mono">architecture.json</code>
+        tem prioridade sobre os documentos (PRD §33).
       </p>
     </div>
   );

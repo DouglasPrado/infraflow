@@ -2,10 +2,11 @@
 
 Plataforma visual para planejamento, validação e execução de infraestrutura.
 
-**Estágio:** Milestone 3 — Architecture Validator (PRD §72), concluído.
+**Estágio:** Milestone 4 — Report Generator (PRD §73), concluído.
 O protótipo foi aprovado (§68), o modelo de domínio é real (§70), a API persiste
-em PostgreSQL, a web salva sozinha e a arquitetura é validada semanticamente.
-Ainda **não** existem OpenTofu, k6, integração com AWS nem LLM.
+em PostgreSQL, a web salva sozinha, a arquitetura é validada semanticamente e os
+artefatos são gerados e baixados de verdade. Ainda **não** existem OpenTofu, k6,
+integração com AWS nem LLM.
 
 ## Documentos
 
@@ -25,6 +26,7 @@ packages/
   infra-registry  Catálogo e características de carga, livre de UI (§10, §42)
   infra-validator Validação semântica da arquitetura (§72)
   infra-analyzer  Motor de capacidade e gargalo (§37, §46)
+  report-generator Artefatos derivados do documento (§32, §33, §73)
 ```
 
 `infra-registry` não importa React: a API e os workers precisam dele para
@@ -70,6 +72,8 @@ Os testes da API são de integração e **exigem o Postgres de pé**.
 | `PUT /architectures/:id` | Autosave — grava por cima, não cria versão |
 | `POST /architectures/:id/versions` | Snapshot explícito (§38) |
 | `GET /architectures/:id/validation` | Validação semântica (§72) |
+| `GET /architectures/:id/reports` | Artefatos disponíveis (§73) |
+| `GET /architectures/:id/reports/:file` | Download do artefato (§73) |
 | `GET /architectures/:id/architecture.json` | Projeção de automação (§33) |
 
 Todo documento é validado contra `@infraflow/schema` na entrada. Um documento
@@ -109,6 +113,26 @@ A validação **não bloqueia o autosave**: o canvas fica incoerente o tempo tod
 enquanto se desenha. O mesmo pacote roda no cliente (feedback ao vivo no
 Analysis Panel e na status bar) e na API (`GET /architectures/:id/validation`),
 então as duas leituras nunca divergem.
+
+## Artefatos gerados
+
+`@infraflow/report-generator` produz ARCHITECTURE.md, CAPACITY.md, LOAD-TEST.md,
+GOAL.md e architecture.json (§73). Tudo é **derivado do documento**: trocar o
+banco muda o ARCHITECTURE.md, mexer nas réplicas muda o CAPACITY.md. Não há
+texto fixo descrevendo a arquitetura.
+
+A geração é determinística — mesma entrada, mesmo byte, sem data de geração no
+corpo — porque o §4.3 pede isso e porque diff de documento gerado não pode mudar
+à toa.
+
+O preview do Export Panel e o botão de download consomem **a mesma rota**: o que
+se lê na tela é byte a byte o que se baixa e o que um agente leria (§32).
+Gerar a prévia no cliente e o arquivo no servidor seriam duas fontes de verdade
+para o mesmo arquivo.
+
+`CAPACITY.md` separa `Estimated` de `Observed` e só escreve a segunda seção
+quando existe execução real. Enquanto não houver k6 (§77), ela diz exatamente
+isso.
 
 ## Como a capacidade é calculada
 
