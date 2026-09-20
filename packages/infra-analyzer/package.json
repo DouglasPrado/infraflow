@@ -22,6 +22,7 @@
     "@infraflow/schema": "workspace:*"
   },
   "devDependencies": {
+    "@infraflow/validator": "workspace:*",
     "@types/node": "^22",
     "typescript": "^5.9.3"
   }

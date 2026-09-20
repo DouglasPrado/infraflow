@@ -30,8 +30,22 @@ const observation: LoadTestObservation = {
   droppedIterations: 0,
   metrics: [],
   stages: [
-    { targetRps: 1000, rps: 998, p95Ms: 210, errorRatePct: 0 },
-    { targetRps: 1500, rps: 1375, p95Ms: 412, errorRatePct: 0.4 },
+    {
+      targetRps: 1000,
+      rps: 998,
+      p95Ms: 210,
+      errorRatePct: 0,
+      startedAt: "2026-09-20T10:00:00.000Z",
+      endedAt: "2026-09-20T10:02:30.000Z",
+    },
+    {
+      targetRps: 1500,
+      rps: 1375,
+      p95Ms: 412,
+      errorRatePct: 0.4,
+      startedAt: "2026-09-20T10:02:30.000Z",
+      endedAt: "2026-09-20T10:05:00.000Z",
+    },
   ],
 };
 
@@ -117,6 +131,63 @@ describe("CAPACITY.md", () => {
     assert.match(content, /Sustained throughput: 1,375 req\/s/);
     assert.match(content, /SLO: cumprido/);
     assert.doesNotMatch(content, /Nenhuma execução real registrada/);
+  });
+
+  it("escreve o gargalo que a medição aponta (§79)", () => {
+    const stage = (targetRps: number, rps: number, p95Ms: number, errorRatePct: number, index: number) => ({
+      targetRps,
+      rps,
+      p95Ms,
+      errorRatePct,
+      startedAt: new Date(Date.parse("2026-09-20T10:00:00.000Z") + index * 10_000).toISOString(),
+      endedAt: new Date(Date.parse("2026-09-20T10:00:00.000Z") + (index + 1) * 10_000).toISOString(),
+    });
+
+    const sample = (nodeId: string, value: number, index: number) => ({
+      nodeId,
+      metric: "cpu",
+      unit: "%",
+      value,
+      at: new Date(Date.parse("2026-09-20T10:00:05.000Z") + index * 10_000).toISOString(),
+    });
+
+    const content = contentOf("CAPACITY.md", {
+      ...reference,
+      observed: {
+        run: {
+          ...observation,
+          meetsSlo: false,
+          stages: [
+            stage(100, 100, 60, 0, 0),
+            stage(300, 300, 180, 0, 1),
+            stage(600, 590, 980, 6, 2),
+          ],
+          metrics: [
+            sample("rds", 30, 0),
+            sample("rds", 64, 1),
+            sample("rds", 96, 2),
+            sample("ecs", 20, 0),
+            sample("ecs", 28, 1),
+            sample("ecs", 35, 2),
+          ],
+        },
+      },
+    });
+
+    assert.match(content, /### Bottleneck \(observed\)/);
+    assert.match(content, /RDS PostgreSQL `orders-db` \| `cpu` \| 96\.0%/);
+    assert.doesNotMatch(content, /não chegou ao limite/);
+  });
+
+  it("diz quando a medição não permite concluir o gargalo", () => {
+    const content = contentOf("CAPACITY.md", {
+      ...reference,
+      observed: { run: observation },
+    });
+
+    // A execução de referência cumpriu o SLO: não há gargalo a apontar.
+    assert.match(content, /### Bottleneck \(observed\)/);
+    assert.match(content, /não chegou ao limite/);
   });
 
   it("resume a série medida em pico e média por recurso", () => {

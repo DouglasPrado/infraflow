@@ -1,3 +1,4 @@
+import type { ObservedAnalysis } from "@infraflow/analyzer";
 import type {
   LabApplyResult,
   LabContainer,
@@ -104,6 +105,8 @@ export interface RunSummary {
 export interface RunDetail extends RunSummary {
   version: number;
   logs: string;
+  /** PRD §79 — presente só em teste de carga concluído. */
+  analysis?: ObservedAnalysis;
 }
 
 export type LabStatus = "CREATING" | "READY" | "DESTROYING" | "DESTROYED" | "FAILED";

@@ -2,10 +2,10 @@
 
 Plataforma visual para planejamento, validação e execução de infraestrutura.
 
-**Estágio:** Milestone 9 — Observability (PRD §78), concluído.
-O laboratório coleta métricas reais por recurso — `docker stats` →
-OpenTelemetry → Prometheus — e elas voltam para o grafo ligadas ao node que as
-produziu. Ainda **não** há análise de gargalo sobre medição (§79) nem LLM.
+**Estágio:** Milestone 10 — Bottleneck Analyzer (PRD §79), concluído.
+O gargalo passa a sair de medição: a carga do k6 é correlacionada com o consumo
+de cada recurso, e quando a evidência não sustenta uma conclusão o produto diz
+isso em vez de apontar um culpado. Falta o AI Assistant (§81).
 
 ## Documentos
 
@@ -299,6 +299,35 @@ recurso ocioso: nada é preenchido por estimativa.
 O laboratório publica duas portas em `127.0.0.1`: a entrada da arquitetura e o
 Prometheus. A segunda é infraestrutura da plataforma, consultada só pelo worker;
 nenhum recurso da arquitetura sob teste ganha porta além da entrada.
+
+## Gargalo observado (§37, §79)
+
+Distinto do gargalo **estimado**: aquele deduz quem satura primeiro a partir
+das capacidades declaradas no registry; este correlaciona o que o k6 ofereceu
+(§77) com o que cada recurso gastou (§78).
+
+O critério tem duas partes, e as duas precisam ser verdadeiras: o recurso
+consumiu **mais** que os outros e consumiu **acompanhando a carga**. O produto
+das duas derruba tanto o recurso caro que ficou constante quanto o que
+acompanhou a carga gastando pouco. Só entram recursos alcançáveis a partir do
+Load Generator — o container de observabilidade também esquenta durante o
+teste, e não é candidato a nada.
+
+Com três degraus ou mais isso é correlação de Pearson. Com dois, correlação não
+existe — dois pontos sempre se ajustam a uma reta —, então a leitura passa a ser
+crescimento relativo e a confiança fica limitada.
+
+**Quando não dá para concluir, não conclui.** Cada caso tem a sua frase:
+
+| Situação | O que o produto diz |
+| --- | --- |
+| O SLO nunca foi violado | Não houve gargalo: o teste não chegou ao limite |
+| O gerador descartou iterações | O limite é o da máquina que gera, não o da arquitetura |
+| Não houve coleta de métricas | Não há como atribuir o limite a um recurso |
+| Nenhum recurso acompanhou a carga | O limite não está no consumo dos recursos medidos |
+
+A conclusão é calculada **na leitura**, não gravada junto com a medição:
+congelá-la prenderia a análise à versão do algoritmo do dia da execução.
 
 ## Como a capacidade é calculada
 

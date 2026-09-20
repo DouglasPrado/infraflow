@@ -1,4 +1,4 @@
-import { estimate, runCapacityTestFor, sloOf } from "@infraflow/analyzer";
+import { analyzeObserved, estimate, runCapacityTestFor, sloOf } from "@infraflow/analyzer";
 import {
   cacheHitRatioFor,
   capacityFor,
@@ -164,7 +164,31 @@ function observedMd({ document, observed }: Required<Pick<ReportContext, "docume
     "Nenhuma métrica coletada",
   );
 
+  // PRD §79 — o gargalo que a medição aponta, distinto do que o modelo estima.
+  const analysis = analyzeObserved(document, run);
+  const bottleneck = analysis.inconclusive
+    ? `_${analysis.inconclusive}_`
+    : table(
+        ["Resource", "Metric", "Value", "Confidence", "At"],
+        analysis.candidates.map((candidate) => {
+          const node = byId.get(candidate.nodeId);
+          const title =
+            node && isResourceNode(node)
+              ? `${getCatalogItem(node.type)?.title ?? node.type} \`${node.name}\``
+              : candidate.nodeId;
+          return [
+            title,
+            code(candidate.metric),
+            `${decimal(candidate.value, 1)}${candidate.unit}`,
+            decimal(candidate.confidence, 2),
+            candidate.timestamp,
+          ];
+        }),
+      );
+
   return `${header}
+- Maximum healthy throughput: ${integer(analysis.maxHealthyRps)} req/s
+- Breaking point: ${analysis.breakingStage ? `${integer(analysis.breakingStage.targetRps)} req/s` : "não alcançado"}
 
 ### Stages
 
@@ -173,5 +197,11 @@ ${stages}
 ### Resource metrics
 
 ${resourceMetrics}
+
+### Bottleneck (observed)
+
+${bottleneck}
+
+${analysis.candidates[0] ? `> ${analysis.candidates[0].reason}` : ""}
 `;
 }

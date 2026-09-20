@@ -45,15 +45,24 @@ export function parseSummary(raw: unknown, options: ParseOptions): LoadTestObser
    * degrau — então a vazão do degrau sai da contagem dividida pela duração
    * dele. Usar o `rate` do k6 aqui subestimaria todos os degraus.
    */
+  let elapsed = 0;
   const stages = options.ladder.map((step) => {
     const suffix = `{stage:${step.index}}`;
     const count = zero(statistic(summary, `http_reqs${suffix}`, "count"));
+
+    // A janela do degrau sai do próprio perfil: o k6 executa os patamares em
+    // sequência, na duração configurada.
+    const startedAt = new Date(options.startedAt.getTime() + elapsed * 1000);
+    elapsed += step.durationSeconds;
+    const endedAt = new Date(options.startedAt.getTime() + elapsed * 1000);
 
     return {
       targetRps: step.targetRps,
       rps: step.durationSeconds > 0 ? count / step.durationSeconds : 0,
       p95Ms: zero(statistic(summary, `http_req_duration${suffix}`, "p(95)")),
       errorRatePct: zero(statistic(summary, `http_req_failed${suffix}`, "rate")) * 100,
+      startedAt: startedAt.toISOString(),
+      endedAt: endedAt.toISOString(),
     };
   });
 

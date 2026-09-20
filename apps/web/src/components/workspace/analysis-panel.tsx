@@ -10,6 +10,7 @@ import { analyze, recommendationsFor } from "@/lib/simulation";
 import { summarize, validateCanvas, type ValidationIssue } from "@/lib/validation";
 import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/store/workspace-store";
+import { ObservedPanel } from "./observed-panel";
 import { Eyebrow, FieldGroup, Provenance } from "./property-field";
 
 function Stat({ label, value, tone }: { label: string; value: string; tone?: string }) {
@@ -95,6 +96,10 @@ export function AnalysisPanel() {
 
   return (
     <div className="space-y-5 p-3">
+      {/* PRD §79 — medição lidera sobre simulação: quando existe execução real,
+          é ela que responde onde a arquitetura cedeu. */}
+      <ObservedPanel />
+
       {/* O veredito lidera assim que existe. Antes disso, a estimativa é tudo que há. */}
       {observed && (
         <>

@@ -35,6 +35,9 @@ importers:
       '@fastify/rate-limit':
         specifier: ^11.2.0
         version: 11.2.0
+      '@infraflow/analyzer':
+        specifier: workspace:*
+        version: link:../../packages/infra-analyzer
       '@infraflow/compiler':
         specifier: workspace:*
         version: link:../../packages/infra-compiler
@@ -226,6 +229,9 @@ importers:
         specifier: workspace:*
         version: link:../infra-schema
     devDependencies:
+      '@infraflow/validator':
+        specifier: workspace:*
+        version: link:../infra-validator
       '@types/node':
         specifier: ^22
         version: 22.20.4

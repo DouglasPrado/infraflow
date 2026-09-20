@@ -322,7 +322,16 @@ describe("relatórios (PRD §73)", () => {
           errorRatePct: 0,
           meetsSlo: true,
           droppedIterations: 0,
-          stages: [{ targetRps: 300, rps: 300, p95Ms: 48, errorRatePct: 0 }],
+          stages: [
+            {
+              targetRps: 300,
+              rps: 300,
+              p95Ms: 48,
+              errorRatePct: 0,
+              startedAt: "2026-09-20T10:00:00.000Z",
+              endedAt: "2026-09-20T10:00:30.000Z",
+            },
+          ],
         },
       },
     });

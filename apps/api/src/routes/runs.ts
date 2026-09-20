@@ -1,4 +1,11 @@
-import { RunParamsSchema, RunTargetSchema, slugFor } from "@infraflow/schema";
+import { analyzeObserved } from "@infraflow/analyzer";
+import {
+  ArchitectureDocumentSchema,
+  LoadTestObservationSchema,
+  RunParamsSchema,
+  RunTargetSchema,
+  slugFor,
+} from "@infraflow/schema";
 import type { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
 import { requireUser } from "../auth/guard.ts";
@@ -136,7 +143,13 @@ export const runRoutes: FastifyPluginAsync = async (app) => {
     return runs.map(serialize);
   });
 
-  /** Execução completa, com o log do processo externo. */
+  /**
+   * Execução completa, com o log do processo externo.
+   *
+   * Para um teste de carga vem junto a análise de gargalo do §79 — calculada na
+   * leitura, a partir do que foi medido. Guardar a conclusão junto com a
+   * medição congelaria a análise na versão do algoritmo do dia da execução.
+   */
   app.get("/runs/:id", async (request, reply) => {
     const user = await requireUser(request, reply);
     if (!user) return;
@@ -146,10 +159,17 @@ export const runRoutes: FastifyPluginAsync = async (app) => {
 
     const run = await db.run.findFirst({
       where: { id: params.data.id, architecture: { project: { ownerId: user.id } } },
-      include: { version: { select: { number: true } } },
+      include: { version: { select: { number: true, graph: true } } },
     });
     if (!run) return reply.status(404).send({ error: "execucao_nao_encontrada" });
 
-    return { ...serialize(run), version: run.version.number, logs: run.logs };
+    const base = { ...serialize(run), version: run.version.number, logs: run.logs };
+    if (run.kind !== "LOAD_TEST" || run.status !== "SUCCEEDED") return base;
+
+    const document = ArchitectureDocumentSchema.safeParse(run.version.graph);
+    const observation = LoadTestObservationSchema.safeParse(run.result);
+    if (!document.success || !observation.success) return base;
+
+    return { ...base, analysis: analyzeObserved(document.data, observation.data) };
   });
 };

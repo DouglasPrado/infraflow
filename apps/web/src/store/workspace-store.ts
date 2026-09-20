@@ -69,6 +69,8 @@ interface WorkspaceState extends Snapshot {
   swapAlternative: (nodeId: string) => void;
   deleteSelected: () => void;
   selectNode: (nodeId: string) => void;
+  /** PRD §36 — a medição volta para o grafo. */
+  markObserved: (nodeId: string) => void;
 
   // --- histórico (PRD §57) ---
   commit: () => void;
@@ -382,6 +384,34 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
     set({
       nodes: get().nodes.map((node) => ({ ...node, selected: node.id === nodeId })) as InfraNode[],
       inspectorTab: "properties",
+    });
+  },
+
+  /**
+   * Destaca no canvas o recurso que a **medição** apontou (PRD §36, §79).
+   *
+   * Ação explícita do usuário, não automática: o canvas também carrega o
+   * estado da simulação, e pintar sozinho faria as duas leituras brigarem sem
+   * que ninguém soubesse qual está na tela.
+   */
+  markObserved: (nodeId) => {
+    set({
+      simulationStatus: "idle",
+      runLog: [],
+      currentRps: null,
+      nodes: get().nodes.map((node) => {
+        if (node.type !== "resource") return node;
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            state: node.id === nodeId ? "bottleneck" : "default",
+            utilization: undefined,
+            rps: undefined,
+          },
+          selected: node.id === nodeId,
+        };
+      }) as InfraNode[],
     });
   },
 

@@ -20,6 +20,14 @@ export const ObservedStageSchema = z.object({
   rps: z.number().nonnegative(),
   p95Ms: z.number().nonnegative(),
   errorRatePct: z.number().min(0).max(100),
+  /**
+   * Janela do degrau.
+   *
+   * Sem ela não há como recortar as métricas do §78 no momento em que a
+   * arquitetura cedeu — e correlacionar carga com recurso (§79) seria adivinhar.
+   */
+  startedAt: z.string(),
+  endedAt: z.string(),
 });
 export type ObservedStage = z.infer<typeof ObservedStageSchema>;
 
