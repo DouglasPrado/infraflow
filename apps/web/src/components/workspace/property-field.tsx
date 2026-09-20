@@ -39,15 +39,24 @@ export function Eyebrow({ children, className }: { children: ReactNode; classNam
 }
 
 /**
- * PRD §85 — `Estimated`, `Observed` e `Suggested` nunca podem se confundir.
- * A mesma etiqueta em todo o produto.
+ * PRD §85 — `Estimated`, `Planned`, `Observed` e `Suggested` nunca podem se
+ * confundir. A mesma etiqueta em todo o produto.
+ *
+ * `Planned` é o que o OpenTofu declarou que vai fazer (§75): não é estimativa
+ * de modelo nem medição de execução — é a intenção conferida contra o provider.
  */
-export function Provenance({ kind }: { kind: "Estimated" | "Observed" | "Suggested" }) {
+export function Provenance({
+  kind,
+}: {
+  kind: "Estimated" | "Planned" | "Observed" | "Suggested";
+}) {
   return (
     <span
       className={cn(
         "inline-flex items-center rounded-sm px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-eyebrow",
-        kind === "Observed" ? "bg-brand/10 text-brand" : "bg-secondary text-muted-foreground",
+        kind === "Observed" || kind === "Planned"
+          ? "bg-brand/10 text-brand"
+          : "bg-secondary text-muted-foreground",
       )}
     >
       {kind}

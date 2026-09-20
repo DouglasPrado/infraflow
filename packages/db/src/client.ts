@@ -1,0 +1,19 @@
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "./generated/prisma/client.ts";
+
+/**
+ * Cliente do banco, compartilhado pela API e pelo worker.
+ *
+ * O §51 separa quem atende requisição de quem executa OpenTofu e k6, mas os
+ * dois gravam o mesmo estado: o resultado de uma execução precisa sobreviver ao
+ * processo que a rodou. Um schema só e um cliente só evitam que as duas visões
+ * do banco divirjam.
+ *
+ * No Prisma 7 a conexão passa por um driver adapter — a URL não vive mais no
+ * schema (ver `prisma.config.ts`).
+ */
+export function createDb(connectionString: string): PrismaClient {
+  return new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
+}
+
+export type Db = PrismaClient;

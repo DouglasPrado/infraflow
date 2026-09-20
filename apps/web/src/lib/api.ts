@@ -1,3 +1,5 @@
+import type { PlanSummary } from "@infraflow/schema";
+
 /**
  * Cliente da API.
  *
@@ -26,6 +28,9 @@ const MESSAGES: Record<string, string> = {
   dados_invalidos: "Confira os dados informados.",
   documento_invalido: "O canvas está num estado que a API não aceita.",
   documento_incoerente: "O canvas tem conexões inválidas e não foi salvo.",
+  execucao_em_andamento: "Já existe uma execução em andamento para esta arquitetura.",
+  fila_indisponivel: "A fila de execuções está fora do ar. Suba o Redis e o worker.",
+  execucao_nao_encontrada: "Execução não encontrada.",
   arquitetura_nao_encontrada: "Arquitetura não encontrada.",
 };
 
@@ -69,6 +74,27 @@ export interface SessionUser {
   id: string;
   email: string;
   name: string;
+}
+
+export type RunStatus = "QUEUED" | "RUNNING" | "SUCCEEDED" | "FAILED";
+
+/** Espelha o que a API devolve em `/runs` (PRD §75). */
+export interface RunSummary {
+  id: string;
+  kind: string;
+  status: RunStatus;
+  slug: string;
+  params: { target: "aws" | "docker" };
+  result: PlanSummary | null;
+  error: string | null;
+  startedAt: string | null;
+  finishedAt: string | null;
+  createdAt: string;
+}
+
+export interface RunDetail extends RunSummary {
+  version: number;
+  logs: string;
 }
 
 export const api = {
@@ -116,6 +142,17 @@ export const api = {
     }
     return response.text();
   },
+
+  /** PRD §75 — pede uma execução ao worker. A API só enfileira. */
+  createRun: (architectureId: string, target: "aws" | "docker") =>
+    request<RunSummary>(`/architectures/${architectureId}/runs`, {
+      method: "POST",
+      body: JSON.stringify({ kind: "plan", target }),
+    }),
+
+  runs: (architectureId: string) => request<RunSummary[]>(`/architectures/${architectureId}/runs`),
+
+  run: (runId: string) => request<RunDetail>(`/runs/${runId}`),
 
   snapshot: (id: string, label?: string) =>
     request<{ version: number; label: string | null }>(`/architectures/${id}/versions`, {

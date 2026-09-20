@@ -41,3 +41,17 @@ export function uniqueIdentifiers(entries: { id: string; name: string }[]): Map<
 export function awsName(suffix: string): string {
   return `\${var.project}-${suffix.replaceAll("_", "-")}`;
 }
+
+/** Prefixo dos recursos na nuvem, derivado do nome da arquitetura. */
+export function projectSlug(name: string): string {
+  const slug = name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 24)
+    .replace(/-+$/, "");
+
+  return slug || "infraflow";
+}

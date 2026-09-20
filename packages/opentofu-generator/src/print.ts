@@ -50,6 +50,17 @@ function renderValue(value: TofuValue): string[] {
       // trata: fora de qualquer grupo.
       return value.source.split("\n");
 
+    case "heredoc":
+      return [
+        `<<-${value.tag}`,
+        ...value.content
+          .replaceAll("${", () => "$${")
+          .replaceAll("%{", () => "%%{")
+          .trimEnd()
+          .split("\n"),
+        value.tag,
+      ];
+
     case "list": {
       if (value.items.length === 0) return ["[]"];
       const rendered = value.items.map(renderValue);
@@ -90,12 +101,14 @@ function renderValue(value: TofuValue): string[] {
 interface Entry {
   name: string;
   lines: string[];
+  heredoc?: boolean;
 }
 
 function renderAttributes(attributes: [string, TofuValue][]): string[] {
   const entries: Entry[] = attributes.map(([name, value]) => ({
     name,
     lines: renderValue(value),
+    ...(value.kind === "heredoc" ? { heredoc: true } : {}),
   }));
 
   const out: string[] = [];
@@ -113,6 +126,15 @@ function renderAttributes(attributes: [string, TofuValue][]): string[] {
   for (const entry of entries) {
     if (entry.lines.length === 1) {
       group.push(entry);
+      continue;
+    }
+
+    // Heredoc é exceção: o `<<-TAG` é um token só, então o fmt o mantém no
+    // grupo de alinhamento e joga apenas o corpo para fora.
+    if (entry.heredoc) {
+      group.push({ name: entry.name, lines: [entry.lines[0]!] });
+      flush();
+      out.push(...entry.lines.slice(1));
       continue;
     }
     // Atributo de várias linhas: fecha o grupo e sai do alinhamento.

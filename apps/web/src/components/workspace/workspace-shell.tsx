@@ -11,6 +11,7 @@ import { useWorkspaceStore } from "@/store/workspace-store";
 import { CommandPalette } from "./command-palette";
 import { ComponentLibrary } from "./component-library";
 import { ExportSheet } from "./export-sheet";
+import { RunSheet } from "./run-sheet";
 import { Inspector } from "./inspector";
 import { StatusBar } from "./status-bar";
 import { TopBar } from "./top-bar";
@@ -38,6 +39,7 @@ function isEditableTarget(target: EventTarget | null): boolean {
 function WorkspaceShellInner({ user }: { user: SessionUser }) {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [exportFile, setExportFile] = useState<string | null>(null);
+  const [openRun, setOpenRun] = useState<string | null>(null);
 
   useSimulationRunner();
   useAutosave();
@@ -93,13 +95,14 @@ function WorkspaceShellInner({ user }: { user: SessionUser }) {
         <main className="min-w-0 flex-1">
           <InfraCanvas />
         </main>
-        <Inspector onOpenFile={openFile} />
+        <Inspector onOpenFile={openFile} onOpenRun={setOpenRun} />
       </div>
 
       <StatusBar />
 
       <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} onOpenFile={openFile} />
       <ExportSheet file={exportFile} onOpenChange={(open) => !open && setExportFile(null)} />
+      <RunSheet runId={openRun} onOpenChange={(open) => !open && setOpenRun(null)} />
     </div>
   );
 }

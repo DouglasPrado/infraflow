@@ -16,12 +16,34 @@ export interface CompileWarning {
   hint?: string;
 }
 
+/**
+ * O que o laboratório precisa saber depois do apply (PRD §76, §78).
+ *
+ * O nome do container é a ponte entre a métrica observada e o node do canvas:
+ * sem ele, a coleta do §78 devolveria número sem dono.
+ */
+export interface DockerRuntime {
+  network: string;
+  containers: {
+    nodeId: string;
+    name: string;
+    image: string;
+    role: "app" | "proxy" | "database" | "cache" | "storage" | "queue";
+    /** Porta em que o serviço escuta dentro da rede do laboratório. */
+    port: number;
+  }[];
+  /** Recurso que recebe a carga e tem porta publicada. */
+  entry?: { nodeId: string; port: number };
+}
+
 export interface CompiledStack {
   target: CompileTarget;
   files: TofuFile[];
   /** Ids dos nodes do canvas que viraram infraestrutura. */
   compiledNodeIds: string[];
   warnings: CompileWarning[];
+  /** Presente apenas no alvo docker. */
+  docker?: DockerRuntime;
 }
 
 /** Arquivo pronto para gravar no diretório de trabalho do worker. */

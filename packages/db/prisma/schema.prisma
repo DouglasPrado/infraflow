@@ -78,6 +78,7 @@ model Architecture {
 
   project  Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
   versions ArchitectureVersion[]
+  runs     Run[]
 
   @@unique([projectId, name])
   @@map("architectures")
@@ -97,8 +98,60 @@ model ArchitectureVersion {
   updatedAt DateTime @updatedAt
 
   architecture Architecture @relation(fields: [architectureId], references: [id], onDelete: Cascade)
+  runs         Run[]
 
   @@unique([architectureId, number])
   @@index([architectureId, createdAt])
   @@map("architecture_versions")
+}
+
+/// O que o worker executa fora da API (PRD §51).
+enum RunKind {
+  PLAN
+
+  @@map("run_kind")
+}
+
+enum RunStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+
+  @@map("run_status")
+}
+
+/// Uma execução de processo externo (PRD §51, §53).
+///
+/// Guarda o que o processo produziu, não o que se esperava dele: `result` é o
+/// resumo estruturado, `logs` é a saída crua e `error` é o motivo da falha. Sem
+/// isso o workspace não teria o que mostrar quando o `plan` não passa — e não
+/// passar é informação, não ausência de resultado.
+model Run {
+  id             String    @id @default(uuid()) @db.Uuid
+  architectureId String    @db.Uuid
+  versionId      String    @db.Uuid
+  kind           RunKind
+  status         RunStatus @default(QUEUED)
+  /// Identificador legível e único da execução (PRD §53).
+  slug           String    @unique
+  /// Entrada da execução: alvo da compilação, por exemplo.
+  params         Json      @default("{}")
+  /// Resumo estruturado do que aconteceu.
+  result         Json?
+  /// Saída combinada do processo externo, truncada.
+  logs           String    @default("")
+  error          String?
+  startedAt      DateTime?
+  finishedAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  architecture Architecture        @relation(fields: [architectureId], references: [id], onDelete: Cascade)
+  version      ArchitectureVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+  @@index([architectureId, createdAt])
+  @@index([status])
+  @@map("runs")
 }

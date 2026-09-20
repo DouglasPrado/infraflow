@@ -12,4 +12,6 @@ export const env = {
   host: process.env.HOST ?? "127.0.0.1",
   /** Origem da web, para o CORS do autosave. */
   webOrigin: process.env.WEB_ORIGIN ?? "http://localhost:3000",
+  /** Fila que leva as execuções ao worker (PRD §50, §51). */
+  redisUrl: process.env.REDIS_URL ?? "redis://localhost:6381",
 };

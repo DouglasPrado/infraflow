@@ -1,6 +1,6 @@
-# Postgres de desenvolvimento (PRD §49).
-# Ambientes de teste de infraestrutura são isolados e efêmeros (§52, §53) — este
-# container é só o banco da aplicação.
+# Dependências de desenvolvimento (PRD §49, §50).
+# Ambientes de teste de infraestrutura são isolados e efêmeros (§52, §53) — estes
+# containers são só o banco e a fila da aplicação.
 services:
   postgres:
     image: postgres:17-alpine
@@ -20,5 +20,22 @@ services:
       timeout: 3s
       retries: 10
 
+  # PRD §50 — fila entre a API e o worker.
+  redis:
+    image: redis:8-alpine
+    container_name: infraflow-redis
+    restart: unless-stopped
+    ports:
+      - "6381:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - infraflow-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
 volumes:
   infraflow-postgres:
+  infraflow-redis:

@@ -1,5 +1,5 @@
 {
-  "name": "@infraflow/api",
+  "name": "@infraflow/worker",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,19 +12,13 @@
     "lint": "eslint --config ../../eslint.config.mjs src"
   },
   "dependencies": {
-    "@fastify/cookie": "^11.1.2",
-    "@fastify/cors": "^11.1.0",
-    "@fastify/rate-limit": "^11.2.0",
     "@infraflow/compiler": "workspace:*",
     "@infraflow/db": "workspace:*",
-    "@infraflow/report-generator": "workspace:*",
     "@infraflow/schema": "workspace:*",
-    "@infraflow/validator": "workspace:*",
-    "bullmq": "^5.65.0",
-    "fastify": "^5.12.5",
-    "zod": "^4.6.5"
+    "bullmq": "^5.65.0"
   },
   "devDependencies": {
+    "@infraflow/validator": "workspace:*",
     "@types/node": "^22",
     "dotenv": "^17.2.3",
     "typescript": "^5.9.3"

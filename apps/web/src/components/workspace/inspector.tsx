@@ -8,7 +8,13 @@ import { CommandsPanel } from "./commands-panel";
 import { PropertiesPanel } from "./properties-panel";
 
 /** PRD §23 — sidebar direita alterna entre Properties, Analysis e Commands. */
-export function Inspector({ onOpenFile }: { onOpenFile: (file: string) => void }) {
+export function Inspector({
+  onOpenFile,
+  onOpenRun,
+}: {
+  onOpenFile: (file: string) => void;
+  onOpenRun: (runId: string) => void;
+}) {
   const tab = useWorkspaceStore((state) => state.inspectorTab);
   const setTab = useWorkspaceStore((state) => state.setInspectorTab);
 
@@ -35,7 +41,7 @@ export function Inspector({ onOpenFile }: { onOpenFile: (file: string) => void }
             <AnalysisPanel />
           </TabsContent>
           <TabsContent value="commands">
-            <CommandsPanel onOpenFile={onOpenFile} />
+            <CommandsPanel onOpenFile={onOpenFile} onOpenRun={onOpenRun} />
           </TabsContent>
         </ScrollArea>
       </Tabs>

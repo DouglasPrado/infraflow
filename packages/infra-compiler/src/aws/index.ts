@@ -10,7 +10,7 @@ import {
   type TofuBlock,
   type TofuFile,
 } from "@infraflow/opentofu-generator";
-import { uniqueIdentifiers } from "../names.ts";
+import { projectSlug, uniqueIdentifiers } from "../names.ts";
 import type { CompiledStack, CompileWarning, EmittedFile } from "../types.ts";
 import { ingressFromGroup, ingressFromInternet, networkBlocks } from "./network.ts";
 import { AWS_EMITTERS, sharedVariables, type Emission } from "./resources.ts";
@@ -218,7 +218,7 @@ export function awsTfvarsExample(document: ArchitectureDocument): EmittedFile {
       "# Copie para terraform.tfvars e ajuste antes do apply.",
       "",
       `region      = "us-east-1"`,
-      `project     = "${project || "infraflow"}"`,
+      `project     = "${project}"`,
       `environment = "${document.environment}"`,
       `vpc_cidr    = "10.20.0.0/16"`,
       "",

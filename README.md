@@ -2,10 +2,10 @@
 
 Plataforma visual para planejamento, validação e execução de infraestrutura.
 
-**Estágio:** Milestone 5 — OpenTofu Compiler (PRD §74), concluído.
-O canvas compila para OpenTofu de verdade: o HCL gerado passa em `tofu fmt` e
-`tofu validate`. Ainda **não** há execução — `init`, `plan` e `apply` entram com
-o worker do Milestone 6. Também não há k6 nem LLM.
+**Estágio:** Milestone 6 — Plan (PRD §75), concluído.
+O canvas compila para OpenTofu e um worker isolado roda `tofu init` e
+`tofu plan` de verdade, com o resultado dentro do workspace. Ainda **não** há
+`apply`, k6 nem LLM.
 
 ## Documentos
 
@@ -19,9 +19,11 @@ o worker do Milestone 6. Também não há k6 nem LLM.
 ```text
 apps/
   web       Next.js — canvas, inspector, simulação (PRD §6–§30)
-  api       Fastify + Prisma — persistência (PRD §48, §49, §71)
+  api       Fastify — persistência e enfileiramento (PRD §48, §71)
+  worker    BullMQ — OpenTofu em processo isolado (PRD §51)
 packages/
-  infra-schema    Contrato do grafo e do architecture.json (PRD §33, §70)
+  db              Schema Prisma e cliente, compartilhados (PRD §49)
+  infra-schema    Contrato do grafo, do architecture.json e dos jobs (§33, §50)
   infra-registry  Catálogo e características de carga, livre de UI (§10, §42)
   infra-validator Validação semântica da arquitetura (§72)
   infra-analyzer  Motor de capacidade e gargalo (§37, §46)
@@ -38,10 +40,14 @@ identificador string e só vira componente na web.
 
 ```bash
 pnpm install
-docker compose up -d          # PostgreSQL 17 na porta 5434
-pnpm --filter @infraflow/api db:deploy
-pnpm dev                      # web em :3000, api em :3333
+docker compose up -d          # PostgreSQL 17 (:5434) e Redis 8 (:6381)
+pnpm --filter @infraflow/db db:deploy
+pnpm dev                      # web :3000 · api :3333 · worker na fila
 ```
+
+O worker precisa do **OpenTofu** no PATH para executar `plan`. Sem ele, a
+execução falha com a mensagem do sistema — e a falha aparece no workspace, que
+é o comportamento correto.
 
 A web abre em [localhost:3000](http://localhost:3000). Crie uma conta na tela de
 login — a primeira entrada gera a arquitetura demo do PRD §65 já persistida.
@@ -77,6 +83,9 @@ Os testes da API são de integração e **exigem o Postgres de pé**.
 | `GET /architectures/:id/reports/:file` | Download do artefato (§73) |
 | `GET /architectures/:id/opentofu` | Arquivos compilados e avisos (§74) |
 | `GET /architectures/:id/opentofu/:file` | Download do `.tf` (§34) |
+| `POST /architectures/:id/runs` | Enfileira um `tofu plan` (§75) |
+| `GET /architectures/:id/runs` | Execuções da arquitetura |
+| `GET /runs/:id` | Execução com o log do OpenTofu |
 | `GET /architectures/:id/architecture.json` | Projeção de automação (§33) |
 
 Todo documento é validado contra `@infraflow/schema` na entrada. Um documento
@@ -171,6 +180,38 @@ Decisões que ficam registradas como aviso, não escondidas no código:
 # valida contra o provider real da AWS (baixa ~766 MB na primeira vez)
 INFRAFLOW_TOFU_VALIDATE=1 pnpm --filter @infraflow/compiler test
 ```
+
+## Execução: o worker
+
+A API **nunca** executa OpenTofu. Ela grava a execução, põe o id na fila e
+responde `202`; quem roda é o `apps/worker`, em outro processo. O §51 é literal
+nisso — "nunca executar testes pesados diretamente no servidor da API".
+
+O job carrega só o id: job que leva o documento envelhece na fila e passa a
+executar uma arquitetura que já mudou.
+
+Cada execução recebe **seu próprio diretório**, criado do zero, sob
+`apps/worker/var/runs/<slug>` (§52, §53). O processo filho **não herda o
+ambiente do worker** — recebe uma lista explícita, senão a URL do banco chegaria
+ao provider. Há teto de tempo e a saída é truncada pela cauda, que é onde o erro
+aparece.
+
+O plano é lido de `tofu show -json`, nunca do texto: a saída humana muda entre
+versões, e regex nela erraria em silêncio.
+
+Dois alvos:
+
+| Alvo | O que planeja | Credencial |
+| --- | --- | --- |
+| `aws` | Os recursos do §74 | Precisa de credencial da AWS |
+| `docker` | Containers equivalentes, para o laboratório do §76 | Nenhuma |
+
+### Limitação conhecida (§52)
+
+A credencial de nuvem usada é a **do próprio worker** — a que estiver no
+ambiente ou em `~/.aws`. O §52 pede credencial por projeto, e isso não existe
+ainda: um worker compartilhado planejaria arquiteturas de vários projetos com a
+mesma identidade. Antes de uso multiusuário, isso precisa mudar.
 
 ## Como a capacidade é calculada
 

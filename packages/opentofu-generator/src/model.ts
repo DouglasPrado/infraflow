@@ -14,7 +14,9 @@ export type TofuValue =
   | { kind: "list"; items: TofuValue[] }
   | { kind: "object"; entries: [string, TofuValue][] }
   /** Expressão HCL crua: referência, interpolação, função. Nunca escapada. */
-  | { kind: "expression"; source: string };
+  | { kind: "expression"; source: string }
+  /** Bloco de texto literal — script, configuração, certificado. */
+  | { kind: "heredoc"; tag: string; content: string };
 
 export interface TofuBlock {
   type: string;
@@ -47,6 +49,19 @@ export const ref = (source: string): TofuValue => ({ kind: "expression", source 
  */
 export const interpolated = (template: string): TofuValue =>
   ref(`"${template.replaceAll('"', '\\"')}"`);
+
+/**
+ * Texto literal em heredoc indentado (`<<-TAG`).
+ *
+ * O `-` faz o HCL descontar a indentação comum, então o corpo pode acompanhar
+ * o recuo do bloco sem entrar no conteúdo. `${` é dobrado: dentro de heredoc
+ * ele interpolaria, e o que vai aqui é script, não expressão.
+ */
+export const heredoc = (tag: string, content: string): TofuValue => ({
+  kind: "heredoc",
+  tag,
+  content,
+});
 
 export function block(
   type: string,
