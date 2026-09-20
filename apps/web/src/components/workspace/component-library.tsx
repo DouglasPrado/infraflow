@@ -7,14 +7,17 @@ import { DND_MIME } from "@/components/canvas/infra-canvas";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CATALOG, LIBRARY_SECTIONS, LOAD_GENERATOR_TYPE } from "@infraflow/registry";
-import { resolveIcon } from "@/lib/icons";
+import { ServiceIcon } from "@/components/service-icon";
 import { cn } from "@/lib/utils";
 
 interface LibraryEntry {
   payload: string;
   name: string;
   hint: string;
-  Icon: LucideIcon;
+  /** Identificador do ícone de serviço, quando houver. */
+  icon?: string;
+  /** Fallback em Lucide, para o que não é recurso de infraestrutura. */
+  Icon?: LucideIcon;
   /** O Load Generator é o único item com acento — é a origem do teste (PRD §15). */
   accent?: boolean;
 }
@@ -50,10 +53,14 @@ function LibraryItem({ entry }: { entry: LibraryEntry }) {
         "transition-colors duration-150 hover:bg-accent active:cursor-grabbing",
       )}
     >
-      <entry.Icon
-        className={cn("size-4 shrink-0", entry.accent ? "text-brand" : "text-muted-foreground")}
-        strokeWidth={1.75}
-      />
+      {entry.icon ? (
+        <ServiceIcon icon={entry.icon} label={entry.hint} />
+      ) : entry.Icon ? (
+        <entry.Icon
+          className={cn("size-4 shrink-0", entry.accent ? "text-brand" : "text-muted-foreground")}
+          strokeWidth={1.75}
+        />
+      ) : null}
       <span className="truncate text-sm">{entry.name}</span>
     </div>
   );
@@ -76,7 +83,7 @@ export function ComponentLibrary() {
             payload: item.type,
             name: item.name,
             hint: item.title,
-            Icon: resolveIcon(item.icon).Icon,
+            icon: item.icon,
           }))
       ).filter(matches),
     }));

@@ -12,7 +12,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { CATALOG, LOAD_GENERATOR_TYPE } from "@infraflow/registry";
-import { resolveIcon } from "@/lib/icons";
+import { ServiceIcon } from "@/components/service-icon";
 import { EXPORT_FILES } from "@/lib/reports";
 import { useWorkspaceStore } from "@/store/workspace-store";
 
@@ -84,14 +84,13 @@ export function CommandPalette({
               Load Generator
             </CommandItem>
             {CATALOG.map((item) => {
-              const icon = resolveIcon(item.icon);
               return (
                 <CommandItem
                   key={item.type}
                   value={`${item.name} ${item.title} ${item.category}`}
                   onSelect={() => run(() => addResource(item.type, centerPosition()))}
                 >
-                  <icon.Icon />
+                  <ServiceIcon icon={item.icon} label={item.title} />
                   {item.name}
                   <span className="ml-auto text-[11px] text-muted-foreground">{item.title}</span>
                 </CommandItem>

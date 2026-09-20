@@ -1,10 +1,10 @@
 "use client";
 
 import { type Node, type NodeProps } from "@xyflow/react";
-import { ArrowLeftRight } from "lucide-react";
+import { ArrowLeftRight, Circle } from "lucide-react";
 import { memo } from "react";
 import { getCatalogItem } from "@infraflow/registry";
-import { resolveIcon } from "@/lib/icons";
+import { ServiceIcon } from "@/components/service-icon";
 import type { CatalogItem, ResourceNodeData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { NodeShell, STATE_DOT, STATE_LABEL } from "./node-shell";
@@ -35,7 +35,6 @@ function specs(item: CatalogItem | undefined, props: ResourceNodeData["props"]):
 
 function ResourceNodeComponent({ data, selected }: NodeProps<Node<ResourceNodeData, "resource">>) {
   const item = getCatalogItem(data.type);
-  const icon = resolveIcon(item?.icon);
   const alternative = item?.alternative ? getCatalogItem(item.alternative) : undefined;
   const detail = specs(item, data.props);
   const tested = data.utilization !== undefined;
@@ -43,7 +42,11 @@ function ResourceNodeComponent({ data, selected }: NodeProps<Node<ResourceNodeDa
   return (
     <NodeShell state={data.state} selected={selected}>
       <div className="flex items-start gap-2.5 px-3 pt-2.5">
-        <icon.Icon className="mt-px size-4 shrink-0 text-muted-foreground" strokeWidth={1.75} />
+        {item ? (
+          <ServiceIcon icon={item.icon} label={item.title} className="mt-px size-5" />
+        ) : (
+          <Circle className="mt-px size-5 shrink-0 text-muted-foreground" strokeWidth={1.75} />
+        )}
         <div className="min-w-0 flex-1">
           <div className="text-[10px] font-medium uppercase leading-none tracking-eyebrow text-muted-foreground">
             {PROVIDER_LABEL[item?.provider ?? ""] ?? "—"}

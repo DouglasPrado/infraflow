@@ -24,7 +24,7 @@ export const CATALOG: CatalogItem[] = [
     title: "EC2 Instance",
     category: "compute",
     provider: "aws",
-    icon: "server",
+    icon: "aws-ec2",
     defaults: { instanceType: "t3.medium", instances: 2, autoScaling: false },
     properties: [
       { key: "instanceType", label: "Instance type", kind: "select", options: ["t3.small", "t3.medium", "t3.large", "m6i.large", "c6i.xlarge"] },
@@ -42,7 +42,7 @@ export const CATALOG: CatalogItem[] = [
     title: "ECS Service",
     category: "compute",
     provider: "aws",
-    icon: "container",
+    icon: "aws-ecs",
     defaults: {
       cpu: "2 vCPU",
       memory: "4GB",
@@ -70,7 +70,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Lambda Function",
     category: "compute",
     provider: "aws",
-    icon: "zap",
+    icon: "aws-lambda",
     defaults: { memoryMb: 512, timeoutMs: 30000, concurrency: 100 },
     properties: [
       { key: "memoryMb", label: "Memory", kind: "number", unit: "MB", min: 128, max: 10240, step: 128 },
@@ -88,7 +88,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Docker Container",
     category: "compute",
     provider: "opensource",
-    icon: "boxes",
+    icon: "opensource-docker",
     defaults: { image: "app:latest", cpu: "1 vCPU", memory: "2GB", replicas: 1 },
     properties: [
       { key: "image", label: "Image", kind: "text", placeholder: "app:latest" },
@@ -107,7 +107,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Kubernetes Deployment",
     category: "compute",
     provider: "opensource",
-    icon: "layers",
+    icon: "opensource-kubernetes",
     defaults: { replicas: 3, cpu: "2 vCPU", memory: "4GB", hpa: true },
     properties: [
       { key: "replicas", label: "Replicas", kind: "number", min: 1, max: 100 },
@@ -128,7 +128,7 @@ export const CATALOG: CatalogItem[] = [
     title: "S3 Bucket",
     category: "storage",
     provider: "aws",
-    icon: "hard-drive",
+    icon: "aws-s3",
     defaults: { storageClass: "Standard", versioning: true, encryption: "SSE-S3" },
     properties: [
       { key: "storageClass", label: "Storage class", kind: "select", options: ["Standard", "Intelligent-Tiering", "Standard-IA", "Glacier"] },
@@ -147,7 +147,7 @@ export const CATALOG: CatalogItem[] = [
     title: "MinIO Object Storage",
     category: "storage",
     provider: "opensource",
-    icon: "package",
+    icon: "opensource-minio",
     defaults: { nodes: 4, diskGb: 500, erasureCoding: true },
     properties: [
       { key: "nodes", label: "Nodes", kind: "number", min: 1, max: 32 },
@@ -168,7 +168,7 @@ export const CATALOG: CatalogItem[] = [
     title: "RDS PostgreSQL",
     category: "database",
     provider: "aws",
-    icon: "database",
+    icon: "aws-rds",
     defaults: {
       engine: "PostgreSQL 16",
       instanceClass: "db.t3.medium",
@@ -197,7 +197,7 @@ export const CATALOG: CatalogItem[] = [
     title: "PostgreSQL",
     category: "database",
     provider: "opensource",
-    icon: "database",
+    icon: "opensource-postgresql",
     defaults: { version: "16", cpu: "2 vCPU", memory: "8GB", maxConnections: 200, replication: false },
     properties: [
       { key: "version", label: "Version", kind: "select", options: ["14", "15", "16", "17"] },
@@ -221,7 +221,7 @@ export const CATALOG: CatalogItem[] = [
     title: "MySQL",
     category: "database",
     provider: "opensource",
-    icon: "database",
+    icon: "opensource-mysql",
     defaults: { version: "8.4", cpu: "2 vCPU", memory: "8GB", maxConnections: 300 },
     properties: [
       { key: "version", label: "Version", kind: "select", options: ["8.0", "8.4"] },
@@ -242,7 +242,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Redis",
     category: "cache",
     provider: "opensource",
-    icon: "zap",
+    icon: "opensource-redis",
     defaults: { version: "7.4", memory: "2GB", evictionPolicy: "allkeys-lru", persistence: false },
     properties: [
       { key: "version", label: "Version", kind: "select", options: ["6.2", "7.2", "7.4"] },
@@ -262,7 +262,7 @@ export const CATALOG: CatalogItem[] = [
     title: "ElastiCache Redis",
     category: "cache",
     provider: "aws",
-    icon: "zap",
+    icon: "aws-elasticache",
     defaults: { nodeType: "cache.t3.micro", nodes: 1, multiAz: false },
     properties: [
       { key: "nodeType", label: "Node type", kind: "select", options: ["cache.t3.micro", "cache.t3.small", "cache.m6g.large", "cache.r6g.large"] },
@@ -283,7 +283,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Application Load Balancer",
     category: "network",
     provider: "aws",
-    icon: "scale",
+    icon: "aws-alb",
     defaults: { scheme: "internet-facing", listeners: "HTTPS:443", idleTimeoutS: 60, stickySessions: false },
     properties: [
       { key: "scheme", label: "Scheme", kind: "select", options: ["internet-facing", "internal"] },
@@ -305,7 +305,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Network Load Balancer",
     category: "network",
     provider: "aws",
-    icon: "network",
+    icon: "aws-nlb",
     defaults: { scheme: "internet-facing", listeners: "TCP:443", crossZone: true },
     properties: [
       { key: "scheme", label: "Scheme", kind: "select", options: ["internet-facing", "internal"] },
@@ -323,7 +323,7 @@ export const CATALOG: CatalogItem[] = [
     title: "CloudFront Distribution",
     category: "network",
     provider: "aws",
-    icon: "globe",
+    icon: "aws-cloudfront",
     defaults: { priceClass: "PriceClass_100", cachePolicy: "CachingOptimized", compress: true },
     properties: [
       { key: "priceClass", label: "Price class", kind: "select", options: ["PriceClass_100", "PriceClass_200", "PriceClass_All"] },
@@ -344,7 +344,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Traefik Proxy",
     category: "network",
     provider: "opensource",
-    icon: "waypoints",
+    icon: "opensource-traefik",
     defaults: { entrypoints: "web, websecure", tls: true, replicas: 2 },
     properties: [
       { key: "entrypoints", label: "Entrypoints", kind: "text", placeholder: "web, websecure" },
@@ -362,7 +362,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Nginx",
     category: "network",
     provider: "opensource",
-    icon: "route",
+    icon: "opensource-nginx",
     defaults: { workerProcesses: "auto", replicas: 2, gzip: true },
     properties: [
       { key: "workerProcesses", label: "Worker processes", kind: "select", options: ["auto", "1", "2", "4", "8"] },
@@ -382,7 +382,7 @@ export const CATALOG: CatalogItem[] = [
     title: "SQS Queue",
     category: "queue",
     provider: "aws",
-    icon: "message-square",
+    icon: "aws-sqs",
     defaults: { queueType: "Standard", visibilityTimeoutS: 30, dlq: true },
     properties: [
       { key: "queueType", label: "Queue type", kind: "select", options: ["Standard", "FIFO"] },
@@ -401,7 +401,7 @@ export const CATALOG: CatalogItem[] = [
     title: "RabbitMQ",
     category: "queue",
     provider: "opensource",
-    icon: "rows-3",
+    icon: "opensource-rabbitmq",
     defaults: { nodes: 3, durable: true, prefetch: 100 },
     properties: [
       { key: "nodes", label: "Nodes", kind: "number", min: 1, max: 12 },
@@ -420,7 +420,7 @@ export const CATALOG: CatalogItem[] = [
     title: "NATS",
     category: "queue",
     provider: "opensource",
-    icon: "radio",
+    icon: "opensource-nats",
     defaults: { cluster: 3, jetstream: true },
     properties: [
       { key: "cluster", label: "Cluster size", kind: "number", min: 1, max: 12 },
@@ -437,7 +437,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Apache Kafka",
     category: "queue",
     provider: "opensource",
-    icon: "binary",
+    icon: "opensource-kafka",
     defaults: { brokers: 3, partitions: 12, replicationFactor: 3 },
     properties: [
       { key: "brokers", label: "Brokers", kind: "number", min: 1, max: 30 },
@@ -457,7 +457,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Prometheus",
     category: "observability",
     provider: "opensource",
-    icon: "activity",
+    icon: "opensource-prometheus",
     defaults: { retentionDays: 15, scrapeIntervalS: 15, storageGb: 100 },
     properties: [
       { key: "retentionDays", label: "Retention", kind: "number", unit: "days", min: 1, max: 365 },
@@ -475,7 +475,7 @@ export const CATALOG: CatalogItem[] = [
     title: "Grafana",
     category: "observability",
     provider: "opensource",
-    icon: "chart-bar",
+    icon: "opensource-grafana",
     defaults: { version: "11", authProvider: "OAuth", dashboards: 12 },
     properties: [
       { key: "version", label: "Version", kind: "select", options: ["10", "11", "12"] },
@@ -493,7 +493,7 @@ export const CATALOG: CatalogItem[] = [
     title: "CloudWatch",
     category: "observability",
     provider: "aws",
-    icon: "gauge",
+    icon: "aws-cloudwatch",
     defaults: { retentionDays: 30, detailedMonitoring: false, alarms: 8 },
     properties: [
       { key: "retentionDays", label: "Log retention", kind: "number", unit: "days", min: 1, max: 3650 },
@@ -511,7 +511,7 @@ export const CATALOG: CatalogItem[] = [
     title: "OpenTelemetry Collector",
     category: "observability",
     provider: "opensource",
-    icon: "satellite",
+    icon: "opensource-opentelemetry",
     defaults: { exporters: "otlp, prometheus", samplingPct: 10, replicas: 2 },
     properties: [
       { key: "exporters", label: "Exporters", kind: "text", placeholder: "otlp, prometheus" },

@@ -7,3 +7,6 @@ allowBuilds:
   prisma: true
   sharp: false
   unrs-resolver: false
+
+minimumReleaseAgeExclude:
+  - simple-icons@16.32.0

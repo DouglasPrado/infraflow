@@ -1,6 +1,7 @@
 import { ArchitectureDocumentSchema, toArchitectureJson, validateIntegrity } from "@infraflow/schema";
-import type { FastifyPluginAsync } from "fastify";
+import type { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
+import { requireUser } from "../auth/guard.ts";
 import { db } from "../db.ts";
 
 /**
@@ -8,33 +9,17 @@ import { db } from "../db.ts";
  *
  * A API é fina de propósito (PRD §51): valida o documento, grava e devolve.
  * Compilação de OpenTofu e teste de carga rodam em workers isolados, nunca aqui.
+ *
+ * Toda leitura e escrita é escopada ao dono. Um id de arquitetura de outro
+ * usuário responde 404, não 403 — não vale confirmar que o recurso existe.
  */
 
-const slugParams = z.object({ slug: z.string().min(1) });
 const idParams = z.object({ id: z.uuid() });
 
-const createProjectBody = z.object({
-  name: z.string().min(1).max(200),
-  slug: z
-    .string()
-    .min(1)
-    .max(200)
-    .regex(/^[a-z0-9-]+$/, "Use apenas minúsculas, números e hífen."),
-});
+const saveBody = z.object({ document: ArchitectureDocumentSchema });
+const snapshotBody = z.object({ label: z.string().min(1).max(200).optional() });
+const workspaceBody = z.object({ document: ArchitectureDocumentSchema });
 
-const createArchitectureBody = z.object({
-  document: ArchitectureDocumentSchema,
-});
-
-const saveBody = z.object({
-  document: ArchitectureDocumentSchema,
-});
-
-const snapshotBody = z.object({
-  label: z.string().min(1).max(200).optional(),
-});
-
-/** Traduz erro do Zod numa resposta previsível para a web. */
 function invalid(issues: z.core.$ZodIssue[]) {
   return {
     error: "documento_invalido",
@@ -42,49 +27,80 @@ function invalid(issues: z.core.$ZodIssue[]) {
   };
 }
 
-export const architectureRoutes: FastifyPluginAsync = async (app) => {
-  app.get("/projects", async () => {
-    const projects = await db.project.findMany({
-      orderBy: { updatedAt: "desc" },
-      include: { _count: { select: { architectures: true } } },
-    });
-
-    return projects.map((project) => ({
-      id: project.id,
-      slug: project.slug,
-      name: project.name,
-      architectures: project._count.architectures,
-      updatedAt: project.updatedAt,
-    }));
+/** Carrega a arquitetura só se ela pertencer ao usuário. */
+async function ownedArchitecture(id: string, userId: string) {
+  return db.architecture.findFirst({
+    where: { id, project: { ownerId: userId } },
+    include: { versions: { orderBy: { number: "desc" }, take: 1 } },
   });
+}
 
-  app.post("/projects", async (request, reply) => {
-    const body = createProjectBody.safeParse(request.body);
+function slugify(value: string): string {
+  return (
+    value
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60) || "projeto"
+  );
+}
+
+export const architectureRoutes: FastifyPluginAsync = async (app) => {
+  /**
+   * Ponto de entrada da web depois do login: devolve a arquitetura de trabalho
+   * do usuário, criando projeto e arquitetura na primeira vez a partir do
+   * documento enviado (a arquitetura demo do §65).
+   */
+  app.post("/me/workspace", async (request: FastifyRequest, reply: FastifyReply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+
+    const existing = await db.architecture.findFirst({
+      where: { project: { ownerId: user.id } },
+      orderBy: { updatedAt: "desc" },
+      select: { id: true },
+    });
+    if (existing) return { architectureId: existing.id, created: false };
+
+    const body = workspaceBody.safeParse(request.body);
     if (!body.success) return reply.status(400).send(invalid(body.error.issues));
 
-    const existing = await db.project.findUnique({ where: { slug: body.data.slug } });
-    if (existing) return reply.status(409).send({ error: "slug_em_uso" });
+    const { document } = body.data;
+    const base = slugify(`${user.name}-${document.name}`);
 
-    const project = await db.project.create({ data: body.data });
-    return reply.status(201).send(project);
+    const architecture = await db.architecture.create({
+      data: {
+        name: document.name,
+        provider: document.provider,
+        environment: document.environment,
+        project: {
+          create: {
+            ownerId: user.id,
+            name: document.name,
+            slug: `${base}-${Date.now().toString(36)}`,
+          },
+        },
+        versions: { create: { number: 1, graph: document } },
+      },
+      select: { id: true },
+    });
+
+    return reply.status(201).send({ architectureId: architecture.id, created: true });
   });
 
-  app.get("/projects/:slug/architectures", async (request, reply) => {
-    const params = slugParams.safeParse(request.params);
-    if (!params.success) return reply.status(400).send(invalid(params.error.issues));
+  app.get("/me/architectures", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
 
-    const project = await db.project.findUnique({
-      where: { slug: params.data.slug },
-      include: {
-        architectures: {
-          orderBy: { updatedAt: "desc" },
-          include: { _count: { select: { versions: true } } },
-        },
-      },
+    const architectures = await db.architecture.findMany({
+      where: { project: { ownerId: user.id } },
+      orderBy: { updatedAt: "desc" },
+      include: { _count: { select: { versions: true } } },
     });
-    if (!project) return reply.status(404).send({ error: "projeto_nao_encontrado" });
 
-    return project.architectures.map((architecture) => ({
+    return architectures.map((architecture) => ({
       id: architecture.id,
       name: architecture.name,
       provider: architecture.provider,
@@ -94,50 +110,19 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
     }));
   });
 
-  app.post("/projects/:slug/architectures", async (request, reply) => {
-    const params = slugParams.safeParse(request.params);
-    if (!params.success) return reply.status(400).send(invalid(params.error.issues));
-
-    const body = createArchitectureBody.safeParse(request.body);
-    if (!body.success) return reply.status(400).send(invalid(body.error.issues));
-
-    const project = await db.project.findUnique({ where: { slug: params.data.slug } });
-    if (!project) return reply.status(404).send({ error: "projeto_nao_encontrado" });
-
-    const { document } = body.data;
-    const architecture = await db.architecture.create({
-      data: {
-        projectId: project.id,
-        name: document.name,
-        provider: document.provider,
-        environment: document.environment,
-        versions: { create: { number: 1, graph: document } },
-      },
-      include: { versions: true },
-    });
-
-    return reply.status(201).send({
-      id: architecture.id,
-      name: architecture.name,
-      version: 1,
-    });
-  });
-
   app.get("/architectures/:id", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+
     const params = idParams.safeParse(request.params);
     if (!params.success) return reply.status(400).send(invalid(params.error.issues));
 
-    const architecture = await db.architecture.findUnique({
-      where: { id: params.data.id },
-      include: { versions: { orderBy: { number: "desc" }, take: 1 } },
-    });
-
+    const architecture = await ownedArchitecture(params.data.id, user.id);
     const latest = architecture?.versions[0];
     if (!architecture || !latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
 
     return {
       id: architecture.id,
-      projectId: architecture.projectId,
       version: latest.number,
       updatedAt: latest.updatedAt,
       document: latest.graph,
@@ -150,6 +135,9 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
    * versão por tecla digitada.
    */
   app.put("/architectures/:id", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+
     const params = idParams.safeParse(request.params);
     if (!params.success) return reply.status(400).send(invalid(params.error.issues));
 
@@ -164,11 +152,7 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
       return reply.status(422).send({ error: "documento_incoerente", issues });
     }
 
-    const architecture = await db.architecture.findUnique({
-      where: { id: params.data.id },
-      include: { versions: { orderBy: { number: "desc" }, take: 1 } },
-    });
-
+    const architecture = await ownedArchitecture(params.data.id, user.id);
     const latest = architecture?.versions[0];
     if (!architecture || !latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
 
@@ -192,21 +176,22 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
 
   /** PRD §38 — congela o estado atual numa nova versão. */
   app.post("/architectures/:id/versions", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+
     const params = idParams.safeParse(request.params);
     if (!params.success) return reply.status(400).send(invalid(params.error.issues));
 
     const body = snapshotBody.safeParse(request.body ?? {});
     if (!body.success) return reply.status(400).send(invalid(body.error.issues));
 
-    const latest = await db.architectureVersion.findFirst({
-      where: { architectureId: params.data.id },
-      orderBy: { number: "desc" },
-    });
-    if (!latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
+    const architecture = await ownedArchitecture(params.data.id, user.id);
+    const latest = architecture?.versions[0];
+    if (!architecture || !latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
 
     const version = await db.architectureVersion.create({
       data: {
-        architectureId: params.data.id,
+        architectureId: architecture.id,
         number: latest.number + 1,
         graph: latest.graph ?? {},
         label: body.data.label ?? null,
@@ -218,13 +203,14 @@ export const architectureRoutes: FastifyPluginAsync = async (app) => {
 
   /** Projeção de automação (PRD §33, §34). */
   app.get("/architectures/:id/architecture.json", async (request, reply) => {
+    const user = await requireUser(request, reply);
+    if (!user) return;
+
     const params = idParams.safeParse(request.params);
     if (!params.success) return reply.status(400).send(invalid(params.error.issues));
 
-    const latest = await db.architectureVersion.findFirst({
-      where: { architectureId: params.data.id },
-      orderBy: { number: "desc" },
-    });
+    const architecture = await ownedArchitecture(params.data.id, user.id);
+    const latest = architecture?.versions[0];
     if (!latest) return reply.status(404).send({ error: "arquitetura_nao_encontrada" });
 
     const parsed = ArchitectureDocumentSchema.safeParse(latest.graph);

@@ -15,8 +15,42 @@ datasource db {
   provider = "postgresql"
 }
 
+/// Dono das arquiteturas. O protótipo simulava autenticação (PRD §7); a partir
+/// daqui ela é real, porque persistência sem dono não tem como isolar dados.
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  name         String
+  /// scrypt: `N$r$p$salt$hash`, tudo em hex. Nunca a senha em claro.
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  projects Project[]
+  sessions Session[]
+
+  @@map("users")
+}
+
+/// Sessão opaca em cookie httpOnly. Só o hash do token vai para o banco, então
+/// vazamento de dump não dá acesso a sessão viva.
+model Session {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
 model Project {
   id        String   @id @default(uuid()) @db.Uuid
+  ownerId   String   @db.Uuid
   slug      String   @unique
   name      String
   /// Preferências do projeto (PRD §71 — settings).
@@ -24,8 +58,10 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  owner         User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   architectures Architecture[]
 
+  @@index([ownerId])
   @@map("projects")
 }
 

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { getCatalogItem } from "@infraflow/registry";
-import { resolveIcon } from "@/lib/icons";
+import { ServiceIcon } from "@/components/service-icon";
 import type { InfraNode } from "@/lib/types";
 import { useWorkspaceStore } from "@/store/workspace-store";
 import { LoadGeneratorProperties } from "./load-generator-properties";
@@ -30,14 +30,13 @@ function ResourceProperties({ node }: { node: Extract<InfraNode, { type: "resour
   const item = getCatalogItem(node.data.type);
   if (!item) return <EmptyState />;
 
-  const icon = resolveIcon(item.icon);
 
   const alternative = item.alternative ? getCatalogItem(item.alternative) : undefined;
 
   return (
     <div className="space-y-5 p-3">
       <div className="flex items-start gap-2">
-        <icon.Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" strokeWidth={1.75} />
+        <ServiceIcon icon={item.icon} label={item.title} className="mt-0.5 size-5" />
         <div className="min-w-0">
           <h2 className="truncate text-sm font-medium">{item.title}</h2>
           <p className="font-mono text-[11px] text-muted-foreground">{item.type}</p>

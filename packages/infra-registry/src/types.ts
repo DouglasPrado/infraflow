@@ -43,7 +43,10 @@ export interface CatalogItem {
   title: string;
   category: Category;
   provider: Provider;
-  /** Identificador do ícone. A web mapeia para um componente Lucide. */
+  /**
+   * Identificador do ícone de serviço, igual ao `type` com o ponto virando
+   * hífen. A web serve `public/icons/<icon>.svg`.
+   */
   icon: string;
   /** Valores aplicados ao criar o node (PRD §11). */
   defaults: Record<string, string | number | boolean>;

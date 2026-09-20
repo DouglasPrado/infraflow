@@ -17,8 +17,9 @@ a cor entra **só onde há saturação** — e o gargalo é a única coisa verme
 
 Disso saem três regras:
 
-1. **Só o estado recebe cor.** Categoria, provider e anotações são tinta neutra.
-   Nada compete com o veredito.
+1. **Cor arbitrária é proibida; cor que carrega informação, não.**
+   Estado é cor. Marca de serviço é cor — é o que distingue RDS de Redis num
+   relance. Categoria, provider e anotações continuam tinta neutra.
 2. **Progressive disclosure** (PRD §85). O node mostra o essencial; o resto vive no
    painel de propriedades.
 3. **Uma ousadia só.** O medidor de saturação é o elemento memorável. Tudo ao redor
@@ -93,9 +94,15 @@ desenho, não papel de escritório. Vale para `--background`, `--foreground`,
 
 ### 3.4 O que foi removido
 
-Havia um acento por categoria (dez hues). Saiu por dois motivos: violava a regra
-"só o estado recebe cor" e `cache` era vermelho, colidindo com `bottleneck`.
+Havia um acento por categoria — dez hues que não vinham de lugar nenhum. Saiu
+porque era decoração e porque `cache` era vermelho, colidindo com `bottleneck`.
+
 **Categoria é comunicada por ícone e seção da library, não por cor.**
+
+Isso não impede o ícone do serviço de ser colorido: a laranja do ECS e o
+vermelho do Redis são identidade, não enfeite. O que garante que não competem
+com o gargalo é a escala — um glifo de 20px contra borda vermelha, texto
+vermelho e uma barra de saturação sangrando na largura inteira do card.
 
 ---
 
@@ -161,12 +168,25 @@ gargalo é a única coisa colorida e fica alinhado à direita.
 
 ## 7. Ícones
 
-**Lucide** é a única biblioteca. `strokeWidth={1.75}` como padrão — mais leve que
-o default 2, combina com o peso do Plex.
+Duas famílias, com papéis distintos:
 
-Tamanho `size-4` em nodes e library, `size-3.5` em barras densas, `size-3` em
-linhas de status. Ícones de recurso são `text-muted-foreground`; o único colorido
-é o raio do Load Generator, em `--brand`.
+**Ícones de serviço** — a marca real de cada recurso, em `public/icons/`.
+Gerados por `pnpm icons` a partir de:
+
+* `aws-icons` (MIT), que empacota os Architecture Icons oficiais da AWS;
+* `simple-icons` (CC0), pintado com a cor de marca do próprio metadado.
+
+O `@infraflow/registry` é livre de UI e carrega só o identificador — igual ao
+`type` com o ponto virando hífen (`aws.rds` → `aws-rds`). O componente
+`ServiceIcon` resolve para `/icons/<id>.svg`.
+
+`size-5` no node e no Properties, `size-4` na library e no command palette.
+
+**Ícones de interface** — **Lucide**, única biblioteca para cromo.
+`strokeWidth={1.75}`, mais leve que o default 2, combinando com o peso do Plex.
+`size-4` no corpo, `size-3.5` em barras densas, `size-3` em linhas de status,
+sempre em `text-muted-foreground`. O raio do Load Generator é a exceção
+colorida, em `--brand`: ele não é um serviço, é a origem do teste.
 
 A marca do GitHub no login é um SVG inline — marca, não ícone de sistema.
 
