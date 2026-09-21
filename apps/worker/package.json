@@ -1,0 +1,26 @@
+{
+  "name": "@infraflow/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --experimental-strip-types src/index.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --test-concurrency=1 --experimental-strip-types \"src/**/*.test.ts\"",
+    "lint": "eslint --config ../../eslint.config.mjs src"
+  },
+  "dependencies": {
+    "@infraflow/compiler": "workspace:*",
+    "@infraflow/db": "workspace:*",
+    "@infraflow/schema": "workspace:*",
+    "bullmq": "^5.65.0"
+  },
+  "devDependencies": {
+    "@infraflow/validator": "workspace:*",
+    "@types/node": "^22",
+    "dotenv": "^17.2.3",
+    "typescript": "^5.9.3"
+  }
+}

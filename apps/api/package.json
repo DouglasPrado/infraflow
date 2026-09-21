@@ -1,0 +1,37 @@
+{
+  "name": "@infraflow/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --experimental-strip-types src/index.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --test-concurrency=1 --experimental-strip-types \"src/**/*.test.ts\"",
+    "lint": "eslint --config ../../eslint.config.mjs src"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.127.0",
+    "@aws-sdk/client-pricing": "^3.1136.0",
+    "@aws-sdk/client-sts": "^3.1136.0",
+    "@fastify/cookie": "^11.1.2",
+    "@fastify/cors": "^11.1.0",
+    "@fastify/rate-limit": "^11.2.0",
+    "@infraflow/analyzer": "workspace:*",
+    "@infraflow/compiler": "workspace:*",
+    "@infraflow/db": "workspace:*",
+    "@infraflow/registry": "workspace:*",
+    "@infraflow/report-generator": "workspace:*",
+    "@infraflow/schema": "workspace:*",
+    "@infraflow/validator": "workspace:*",
+    "bullmq": "^5.65.0",
+    "fastify": "^5.12.5",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "dotenv": "^17.2.3",
+    "typescript": "^5.9.3"
+  }
+}

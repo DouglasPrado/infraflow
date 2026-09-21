@@ -1,3 +1,14 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
 allowBuilds:
+  '@prisma/engines': true
+  # Acelerador nativo opcional do msgpackr (vem via BullMQ); o JS puro basta.
+  msgpackr-extract: false
+  prisma: true
   sharp: false
   unrs-resolver: false
+
+minimumReleaseAgeExclude:
+  - simple-icons@16.32.0

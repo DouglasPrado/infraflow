@@ -1,0 +1,30 @@
+{
+  "name": "@infraflow/report-generator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --experimental-strip-types \"src/**/*.test.ts\"",
+    "lint": "eslint --config ../../eslint.config.mjs src"
+  },
+  "dependencies": {
+    "@infraflow/analyzer": "workspace:*",
+    "@infraflow/registry": "workspace:*",
+    "@infraflow/schema": "workspace:*",
+    "@infraflow/validator": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "typescript": "^5.9.3"
+  }
+}

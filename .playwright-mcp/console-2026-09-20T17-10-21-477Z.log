@@ -1,0 +1,84 @@
+[    8607ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[    8640ms] [LOG] [HMR] connected @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[    9087ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3200/favicon.ico:0
+[    9265ms] [WARNING] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[    9686ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3201/v1/caixa:0
+[   14967ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   15285ms] [LOG] [Fast Refresh] done in 419ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   17182ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   17312ms] [LOG] [Fast Refresh] done in 231ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   24009ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   24562ms] [LOG] [Fast Refresh] done in 654ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   32158ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   32394ms] [LOG] [Fast Refresh] done in 338ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   33882ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   33975ms] [LOG] [Fast Refresh] done in 194ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   35228ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   35277ms] [LOG] [Fast Refresh] done in 149ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   36910ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   36966ms] [LOG] [Fast Refresh] done in 157ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   38343ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   38402ms] [LOG] [Fast Refresh] done in 161ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   39397ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   39467ms] [LOG] [Fast Refresh] done in 172ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   40509ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   40571ms] [LOG] [Fast Refresh] done in 165ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   41809ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   41892ms] [LOG] [Fast Refresh] done in 184ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   46355ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   46875ms] [LOG] [Fast Refresh] done in 621ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[   49575ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3201/v1/caixa:0
+[ 2950001ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 2950950ms] [LOG] [Fast Refresh] done in 1050ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 2965653ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 2965671ms] [LOG] [Fast Refresh] done in 128ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 2968013ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3201/v1/caixa:0
+[ 2983896ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 2985148ms] [LOG] [Fast Refresh] done in 1352ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3195683ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3197794ms] [LOG] [Fast Refresh] done in 1952ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3220137ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3220168ms] [LOG] [Fast Refresh] done in 2ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3260416ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3260445ms] [LOG] [Fast Refresh] done in 3ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3261401ms] [LOG] [Fast Refresh] done in 3ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3286641ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3286670ms] [LOG] [Fast Refresh] done in 3ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3311104ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3311137ms] [LOG] [Fast Refresh] done in 2ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3324037ms] [LOG] [Fast Refresh] done in 2ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3344796ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3344825ms] [LOG] [Fast Refresh] done in 33ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3377687ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3377718ms] [LOG] [Fast Refresh] done in 2ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3412667ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3412700ms] [LOG] [Fast Refresh] done in 2ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3413866ms] [LOG] [Fast Refresh] done in 2ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3430786ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3431411ms] [LOG] [Fast Refresh] done in 546ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3431942ms] [LOG] [Fast Refresh] done in 546ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3472744ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3472773ms] [LOG] [Fast Refresh] done in 3ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3493797ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3494453ms] [LOG] [Fast Refresh] done in 707ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3494795ms] [LOG] [Fast Refresh] done in 1057ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3505860ms] [LOG] [Fast Refresh] done in 1057ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3516479ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3516556ms] [LOG] [Fast Refresh] done in 180ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3517190ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3518212ms] [LOG] [Fast Refresh] done in 1123ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3521413ms] [WARNING] The resource http://localhost:3200/_next/static/chunks/apps_web_src_features_editorial_components_studio_19wakyv.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3200/editorial:0
+[ 3566697ms] [WARNING] The resource http://localhost:3200/_next/static/chunks/apps_web_src_features_editorial_components_studio_19wakyv.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3200/editorial:0
+[ 3577068ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3577256ms] [LOG] [Fast Refresh] done in 241ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3593100ms] [LOG] [Fast Refresh] done in 241ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3593172ms] [LOG] [Fast Refresh] done in 16162ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3636281ms] [LOG] [Fast Refresh] done in 16162ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3649616ms] [LOG] [Fast Refresh] done in 16162ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 3724111ms] [LOG] [Fast Refresh] done in 13277ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 4059763ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 4060227ms] [LOG] [Fast Refresh] done in 567ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 4060431ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 4060473ms] [LOG] [Fast Refresh] done in 144ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 4067318ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
+[ 4067742ms] [LOG] [Fast Refresh] done in 527ms @ http://localhost:3200/_next/static/chunks/152l_next_dist_0mk-alz._.js:776
