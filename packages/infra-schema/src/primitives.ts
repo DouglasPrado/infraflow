@@ -20,8 +20,14 @@ export const CategorySchema = z.enum([
 ]);
 export type Category = z.infer<typeof CategorySchema>;
 
-/** PRD §44 — origem do recurso. */
-export const ProviderSchema = z.enum(["aws", "opensource"]);
+/**
+ * PRD §44 — origem do recurso.
+ *
+ * `onprem` é máquina que o usuário já tem: não há tabela de preço nem provider
+ * de nuvem para aplicar, então ela não compila para infraestrutura — participa
+ * do desenho e da estimativa, e o custo é o que o usuário informa.
+ */
+export const ProviderSchema = z.enum(["aws", "opensource", "onprem"]);
 export type Provider = z.infer<typeof ProviderSchema>;
 
 /** PRD §13 — tipo de tráfego que a conexão carrega. */

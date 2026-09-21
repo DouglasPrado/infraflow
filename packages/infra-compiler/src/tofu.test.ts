@@ -4,6 +4,7 @@ import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { after, before, describe, it } from "node:test";
+import { CATALOG } from "@infraflow/registry";
 import { connection, documentOf, loadGeneratorNode, resourceNode } from "@infraflow/validator";
 import { emit } from "./index.ts";
 
@@ -21,6 +22,7 @@ const hasTofu = spawnSync("tofu", ["version"], { stdio: "ignore" }).status === 0
 const validateEnabled = process.env.INFRAFLOW_TOFU_VALIDATE === "1";
 
 let workdir: string;
+let todosDir: string;
 
 function document() {
   return documentOf(
@@ -42,15 +44,42 @@ function document() {
   );
 }
 
+/**
+ * Um documento com **todo** tipo que o compiler sabe emitir.
+ *
+ * A arquitetura de referência exercita cinco recursos; o resto passaria sem
+ * ninguém olhar. Foi assim que cinco grupos de segurança saíram referenciados
+ * mas não declarados — HCL que tipa, compila e o OpenTofu recusa.
+ */
+function todosOsTipos() {
+  const emissiveis = CATALOG.filter((item) => item.provider === "aws").map((item) => item.type);
+  return documentOf(
+    [
+      loadGeneratorNode(),
+      ...emissiveis.map((type) => {
+        const slug = type.split(".")[1]!;
+        return resourceNode(slug, type, {}, slug);
+      }),
+    ],
+    [],
+  );
+}
+
 before(() => {
   workdir = mkdtempSync(join(tmpdir(), "infraflow-compile-"));
   for (const file of emit(document()).files) {
     writeFileSync(join(workdir, file.name), file.content);
   }
+
+  todosDir = mkdtempSync(join(tmpdir(), "infraflow-todos-"));
+  for (const file of emit(todosOsTipos()).files) {
+    writeFileSync(join(todosDir, file.name), file.content);
+  }
 });
 
 after(() => {
   if (workdir) rmSync(workdir, { recursive: true, force: true });
+  if (todosDir) rmSync(todosDir, { recursive: true, force: true });
 });
 
 describe("OpenTofu de verdade", { skip: hasTofu ? false : "OpenTofu não está instalado" }, () => {
@@ -74,6 +103,33 @@ describe("OpenTofu de verdade", { skip: hasTofu ? false : "OpenTofu não está i
 
       const output = execFileSync("tofu", ["validate", "-no-color"], {
         cwd: workdir,
+        encoding: "utf8",
+      });
+
+      assert.match(output, /Success/);
+    },
+  );
+
+  it("todo recurso do catálogo gera HCL canônico", () => {
+    const result = spawnSync("tofu", ["fmt", "-check", "-no-color", "-diff", todosDir], {
+      encoding: "utf8",
+    });
+
+    assert.equal(result.stdout, "", `tofu fmt reescreveria a saída:\n${result.stdout}`);
+    assert.equal(result.status, 0);
+  });
+
+  it(
+    "todo recurso do catálogo passa no tofu validate",
+    { skip: validateEnabled ? false : "defina INFRAFLOW_TOFU_VALIDATE=1 (baixa o provider da AWS)" },
+    () => {
+      execFileSync("tofu", ["init", "-no-color", "-input=false", "-backend=false"], {
+        cwd: todosDir,
+        stdio: "pipe",
+      });
+
+      const output = execFileSync("tofu", ["validate", "-no-color"], {
+        cwd: todosDir,
         encoding: "utf8",
       });
 

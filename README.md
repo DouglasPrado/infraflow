@@ -171,11 +171,31 @@ regra de grupo de segurança**. Um ALB ligado a um ECS abre a porta da aplicaç�
 só para aquele balanceador; um ECS ligado a um RDS abre a 5432 só para aquele
 serviço; só quem é porta de entrada aceita `0.0.0.0/0`.
 
-Escopo do §74: VPC, ALB, ECS, RDS, S3 e Redis (ElastiCache). A VPC não vem de
-node nenhum — é o chão que os outros precisam. Tipo fora dessa lista **não é
-traduzido por aproximação**: vira aviso com a alternativa que o registry já
-conhece (§29). Inventar equivalência silenciosa é o risco de IaC incorreta do
-§85.
+O §74 pediu VPC, ALB, ECS, RDS, S3 e Redis; o catálogo cresceu e a tradução
+acompanhou. Hoje o compiler emite 19 tipos:
+
+| Categoria | Traduzidos |
+| --- | --- |
+| Compute | ECS, Fargate, EKS |
+| Dados | RDS, Aurora, DynamoDB, OpenSearch, ElastiCache |
+| Armazenamento | S3, EFS, Secrets Manager |
+| Rede | ALB, API Gateway, Route 53, NAT Gateway, WAF |
+| Mensageria | SNS, EventBridge, Kinesis |
+
+A VPC não vem de node nenhum — é o chão que os outros precisam. EC2, Lambda,
+CloudFront, NLB, SQS e CloudWatch estão no canvas e na estimativa, mas ainda
+não têm emissor.
+
+Tipo sem emissor **não é traduzido por aproximação**: vira aviso com a
+alternativa que o registry já conhece (§29). Inventar equivalência silenciosa é
+o risco de IaC incorreta do §85. A mesma regra vale dentro do recurso — regra de
+WAF sem critério, assinatura de tópico sem destino e registro de DNS sem alvo
+saem como aviso, não como valor inventado.
+
+A máquina própria (`onprem.machine`) é caso à parte: ela participa do desenho e
+da estimativa, e **não compila** — infraestrutura que você já tem não é criada
+pelo plano. O custo dela é o que você informa no painel, porque não há tabela de
+preço para consultar.
 
 Decisões que ficam registradas como aviso, não escondidas no código:
 
@@ -208,11 +228,11 @@ aparece.
 O plano é lido de `tofu show -json`, nunca do texto: a saída humana muda entre
 versões, e regex nela erraria em silêncio.
 
-Dois alvos:
+Um alvo:
 
 | Alvo | O que planeja | Credencial |
 | --- | --- | --- |
-| `aws` | Os recursos do §74 | Precisa de credencial da AWS |
+| `aws` | Os 19 tipos que o compiler traduz | Precisa de credencial da AWS |
 
 ### Limitação conhecida (§52)
 

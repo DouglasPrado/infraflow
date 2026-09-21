@@ -133,6 +133,67 @@ export const LOAD_MODEL: Record<string, LoadCharacteristics> = {
   "opensource.grafana": { serviceTimeMs: 20 },
   "aws.cloudwatch": { serviceTimeMs: 5 },
   "opensource.opentelemetry": { serviceTimeMs: 1 },
+
+  // --- borda e rede: encaminham, quase não custam tempo ---
+  "aws.apigateway": {
+    serviceTimeMs: 12,
+    serviceTimeFactors: [
+      // O REST carrega mais etapas por requisição que o HTTP enxuto.
+      { kind: "scale", key: "apiType", values: { HTTP: 1, REST: 1.8 } },
+    ],
+    // Com cache de resposta ligado, parte do tráfego nem chega à integração.
+    cacheHitRatio: 0,
+  },
+  "aws.route53": { serviceTimeMs: 1 },
+  "aws.natgateway": { serviceTimeMs: 1.5 },
+  // Inspeção inline: barata, mas cresce com o número de grupos de regra.
+  "aws.waf": {
+    serviceTimeMs: 3,
+    serviceTimeFactors: [{ kind: "linear", key: "managedRuleGroups", baseline: 2 }],
+  },
+
+  // --- compute gerenciado ---
+  "aws.eks": { serviceTimeMs: 35 },
+  "aws.fargate": {
+    serviceTimeMs: 40,
+    serviceTimeFactors: [
+      { kind: "scale", key: "cpu", values: { "0.25 vCPU": 2.4, "0.5 vCPU": 1.6, "1 vCPU": 1, "2 vCPU": 0.7, "4 vCPU": 0.55 } },
+    ],
+  },
+  /**
+   * Máquina própria: o tempo sai do que ela tem. Mais vCPU atende mais rápido;
+   * disco lento cobra o preço em cada requisição que toca o disco.
+   */
+  "onprem.machine": {
+    serviceTimeMs: 30,
+    serviceTimeFactors: [
+      { kind: "scale", key: "vcpu", values: { 1: 2.6, 2: 1.7, 4: 1, 8: 0.7, 16: 0.55 } },
+      { kind: "scale", key: "diskType", values: { NVMe: 1, SSD: 1.3, HDD: 3.2 } },
+    ],
+  },
+
+  // --- dados ---
+  "aws.dynamodb": { serviceTimeMs: 6 },
+  "aws.aurora": {
+    serviceTimeMs: 8,
+    serviceTimeFactors: [
+      { kind: "scale", key: "instanceClass", values: { "db.t4g.medium": 2.2, "db.r6g.large": 1, "db.r6g.xlarge": 0.72, "db.r6g.2xlarge": 0.6 } },
+    ],
+  },
+  "aws.opensearch": { serviceTimeMs: 22 },
+  "aws.efs": {
+    serviceTimeMs: 12,
+    serviceTimeFactors: [
+      { kind: "scale", key: "throughputMode", values: { elastic: 1, bursting: 1.6, provisioned: 0.8 } },
+    ],
+  },
+  // Segredo se lê uma vez e se guarda em memória; o custo real é a primeira vez.
+  "aws.secretsmanager": { serviceTimeMs: 20 },
+
+  // --- mensageria ---
+  "aws.sns": { serviceTimeMs: 10 },
+  "aws.eventbridge": { serviceTimeMs: 14 },
+  "aws.kinesis": { serviceTimeMs: 8 },
 };
 
 /** Tempo de serviço em ms do recurso **como está configurado**. */

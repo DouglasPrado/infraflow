@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { CATALOG } from "@infraflow/registry";
 import {
   connection,
   documentOf,
@@ -240,5 +241,52 @@ describe("terraform.tfvars.example", () => {
 
     assert.match(content, /environment = "dev"/);
     assert.match(content, /container_image = "public\.ecr\.aws/);
+  });
+});
+
+describe("o HCL fecha em si mesmo", () => {
+  /**
+   * Referência a recurso que ninguém declarou.
+   *
+   * O `tofu validate` pega isso, mas só roda atrás de uma variável de ambiente
+   * porque baixa o provider da AWS. Este teste custa nada e pega a mesma
+   * classe de erro — foi ela que deixou cinco grupos de segurança
+   * referenciados e não declarados quando o catálogo cresceu.
+   */
+  it("nenhum recurso é referenciado sem ser declarado", () => {
+    const emissiveis = CATALOG.filter((item) => item.provider === "aws");
+    const document = documentOf(
+      [
+        loadGeneratorNode(),
+        ...emissiveis.map((item) => {
+          const slug = item.type.split(".")[1]!;
+          return resourceNode(slug, item.type, {}, slug);
+        }),
+      ],
+      [],
+    );
+
+    const hcl = emit(document)
+      .files.filter((file) => file.name.endsWith(".tf"))
+      .map((file) => file.content)
+      .join("\n");
+
+    const declarados = new Set(
+      [...hcl.matchAll(/^resource "([a-z0-9_]+)" "([a-z0-9_]+)"/gm)].map(
+        (match) => `${match[1]}.${match[2]}`,
+      ),
+    );
+
+    // `data.` tem espaço próprio e não colide com os recursos gerenciados.
+    const referencias = [...hcl.matchAll(/(?<!data\.)\b(aws_[a-z0-9_]+)\.([a-z0-9_]+)\./g)];
+    const penduradas = [
+      ...new Set(
+        referencias
+          .map((match) => `${match[1]}.${match[2]}`)
+          .filter((endereco) => !declarados.has(endereco)),
+      ),
+    ];
+
+    assert.deepEqual(penduradas, [], `referências sem recurso declarado: ${penduradas.join(", ")}`);
   });
 });

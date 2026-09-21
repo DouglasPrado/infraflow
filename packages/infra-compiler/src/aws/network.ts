@@ -24,11 +24,18 @@ import {
  * sem NAT) e dado fica no privado. É a decisão que mantém o laboratório barato
  * sem deixar banco exposto — e sai registrada como `assumption` no resultado.
  */
+/**
+ * As sub-redes são declaradas como lista **estreita**, não como `TofuValue`
+ * cru: quem emite recurso por sub-rede — destino de montagem do EFS, por
+ * exemplo — precisa percorrer os itens, e a união larga esconde isso.
+ */
+type TofuList = Extract<TofuValue, { kind: "list" }>;
+
 export interface NetworkRefs {
   blocks: TofuBlock[];
   vpcId: ReturnType<typeof attributeOf>;
-  publicSubnetIds: ReturnType<typeof list>;
-  privateSubnetIds: ReturnType<typeof list>;
+  publicSubnetIds: TofuList;
+  privateSubnetIds: TofuList;
 }
 
 const AZ_COUNT = 2;
@@ -97,8 +104,8 @@ export function networkBlocks(): NetworkRefs {
   return {
     blocks: [zones, vpc, gateway, ...publicSubnets, ...privateSubnets, publicRoutes, ...associations],
     vpcId: attributeOf(vpc, "id"),
-    publicSubnetIds: list(publicSubnets.map((subnet) => attributeOf(subnet, "id"))),
-    privateSubnetIds: list(privateSubnets.map((subnet) => attributeOf(subnet, "id"))),
+    publicSubnetIds: list(publicSubnets.map((subnet) => attributeOf(subnet, "id"))) as TofuList,
+    privateSubnetIds: list(privateSubnets.map((subnet) => attributeOf(subnet, "id"))) as TofuList,
   };
 }
 

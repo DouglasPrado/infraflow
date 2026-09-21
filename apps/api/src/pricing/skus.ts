@@ -245,6 +245,258 @@ export function planFor(type: string, props: PropertyBag, region: string): SkuPl
         reason: "CloudWatch é cobrada por métrica, log ingerido e alarme — nenhum deles declarado.",
       };
 
+    case "aws.eks": {
+      const nodes = count(props, "nodes", 3);
+      const nodeType = text(props, "nodeInstanceType", "m6i.large");
+
+      return {
+        queries: [
+          {
+            serviceCode: "AmazonEKS",
+            label: "Horas do control plane",
+            quantity: HOURS_PER_MONTH,
+            filters: { regionCode: region, tiertype: "Standard" },
+            usageTypeContains: "AmazonEKS-Hours",
+          },
+          {
+            serviceCode: "AmazonEC2",
+            label: `${nodes}× ${nodeType}`,
+            quantity: HOURS_PER_MONTH * nodes,
+            filters: {
+              instanceType: nodeType,
+              regionCode: region,
+              operatingSystem: "Linux",
+              tenancy: "Shared",
+              preInstalledSw: "NA",
+              capacitystatus: "Used",
+              licenseModel: "No License required",
+            },
+            usageTypeContains: "BoxUsage:",
+            usageTypeExcludes: ["ExtendedSupport"],
+          },
+        ],
+      };
+    }
+
+    case "aws.fargate": {
+      const tasks = count(props, "tasks", 1);
+      const vcpu = numeric(text(props, "cpu", "1 vCPU"), 1);
+      const memory = numeric(text(props, "memory", "2GB"), 2);
+
+      return {
+        queries: [
+          {
+            serviceCode: "AmazonECS",
+            label: `Fargate vCPU · ${tasks}× ${vcpu}`,
+            quantity: HOURS_PER_MONTH * tasks * vcpu,
+            filters: { regionCode: region, cputype: "perCPU" },
+            usageTypeContains: "Fargate-vCPU-Hours",
+          },
+          {
+            serviceCode: "AmazonECS",
+            label: `Fargate memória · ${tasks}× ${memory}GB`,
+            quantity: HOURS_PER_MONTH * tasks * memory,
+            filters: { regionCode: region, memorytype: "perGB" },
+            usageTypeContains: "Fargate-GB-Hours",
+          },
+        ],
+      };
+    }
+
+    case "aws.aurora": {
+      const engine = /mysql/i.test(text(props, "engine", "Aurora PostgreSQL"))
+        ? "Aurora MySQL"
+        : "Aurora PostgreSQL";
+      // Uma escritora mais as leitoras: todas cobradas por hora de instância.
+      const instances = 1 + count(props, "readers", 0);
+
+      return {
+        queries: [
+          {
+            serviceCode: "AmazonRDS",
+            label: `${instances}× ${text(props, "instanceClass", "db.r6g.large")}`,
+            quantity: HOURS_PER_MONTH * instances,
+            filters: {
+              instanceType: text(props, "instanceClass", "db.r6g.large"),
+              databaseEngine: engine,
+              regionCode: region,
+            },
+            usageTypeContains: "InstanceUsage:db.",
+            usageTypeExcludes: ["ExtendedSupport"],
+          },
+          {
+            serviceCode: "AmazonRDS",
+            label: `${count(props, "storageGb", 100)}GB de armazenamento`,
+            quantity: count(props, "storageGb", 100),
+            filters: {
+              regionCode: region,
+              productFamily: "Database Storage",
+              databaseEngine: engine,
+            },
+            usageTypeContains: "StorageUsage",
+            usageTypeExcludes: ["ExtendedSupport", "IOPS", "Snapshot", "Backtrack"],
+          },
+        ],
+      };
+    }
+
+    case "aws.opensearch": {
+      const nodes = count(props, "nodes", 3);
+
+      return {
+        queries: [
+          {
+            serviceCode: "AmazonES",
+            label: `${nodes}× ${text(props, "instanceType", "r6g.large.search")}`,
+            quantity: HOURS_PER_MONTH * nodes,
+            filters: {
+              instanceType: text(props, "instanceType", "r6g.large.search"),
+              regionCode: region,
+            },
+            usageTypeContains: "ESInstance",
+          },
+          {
+            serviceCode: "AmazonES",
+            label: `${nodes}× ${count(props, "storageGb", 100)}GB`,
+            quantity: nodes * count(props, "storageGb", 100),
+            filters: { regionCode: region, storageMedia: "SSD" },
+            usageTypeContains: "ES:GP2-Storage",
+          },
+        ],
+      };
+    }
+
+    case "aws.natgateway": {
+      const azs = count(props, "azs", 1);
+
+      return {
+        queries: [
+          {
+            serviceCode: "AmazonEC2",
+            label: `${azs}× horas do gateway`,
+            quantity: HOURS_PER_MONTH * azs,
+            filters: { regionCode: region, productFamily: "NAT Gateway", group: "NGW:NatGateway" },
+            usageTypeContains: "NatGateway-Hours",
+          },
+        ],
+      };
+    }
+
+    case "aws.secretsmanager":
+      return {
+        queries: [
+          {
+            serviceCode: "AWSSecretsManager",
+            label: `${count(props, "secrets", 1)} segredos`,
+            quantity: count(props, "secrets", 1),
+            filters: { regionCode: region },
+            usageTypeContains: "AWSSecretsManager-Secrets",
+          },
+        ],
+      };
+
+    case "aws.kinesis":
+      return {
+        queries: [
+          {
+            serviceCode: "AmazonKinesis",
+            label: `${count(props, "shards", 1)}× horas de shard`,
+            quantity: HOURS_PER_MONTH * count(props, "shards", 1),
+            filters: { regionCode: region, productFamily: "Kinesis Streams" },
+            usageTypeContains: "Shard-Hour",
+          },
+        ],
+      };
+
+    case "aws.waf":
+      return {
+        queries: [
+          {
+            serviceCode: "AWSWAF",
+            label: "Web ACL",
+            quantity: 1,
+            filters: { regionCode: region, usagetype: `${region}-WebACLV2` },
+            usageTypeContains: "WebACL",
+          },
+          {
+            serviceCode: "AWSWAF",
+            label: `${count(props, "managedRuleGroups", 0) + count(props, "customRules", 0)} regras`,
+            quantity: count(props, "managedRuleGroups", 0) + count(props, "customRules", 0),
+            filters: { regionCode: region },
+            usageTypeContains: "RuleV2",
+          },
+        ],
+      };
+
+    case "aws.route53":
+      return {
+        queries: [
+          {
+            serviceCode: "AmazonRoute53",
+            label: "Hosted zone",
+            quantity: 1,
+            filters: { productFamily: "DNS Zone" },
+            usageTypeContains: "HostedZone",
+          },
+        ],
+      };
+
+    /**
+     * Sob demanda a tabela é cobrada por requisição, que o canvas não declara.
+     * Provisionada tem RCU e WCU no painel — aí há o que cobrar.
+     */
+    case "aws.dynamodb": {
+      if (text(props, "billingMode", "On-demand") !== "Provisioned") {
+        return {
+          reason:
+            "DynamoDB sob demanda é cobrada por requisição, e o canvas não declara volume. Troque para Provisioned para ver o preço de tabela.",
+        };
+      }
+
+      return {
+        queries: [
+          {
+            serviceCode: "AmazonDynamoDB",
+            label: `${count(props, "readCapacity", 1)} RCU`,
+            quantity: HOURS_PER_MONTH * count(props, "readCapacity", 1),
+            filters: { regionCode: region, group: "DDB-ReadUnits" },
+            usageTypeContains: "ReadCapacityUnit-Hrs",
+          },
+          {
+            serviceCode: "AmazonDynamoDB",
+            label: `${count(props, "writeCapacity", 1)} WCU`,
+            quantity: HOURS_PER_MONTH * count(props, "writeCapacity", 1),
+            filters: { regionCode: region, group: "DDB-WriteUnits" },
+            usageTypeContains: "WriteCapacityUnit-Hrs",
+          },
+        ],
+      };
+    }
+
+    case "aws.efs":
+      return {
+        reason:
+          "EFS é cobrado por GB-mês armazenado, e o canvas declara modo de throughput, não volume.",
+      };
+
+    case "aws.apigateway":
+      return {
+        reason:
+          "API Gateway é cobrado por requisição. O canvas declara o teto de throttle, não o volume que vai passar.",
+      };
+
+    case "aws.sns":
+      return { reason: "SNS é cobrado por publicação e entrega. O canvas não declara volume." };
+
+    case "aws.eventbridge":
+      return { reason: "EventBridge é cobrado por evento publicado. O canvas não declara volume." };
+
+    case "onprem.machine":
+      return {
+        reason:
+          "Máquina própria não tem tabela de preço: o custo é o que você informou no painel.",
+      };
+
     default:
       return {
         reason: "Recurso fora da AWS: o custo é da infraestrutura que o hospeda, não de tabela.",

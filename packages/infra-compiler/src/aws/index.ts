@@ -45,14 +45,32 @@ export function compileAws(document: ArchitectureDocument): CompiledStack {
     if (!name) continue;
 
     if (!emitter) {
-      const alternative = getCatalogItem(node.type)?.alternative;
+      const item = getCatalogItem(node.type);
+      const alternative = item?.alternative;
+
+      /**
+       * Máquina própria não é lacuna do compiler: ela é, por definição,
+       * infraestrutura que já existe. Dizer que "não tem equivalente na AWS"
+       * sugeriria que falta suporte, quando o que falta é a máquina ser da
+       * nuvem — e não é.
+       */
+      if (item?.provider === "onprem") {
+        warnings.push({
+          code: "assumption",
+          nodeId: node.id,
+          message: `"${node.name}" é uma máquina sua: ela entra no desenho e na estimativa, mas não vira infraestrutura da AWS.`,
+          hint: "O plano do §75 descreve o que a AWS vai criar. Uma máquina que você já tem não é criada por ele.",
+        });
+        continue;
+      }
+
       warnings.push({
         code: "unsupported-resource",
         nodeId: node.id,
-        message: `${getCatalogItem(node.type)?.title ?? node.type} "${node.name}" não tem equivalente no alvo AWS deste milestone.`,
+        message: `${item?.title ?? node.type} "${node.name}" não tem equivalente no alvo AWS.`,
         hint: alternative
           ? `Troque pelo equivalente do registry: ${getCatalogItem(alternative)?.title ?? alternative} (PRD §29).`
-          : "O §74 cobre VPC, ALB, ECS, RDS, S3 e Redis.",
+          : "O compiler traduz o que tem forma declarada no canvas; este recurso ainda não tem.",
       });
       continue;
     }

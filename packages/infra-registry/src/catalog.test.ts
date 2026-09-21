@@ -10,7 +10,7 @@ describe("catálogo", () => {
 
   it("usa o formato provider.recurso em todo tipo (PRD §44)", () => {
     for (const item of CATALOG) {
-      assert.match(item.type, /^(aws|opensource)\.[a-z0-9-]+$/, item.type);
+      assert.match(item.type, /^(aws|opensource|onprem)\.[a-z0-9-]+$/, item.type);
       assert.equal(item.type.split(".")[0], item.provider, item.type);
     }
   });

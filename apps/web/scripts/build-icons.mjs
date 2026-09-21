@@ -4,6 +4,8 @@
  * - AWS: `aws-icons` (MIT) empacota os Architecture Icons oficiais da AWS.
  * - Open source: `simple-icons` (CC0), monocromático — a cor de marca é
  *   aplicada aqui, a partir do metadado do próprio pacote.
+ * - Local: `scripts/icons/`, para o que não é serviço de nuvem nem produto —
+ *   a máquina própria do usuário não tem marca a representar.
  *
  * Os SVGs resultantes são versionados, então a aplicação não depende destes
  * pacotes em runtime. Rode `pnpm icons` depois de mexer no mapa abaixo.
@@ -27,6 +29,23 @@ const MAP = {
   "aws.cloudfront": { pack: "aws", file: "AmazonCloudFront" },
   "aws.sqs": { pack: "aws", file: "AmazonSimpleQueueService" },
   "aws.cloudwatch": { pack: "aws", file: "AmazonCloudWatch" },
+  "aws.eks": { pack: "aws", file: "AmazonElasticKubernetesService" },
+  "aws.fargate": { pack: "aws", file: "AWSFargate" },
+  "aws.efs": { pack: "aws", file: "AmazonEFS" },
+  "aws.secretsmanager": { pack: "aws", file: "AWSSecretsManager" },
+  "aws.dynamodb": { pack: "aws", file: "AmazonDynamoDB" },
+  "aws.aurora": { pack: "aws", file: "AmazonAurora" },
+  "aws.opensearch": { pack: "aws", file: "AmazonOpenSearchService" },
+  "aws.apigateway": { pack: "aws", file: "AmazonAPIGateway" },
+  "aws.route53": { pack: "aws", file: "AmazonRoute53" },
+  // O pacote da AWS não traz o NAT Gateway; a VPC é o componente que o abriga.
+  "aws.natgateway": { pack: "aws", file: "AmazonVirtualPrivateCloud" },
+  "aws.waf": { pack: "aws", file: "AWSWAF" },
+  "aws.sns": { pack: "aws", file: "AmazonSimpleNotificationService" },
+  "aws.eventbridge": { pack: "aws", file: "AmazonEventBridge" },
+  "aws.kinesis": { pack: "aws", file: "AmazonKinesisDataStreams" },
+
+  "onprem.machine": { pack: "local", file: "onprem-machine" },
 
   "opensource.docker": { pack: "simple", file: "docker" },
   "opensource.kubernetes": { pack: "simple", file: "kubernetes" },
@@ -91,7 +110,15 @@ for (const [type, source] of Object.entries(MAP)) {
   const slug = type.replace(".", "-");
   let svg;
 
-  if (source.pack === "aws") {
+  if (source.pack === "local") {
+    const file = path.join(import.meta.dirname, "icons", `${source.file}.svg`);
+    try {
+      svg = await readFile(file, "utf8");
+    } catch {
+      missing.push(`${type} → scripts/icons/${source.file}.svg`);
+      continue;
+    }
+  } else if (source.pack === "aws") {
     const file = `${source.file}.svg`;
     if (!awsFiles.has(file)) {
       missing.push(`${type} → aws/${file}`);

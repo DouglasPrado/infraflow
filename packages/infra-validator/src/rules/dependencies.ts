@@ -55,6 +55,50 @@ const DEPENDENCIES: Record<string, DependencyRule> = {
     role: "fonte de dados",
     hint: "Conecte o Grafana à fonte que ele consulta.",
   },
+
+  "aws.apigateway": {
+    direction: "out",
+    categories: ["compute"],
+    severity: "error",
+    role: "integração",
+    hint: "Conecte a API ao serviço que responde as rotas.",
+  },
+  // O WAF inspeciona o que passa: sem alvo, ele não protege nada.
+  "aws.waf": {
+    direction: "out",
+    categories: ["network"],
+    severity: "error",
+    role: "alvo",
+    hint: "Conecte o Web ACL ao balanceador ou à distribuição que ele protege.",
+  },
+  "aws.route53": {
+    direction: "out",
+    categories: ["network", "compute"],
+    severity: "warning",
+    role: "destino",
+    hint: "Conecte a zona ao que ela resolve — balanceador, API ou distribuição.",
+  },
+  "aws.sns": {
+    direction: "out",
+    categories: ["compute", "queue"],
+    severity: "warning",
+    role: "assinante",
+    hint: "Conecte o tópico a quem recebe a publicação.",
+  },
+  "aws.eventbridge": {
+    direction: "out",
+    categories: ["compute", "queue"],
+    severity: "warning",
+    role: "destino",
+    hint: "Conecte o barramento ao que reage aos eventos.",
+  },
+  "aws.kinesis": {
+    direction: "out",
+    categories: ["compute"],
+    severity: "warning",
+    role: "consumidor",
+    hint: "Conecte o fluxo ao serviço que lê os registros.",
+  },
 };
 
 export function dependencyIssues(topology: Topology): ValidationIssue[] {

@@ -128,6 +128,43 @@ const CACHE_NODE: Record<string, number> = {
   "cache.r6g.large": 5.2,
 };
 
+const EKS_NODE: Record<string, number> = {
+  "t3.large": 0.8,
+  "m6i.large": 1,
+  "m6i.xlarge": 1.9,
+  "c6i.2xlarge": 3.6,
+};
+
+/** O Fargate oferece 0.25 vCPU, que a escala compartilhada não tem. */
+const FARGATE_CPU: Record<string, number> = {
+  "0.25 vCPU": 0.28,
+  "0.5 vCPU": 0.55,
+  "1 vCPU": 1,
+  "2 vCPU": 1.9,
+  "4 vCPU": 3.5,
+};
+
+const AURORA_INSTANCE: Record<string, number> = {
+  "db.t4g.medium": 0.4,
+  "db.r6g.large": 1,
+  "db.r6g.xlarge": 1.9,
+  "db.r6g.2xlarge": 3.6,
+};
+
+const SEARCH_INSTANCE: Record<string, number> = {
+  "t3.small.search": 0.25,
+  "r6g.large.search": 1,
+  "r6g.xlarge.search": 1.9,
+  "r6g.2xlarge.search": 3.7,
+};
+
+/** Disco da máquina própria: o tipo muda o que ela sustenta. */
+const DISK_TYPE: Record<string, number> = {
+  NVMe: 1,
+  SSD: 0.85,
+  HDD: 0.45,
+};
+
 /** O que faz o recurso aguentar mais carga. */
 export const CAPACITY_MODEL: Record<string, Factor[]> = {
   "aws.ec2": [
@@ -186,6 +223,52 @@ export const CAPACITY_MODEL: Record<string, Factor[]> = {
   "opensource.nats": [{ kind: "linear", key: "cluster", baseline: 3 }],
   "opensource.kafka": [{ kind: "linear", key: "brokers", baseline: 3 }],
 
+  "aws.eks": [
+    { kind: "scale", key: "nodeInstanceType", values: EKS_NODE },
+    { kind: "autoscale", toggleKey: "autoScaling", onKey: "maxNodes", offKey: "nodes", baseline: 10 },
+  ],
+  "aws.fargate": [
+    { kind: "scale", key: "cpu", values: FARGATE_CPU },
+    { kind: "linear", key: "tasks", baseline: 2 },
+  ],
+  /**
+   * A máquina própria não tem catálogo de instância: a capacidade sai das
+   * specs. vCPU multiplica, o tipo de disco pesa, e a memória é **teto** — foi
+   * a forma de dizer que subir vCPU sem subir RAM não compra vazão nenhuma.
+   */
+  "onprem.machine": [
+    { kind: "linear", key: "vcpu", baseline: 4 },
+    { kind: "scale", key: "diskType", values: DISK_TYPE },
+    { kind: "cap", key: "memoryGb", perUnit: 250 },
+  ],
+
+  "aws.efs": [
+    { kind: "scale", key: "performanceMode", values: { generalPurpose: 1, maxIO: 2.2 } },
+    { kind: "scale", key: "throughputMode", values: { elastic: 1, bursting: 0.6, provisioned: 1.4 } },
+  ],
+
+  "aws.dynamodb": [
+    // Provisionado tem teto; sob demanda a tabela acompanha a carga.
+    { kind: "scale", key: "billingMode", values: { "On-demand": 1, Provisioned: 1 } },
+    { kind: "cap", key: "readCapacity", perUnit: 480 },
+  ],
+  "aws.aurora": [{ kind: "scale", key: "instanceClass", values: AURORA_INSTANCE }],
+  "aws.opensearch": [
+    { kind: "scale", key: "instanceType", values: SEARCH_INSTANCE },
+    { kind: "linear", key: "nodes", baseline: 3 },
+  ],
+
+  "aws.apigateway": [
+    { kind: "scale", key: "apiType", values: { HTTP: 1, REST: 0.7 } },
+    // O throttle configurado é o teto declarado, não uma sugestão.
+    { kind: "cap", key: "throttleRps", perUnit: 1 },
+  ],
+  "aws.natgateway": [{ kind: "linear", key: "azs", baseline: 1 }],
+
+  // FIFO troca vazão por ordem: a AWS limita o tópico ordenado a 300 msg/s.
+  "aws.sns": [{ kind: "toggle", key: "fifo", on: 0.35, off: 1 }],
+  "aws.kinesis": [{ kind: "linear", key: "shards", baseline: 2 }],
+
   "opensource.opentelemetry": [{ kind: "linear", key: "replicas", baseline: 2 }],
 };
 
@@ -232,6 +315,67 @@ export const COST_MODEL: Record<string, Factor[]> = {
   "opensource.rabbitmq": [{ kind: "linear", key: "nodes", baseline: 3 }],
   "opensource.nats": [{ kind: "linear", key: "cluster", baseline: 3 }],
   "opensource.kafka": [{ kind: "linear", key: "brokers", baseline: 3 }],
+
+  "aws.eks": [
+    { kind: "scale", key: "nodeInstanceType", values: EKS_NODE },
+    // Paga-se pelos nodes de pé, não pelo teto que o autoscaler pode alcançar.
+    { kind: "linear", key: "nodes", baseline: 3 },
+  ],
+  "aws.fargate": [
+    { kind: "scale", key: "cpu", values: FARGATE_CPU },
+    { kind: "linear", key: "tasks", baseline: 2 },
+    // Spot é capacidade interrompível, cobrada a uma fração do preço.
+    { kind: "toggle", key: "spot", on: 0.3, off: 1 },
+  ],
+  /** A máquina é sua: o custo é o que você informa, não uma tabela. */
+  "onprem.machine": [{ kind: "linear", key: "monthlyCostUsd", baseline: 180 }],
+
+  "aws.efs": [
+    // Sem o ciclo de vida para IA, tudo permanece na classe cara.
+    { kind: "toggle", key: "lifecycleToIa", on: 1, off: 1.35 },
+    { kind: "scale", key: "throughputMode", values: { elastic: 1, bursting: 0.7, provisioned: 1.8 } },
+  ],
+  "aws.secretsmanager": [{ kind: "linear", key: "secrets", baseline: 10 }],
+
+  "aws.dynamodb": [
+    { kind: "linear", key: "readCapacity", baseline: 25 },
+    // Tabela global replica escrita em cada região: a conta acompanha.
+    { kind: "toggle", key: "globalTables", on: 2.1, off: 1 },
+    { kind: "toggle", key: "pointInTimeRecovery", on: 1, off: 0.8 },
+  ],
+  "aws.aurora": [
+    { kind: "scale", key: "instanceClass", values: AURORA_INSTANCE },
+    { kind: "linear", key: "storageGb", baseline: 100 },
+    { kind: "toggle", key: "multiAz", on: 1, off: 0.6 },
+  ],
+  "aws.opensearch": [
+    { kind: "scale", key: "instanceType", values: SEARCH_INSTANCE },
+    { kind: "linear", key: "nodes", baseline: 3 },
+    { kind: "linear", key: "storageGb", baseline: 100 },
+  ],
+
+  // REST cobra por milhão de chamadas várias vezes o que o HTTP cobra.
+  "aws.apigateway": [
+    { kind: "scale", key: "apiType", values: { HTTP: 1, REST: 3.5 } },
+    { kind: "toggle", key: "caching", on: 2.2, off: 1 },
+  ],
+  "aws.route53": [
+    { kind: "linear", key: "records", baseline: 10 },
+    { kind: "toggle", key: "healthCheck", on: 1.6, off: 1 },
+  ],
+  // Cada zona ganha o seu: é gateway por AZ, cobrado por hora e por AZ.
+  "aws.natgateway": [{ kind: "linear", key: "azs", baseline: 1 }],
+  "aws.waf": [{ kind: "linear", key: "managedRuleGroups", baseline: 2 }],
+
+  "aws.sns": [{ kind: "linear", key: "subscriptions", baseline: 3 }],
+  "aws.eventbridge": [
+    { kind: "linear", key: "rules", baseline: 5 },
+    { kind: "toggle", key: "archive", on: 1.4, off: 1 },
+  ],
+  "aws.kinesis": [
+    { kind: "linear", key: "shards", baseline: 2 },
+    { kind: "toggle", key: "enhancedFanout", on: 1.5, off: 1 },
+  ],
 
   "opensource.prometheus": [{ kind: "linear", key: "storageGb", baseline: 100 }],
   "opensource.opentelemetry": [{ kind: "linear", key: "replicas", baseline: 2 }],
